@@ -1,28 +1,16 @@
 [
   {
-    "id": "sample1",
-    "question_type": "spatial",
-    "user_1_image": "/img/sample_1.jpg",
-    "user_2_image": "/img/sample_2.jpg",
-    "user_1_question": "User 1 question \u2014 describe your view.",
-    "user_2_question": "User 2 question \u2014 describe your view.",
-    "options": [
-      "8",
-      "9",
-      "10",
-      "12"
-    ]
-  },
-  {
     "id": "sample2",
     "question_type": "count",
     "user_1_image": "/img/sample_3.jpg",
     "user_2_image": "/img/sample_4.jpg",
-    "user_1_question": "User 1 question for item 2.",
-    "user_2_question": "User 2 question for item 2.",
+    "user_1_question": "How many total lamps are there in the room?",
+    "user_2_question": "How many total lamps are there in the room?",
     "options": [
-      "8",
-      "12"
+      "4",
+      "5",
+      "3",
+      "6"
     ]
   }
 ]
