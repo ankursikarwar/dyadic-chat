@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prolific Dyadic Chat</title>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- jsPsych core -->
+    <script src="https://unpkg.com/jspsych@7.3.3/dist/index.browser.js?v=core"></script>
+    <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.3/dist/style.css?v=core">
+
+    <!-- Local plugins -->
+    <script src="/plugins/jspsych-survey-html-form-lite.js?v=v7class"></script>
+    <script src="/plugins/jspsych-instructions-lite.js?v=v7class"></script>
+    <script src="/plugins/jspsych-dyadic-chat.js?v=vG6h-uipatch3d"></script>
+
+    <style>
+      body { margin:0; background:#000; color:#fff; font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .jspsych-content { color:#fff; }
+      .jspsych-btn { background:#1f1f22; color:#fff; border:1px solid #555; border-radius:10px; padding:10px 14px; }
+      a, p, li, h1, h2, h3 { color:#fff; }
+      .consent-box { margin-top:20px; max-height:55vh; overflow:auto; padding:12px; border:1px solid #444; border-radius:10px; background:#0b0b0b; text-align:left; }
+      .consent-actions { margin-top:12px; }
+      .consent-actions label { display:flex; align-items:center; gap:8px; }
+      .instr { text-align:left; max-width:1400px; margin:0 auto; padding: 0 10px; }
+      .instr ul { line-height:1.6; }
+      .instr h2 { margin-top:0; }
+      .instr-page-top { margin-top: 24px; }
+      .instr li { margin: 8px 0; }
+      .instr strong { color: #8bd5ff; }
+  .consent-box h2 { margin: 0 0 12px 0; }
+</style>
+  </head>
+  <body>
+    <script>
+      const jsPsych = initJsPsych();
+      const __qp = new URLSearchParams(location.search);
+      const pidFromUrl = __qp.get('PID') || __qp.get('PROLIFIC_PID') || 'DEBUG_LOCAL';
+
+      const CONSENT_HTML = `
+        <div class="consent-box">
+          <h2>Consent</h2>
+          <p>Please read the study information below. By checking the box, you confirm that you are 18+, and consent to participate.</p>
+          <ul>
+            <li>Your chat and answers will be recorded for research.</li>
+            <li>Do not share any personal or identifying information.</li>
+            <li>You may withdraw at any time by closing the window.</li>
+          </ul>
+          <div class="consent-actions">
+            <label><input type="checkbox" name="consent" required> I have read the information and I consent to participate.</label>
+          </div>
+        </div>`;
+
+      // Function to generate instructions based on question type
+      function generateInstructions(questionType) {
+        const baseInstructions = `
+<div class="instr instr-aesthetic instr-page-top" style="margin-top: 28px;">
+  <style>
+    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
+    .instr-aesthetic li { margin: 6px 0; }
+    .instr-aesthetic ol[type="a"] { margin-top: 6px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; }
+  </style>
+  <h2>Instructions</h2>
+  <ol class="nice">
+    <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
+    <li>You and your partner will each see different views of the same room.</li>
+    <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+    ${getQuestionTypeSpecificInstructions(questionType)}
+    <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
+    <li>Strict turn-taking:
+      <ol type="a">
+        <li>Send a message only after your partner replies.</li>
+        <li>No two consecutive messages from the same person.</li>
+      </ol>
+    </li>
+    <li>You may zoom in on the image to inspect details.</li>
+    <li>After the turns are completed, select the best option you think is correct and click "Submit Answer".</li>
+    <li>Do not share personal information.</li>
+  </ol>
+  
+  <div style="margin-top: 30px; text-align: center;">
+    <h3 style="margin-bottom: 20px; color: #fff;">Example: Different Views of the Same Scene</h3>
+    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+      <div style="text-align: center;">
+        <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+        <img src="https://via.placeholder.com/300x200/1f1f22/8bd5ff?text=Your+View+%28Count%3A+2+lamps%29" 
+             alt="Your view example" 
+             style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 300px; height: auto;">
+        <p style="font-size: 12px; color: #8bd5ff; margin-top: 5px;">You see 2 lamps</p>
+      </div>
+      <div style="text-align: center;">
+        <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+        <img src="https://via.placeholder.com/300x200/1f1f22/ff6b6e?text=Partner+View+%28Count%3A+1+lamp%29" 
+             alt="Partner's view example" 
+             style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 300px; height: auto;">
+        <p style="font-size: 12px; color: #ff6b6e; margin-top: 5px;">Partner sees 1 lamp</p>
+      </div>
+    </div>
+    <div style="margin-top: 15px; font-size: 14px; color: #d0d4d9;">
+      <p><strong>Question:</strong> "How many lamps are there in total?"</p>
+      <p><strong>Answer:</strong> 2 (not 3!) - You need to discuss to avoid counting the same lamp twice.</p>
+    </div>
+  </div>
+  
+  <p>Click "Start chat" when you are ready.</p>
+</div>
+`;
+        return baseInstructions;
+      }
+
+      function getQuestionTypeSpecificInstructions(questionType) {
+        switch(questionType) {
+          case 'count':
+            return `<li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp. You have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>`;
+          case 'spatial':
+            return `<li>For instance, if the question is "Where is the red chair located?", you might see the chair on the left side of your view while your partner sees it on the right side of their view. You need to discuss the spatial relationships and positions to determine the correct answer.</li>`;
+          case 'all_types':
+            return `
+            <li><strong>Counting Tasks:</strong> For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp. You have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
+            <li><strong>Spatial Tasks:</strong> For instance, if the question is "Where is the red chair located?", you might see the chair on the left side of your view while your partner sees it on the right side of their view. You need to discuss the spatial relationships and positions to determine the correct answer.</li>
+            <li><strong>Other Tasks:</strong> You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
+          default:
+            return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
+        }
+      }
+
+      // Default instructions showing all question types
+      const INSTRUCTIONS_PAGE_HTML = generateInstructions('all_types');
+const SIDEBAR_INSTR_HTML = `\
+<div class="instr instr-aesthetic">
+  <style>
+    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
+    .instr-aesthetic li { margin: 6px 0; }
+    .instr-aesthetic ol[type="a"] { margin-top: 6px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; }
+    .consent-box h2 { margin: 0 0 12px 0; }
+</style>
+  <h2>Instructions</h2>
+  <ol class="nice">
+    <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
+    <li>You and your partner will each see different views of the same room.</li>
+    <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+    <li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp. You have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
+    <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
+    <li>Strict turn-taking:
+      <ol type="a">
+        <li>Send a message only after your partner replies.</li>
+        <li>No two consecutive messages from the same person.</li>
+      </ol>
+    </li>
+    <li>You may zoom in on the image to inspect details.</li>
+    <li>After the turns are completed, select the best option you think is correct and click “Submit Answer”.</li>
+    <li>Do not share personal information.</li>
+  </ol>
+</div>
+`;
+const consentTrial = { type: jsPsychSurveyHtmlForm, html: CONSENT_HTML, button_label: "Continue" };
+      const instructionsTrial = { type: jsPsychInstructions, pages: [INSTRUCTIONS_PAGE_HTML], show_clickable_nav: true, button_label_next: "Start chat", button_label_previous: "Back" };
+      const chatTrial = {
+        type: jsPsychDyadicChat,
+        socketUrl: window.location.origin,
+        prolific: { PID: pidFromUrl },
+        min_turns: 10,
+        goal_question: '',
+        answer_options: ['A','B','C','D'],
+        wait_timeout_sec: 120,
+        instructions_html: SIDEBAR_INSTR_HTML,
+        image_url: '',
+        question_type: 'default'
+      };
+
+      jsPsych.run([consentTrial, instructionsTrial, chatTrial]);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "prolific-dyadic-chat",
+  "version": "0.9.3",
+  "type": "module",
+  "private": true,
+  "scripts": { "start": "node server.mjs" },
+  "dependencies": { "express": "^4.19.2", "socket.io": "^4.7.5" }
+}
