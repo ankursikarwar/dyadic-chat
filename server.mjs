@@ -94,6 +94,9 @@ io.on('connection', (socket) => {
     return;
   }
 
+  // Clear any existing room assignment for reconnecting users
+  socket.currentRoom = null;
+  
   queue.push(socket);
   tryPair();
 
@@ -112,34 +115,46 @@ io.on('connection', (socket) => {
       // Mark this user as finished
       room.finished[socket.id] = true;
       
-      // Only notify partner if they're still connected and haven't already been notified
-      if (other && other.connected && !room.notifiedDisconnect) {
-        room.notifiedDisconnect = true;
+      // If there's a partner still connected, notify them and put them back in queue
+      if (other && other.connected) {
         try { 
           io.to(other.id).emit('end:partner'); 
           console.log(`[DyadicChat] Notified partner ${other.id} of disconnect`);
+          
+          // Put the remaining user back in the queue for re-pairing
+          other.currentRoom = null;
+          queue.push(other);
+          console.log(`[DyadicChat] Put remaining user ${other.id} back in queue`);
+          
+          // Try to pair them with someone else
+          tryPair();
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
         }
       }
       
-      // Clean up room if both users are finished
-      const [u1, u2] = room.users;
-      if (room.finished[u1.id] && room.finished[u2.id]){
-        try { 
-          persistRoom(room);
-          rooms.delete(roomId);
-          console.log(`[DyadicChat] Cleaned up room ${roomId}`);
-        } catch(e) {
-          console.error('[DyadicChat] Error cleaning up room:', e);
-        }
+      // Always clean up the room when someone disconnects
+      try { 
+        persistRoom(room);
+        rooms.delete(roomId);
+        console.log(`[DyadicChat] Cleaned up room ${roomId} due to disconnect`);
+      } catch(e) {
+        console.error('[DyadicChat] Error cleaning up room:', e);
       }
     }
   });
 
   socket.on('chat:message', (msg={}) => {
     const roomId = socket.currentRoom;
-    if (!roomId || !rooms.has(roomId)) return;
+    if (!roomId || !rooms.has(roomId)) {
+      // Room no longer exists, put user back in queue
+      socket.currentRoom = null;
+      if (queue.indexOf(socket) === -1) {
+        queue.push(socket);
+        tryPair();
+      }
+      return;
+    }
     const room = rooms.get(roomId);
     if (room.chatClosed) return;
 
@@ -169,7 +184,15 @@ io.on('connection', (socket) => {
 
   socket.on('answer:submit', (payload={}) => {
     const roomId = socket.currentRoom;
-    if (!roomId || !rooms.has(roomId)) return;
+    if (!roomId || !rooms.has(roomId)) {
+      // Room no longer exists, put user back in queue
+      socket.currentRoom = null;
+      if (queue.indexOf(socket) === -1) {
+        queue.push(socket);
+        tryPair();
+      }
+      return;
+    }
     const room = rooms.get(roomId);
     room.answers[socket.id] = { pid: socket.prolific.PID, choice: payload.choice, rt: payload.rt, t: Date.now() };
     room.finished[socket.id] = true;
