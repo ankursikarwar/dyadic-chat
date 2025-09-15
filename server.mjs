@@ -97,30 +97,43 @@ io.on('connection', (socket) => {
   queue.push(socket);
   tryPair();
 
-  socket.on('disconnect', () => {
-const qi = queue.indexOf(socket);
+  socket.on('disconnect', (reason) => {
+    console.log(`[DyadicChat] Socket ${socket.id} disconnected: ${reason}`);
+    
+    // Remove from queue if still waiting
+    const qi = queue.indexOf(socket);
     if (qi >= 0) queue.splice(qi, 1);
+    
     const roomId = socket.currentRoom;
     if (roomId && rooms.has(roomId)){
       const room = rooms.get(roomId);
+      const other = room.users.find(u => u.id !== socket.id);
+      
+      // Mark this user as finished
       room.finished[socket.id] = true;
+      
+      // Only notify partner if they're still connected and haven't already been notified
+      if (other && other.connected && !room.notifiedDisconnect) {
+        room.notifiedDisconnect = true;
+        try { 
+          io.to(other.id).emit('end:partner'); 
+          console.log(`[DyadicChat] Notified partner ${other.id} of disconnect`);
+        } catch(e) {
+          console.error('[DyadicChat] Error notifying partner:', e);
+        }
+      }
+      
+      // Clean up room if both users are finished
       const [u1, u2] = room.users;
       if (room.finished[u1.id] && room.finished[u2.id]){
-        persistRoom(room);
-        rooms.delete(roomId);
+        try { 
+          persistRoom(room);
+          rooms.delete(roomId);
+          console.log(`[DyadicChat] Cleaned up room ${roomId}`);
+        } catch(e) {
+          console.error('[DyadicChat] Error cleaning up room:', e);
+        }
       }
-    }
-  
-    // Notify partner & end their session when one user disconnects
-    
-    if (roomId && rooms.has(roomId)){
-      const room = rooms.get(roomId);
-      const other = room.users.find(u => u.id !== socket.id);
-      if (other){ try { io.to(other.id).emit('end:partner'); } catch(e){} }
-      // mark finished & cleanup if both ended
-      room.finished[socket.id] = true;
-      const [u1,u2] = room.users;
-      if (room.finished[u1.id] && room.finished[u2.id]){ try { persistRoom(room); } catch(e){} rooms.delete(roomId); }
     }
   });
 
@@ -168,6 +181,11 @@ const qi = queue.indexOf(socket);
       persistRoom(room);
       rooms.delete(room.id);
     }
+  });
+
+  // Heartbeat mechanism to detect actual disconnections
+  socket.on('ping', () => {
+    socket.emit('pong');
   });
 
   function tryPair(){

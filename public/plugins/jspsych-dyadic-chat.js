@@ -187,6 +187,8 @@
       const socket = io(trial.socketUrl, { query: { pid: pidLabel } });
       let myTurn = false, chatClosed = false;
       let msgCount = 0;
+      let heartbeatInterval = null;
+      let lastPongTime = Date.now();
       const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
 
       function showBlocked(msg){
@@ -484,17 +486,44 @@
         setupTextarea();
         setupZoom();
         updateTurns();
+        startHeartbeat(); // Start heartbeat monitoring
       });
 
       socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateTurns(); });
       socket.on('turn:you', function(){ myTurn = true; updateTurns(); });
       socket.on('turn:wait', function(){ myTurn = false; updateTurns(); });
       socket.on('chat:closed', function(){ chatClosed = true; updateTurns(); });
-    socket.on('end:partner', function(){
-      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
-      try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
-    });
+      // Heartbeat mechanism
+      function startHeartbeat() {
+        heartbeatInterval = setInterval(() => {
+          const now = Date.now();
+          if (now - lastPongTime > 10000) { // 10 seconds without pong
+            console.log('[DyadicChat] Heartbeat timeout, checking connection...');
+            socket.emit('ping');
+          } else {
+            socket.emit('ping');
+          }
+        }, 5000); // Send ping every 5 seconds
+      }
+
+      function stopHeartbeat() {
+        if (heartbeatInterval) {
+          clearInterval(heartbeatInterval);
+          heartbeatInterval = null;
+        }
+      }
+
+      socket.on('pong', () => {
+        lastPongTime = Date.now();
+      });
+
+      socket.on('end:partner', function(){
+        stopHeartbeat();
+        try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
+        try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
+      });
       socket.on('end:self', function(){
+        stopHeartbeat();
         // Store the answer data for the survey (if not already stored)
         if (!window.__answerData) {
           window.__answerData = { turns: Math.floor(msgCount/2), ended: 'self' };
