@@ -163,8 +163,10 @@
           '  <div class="dc-grid">',
           '    <section class="dc-panel dc-left" style="overflow:auto; min-height:0;">',
                     '      <div class="dc-instructions">', (function() {
-                      console.log('[DyadicChat] Generating instructions for question_type:', p && p.item ? p.item.question_type : 'undefined');
-                      return (p && p.item && p.item.question_type) ? generateSidebarInstructions(p.item.question_type, minMessages) : (trial.instructions_html || '');
+                      // Use server question type for sidebar instructions if available, otherwise fall back to item question type
+                      const questionTypeForInstructions = p.server_question_type || (p && p.item && p.item.question_type) || 'all_types';
+                      console.log('[DyadicChat] Generating sidebar instructions for question_type:', questionTypeForInstructions);
+                      return generateSidebarInstructions(questionTypeForInstructions, minMessages);
                     })(), '</div>',
           '    </section>',
           '    <section class="dc-center">',

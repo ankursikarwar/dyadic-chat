@@ -461,8 +461,8 @@ io.on('connection', (socket) => {
       rooms.set(roomId, room);
 
       console.log(`[DyadicChat] Sending paired event to ${a.id} and ${b.id}`);
-      io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type, correct_answer: item.user_1_gt_answer, options: item.options }, min_turns: MAX_TURNS });
-      io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type, correct_answer: item.user_2_gt_answer, options: item.options }, min_turns: MAX_TURNS });
+      io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type, correct_answer: item.user_1_gt_answer, options: item.options }, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
+      io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type, correct_answer: item.user_2_gt_answer, options: item.options }, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
       // User 1 (first user in queue) always starts the conversation
       room.nextSenderId = a.id;
       io.to(a.id).emit('turn:you');
