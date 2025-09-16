@@ -132,12 +132,12 @@ io.on('connection', (socket) => {
         console.log(`[DyadicChat] User ${socket.id} disconnected after completing study, partner can continue`);
       }
       
-      // Only clean up the room if both users are finished OR if the partner wasn't finished
-      if ((room.finished[other?.id] && other) || !other) {
+      // Only clean up the room if both users are finished AND have submitted surveys OR if the partner wasn't finished
+      if ((room.finished[other?.id] && other && room.surveys[other.id]) || !other) {
         try { 
           persistRoom(room);
           rooms.delete(roomId);
-          console.log(`[DyadicChat] Cleaned up room ${roomId} - both users finished or no partner`);
+          console.log(`[DyadicChat] Cleaned up room ${roomId} - both users finished and submitted surveys or no partner`);
         } catch(e) {
           console.error('[DyadicChat] Error cleaning up room:', e);
         }
@@ -195,12 +195,13 @@ io.on('connection', (socket) => {
 
     const [a,b] = room.users;
     
-    // Only clean up the room when both users have completed the study
-    if (room.finished[a.id] && room.finished[b.id]){
+    // Only clean up the room when both users have completed the study AND submitted surveys
+    if (room.finished[a.id] && room.finished[b.id] && 
+        room.surveys[a.id] && room.surveys[b.id]){
       try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
       persistRoom(room);
       rooms.delete(room.id);
-      console.log(`[DyadicChat] Both users completed study, cleaned up room ${roomId}`);
+      console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
     } else {
       console.log(`[DyadicChat] User ${socket.id} completed study, partner can still continue`);
     }
@@ -225,6 +226,16 @@ io.on('connection', (socket) => {
     };
     
     console.log(`[DyadicChat] User ${socket.id} submitted survey data`);
+    
+    // Check if both users have completed study and surveys
+    const [a,b] = room.users;
+    if (room.finished[a.id] && room.finished[b.id] && 
+        room.surveys[a.id] && room.surveys[b.id]){
+      try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
+      persistRoom(room);
+      rooms.delete(room.id);
+      console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
+    }
   });
 
   // Heartbeat mechanism to detect actual disconnections
