@@ -64,6 +64,7 @@
   }
 
   function generateSidebarInstructions(questionType, minMessages = 10) {
+    console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType);
     const baseInstructions = `
 <div class="instr instr-aesthetic">
   <style>
@@ -143,7 +144,10 @@
           '<div class="dc-root">',
           '  <div class="dc-grid">',
           '    <section class="dc-panel dc-left" style="overflow:auto; min-height:0;">',
-                    '      <div class="dc-instructions">', (p && p.item && p.item.question_type) ? generateSidebarInstructions(p.item.question_type, minMessages) : (trial.instructions_html || ''), '</div>',
+                    '      <div class="dc-instructions">', (function() {
+                      console.log('[DyadicChat] Generating instructions for question_type:', p && p.item ? p.item.question_type : 'undefined');
+                      return (p && p.item && p.item.question_type) ? generateSidebarInstructions(p.item.question_type, minMessages) : (trial.instructions_html || '');
+                    })(), '</div>',
           '    </section>',
           '    <section class="dc-center">',
           '      <div class="dc-image">', imgHtml, '</div>',
