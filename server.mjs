@@ -226,18 +226,17 @@ io.on('connection', (socket) => {
       
       // Clean up the room if:
       // 1. No partner exists, OR
-      // 2. Partner is finished and has submitted survey, OR  
-      // 3. Partner is finished but hasn't submitted survey yet (they'll submit later)
-      if (!other || (room.finished[other.id] && room.surveys[other.id]) || room.finished[other.id]) {
+      // 2. Partner is finished AND has submitted survey
+      if (!other || (room.finished[other.id] && room.surveys[other.id])) {
         try { 
           persistRoom(room);
           rooms.delete(roomId);
-          console.log(`[DyadicChat] Cleaned up room ${roomId} - partner finished or no partner`);
+          console.log(`[DyadicChat] Cleaned up room ${roomId} - partner finished and submitted survey or no partner`);
         } catch(e) {
           console.error('[DyadicChat] Error cleaning up room:', e);
         }
       } else {
-        console.log(`[DyadicChat] Room ${roomId} kept active - partner can still complete study`);
+        console.log(`[DyadicChat] Room ${roomId} kept active - partner can still complete study and survey`);
       }
     }
   });
