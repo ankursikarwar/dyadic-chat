@@ -185,10 +185,15 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit('end:self');
 
     const [a,b] = room.users;
+    
+    // Only clean up the room when both users have completed the study
     if (room.finished[a.id] && room.finished[b.id]){
       try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
       persistRoom(room);
       rooms.delete(room.id);
+      console.log(`[DyadicChat] Both users completed study, cleaned up room ${roomId}`);
+    } else {
+      console.log(`[DyadicChat] User ${socket.id} completed study, partner can still continue`);
     }
   });
 
