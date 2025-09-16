@@ -1,0 +1,212 @@
+[
+    {
+      "id": "sample1",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular light green soft fabric mattress?",
+      "user_2_question": "Which object is closer in distance to the rectangular light green soft fabric mattress?",
+      "options": [
+        "rectangular multicolored canvas-like textured wall art with a black frame",
+        "rectangular black wooden cell shelf"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 0.7787257452406959
+    },
+    {
+      "id": "sample2",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bathroom_v201_Part2/62c46e51/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bathroom_v201_Part2/62c46e51/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer to the cylindrical transparent glass plant container with visible brown soil?",
+      "user_2_question": "Which object is closer to the cylindrical transparent glass plant container with visible brown soil?",
+      "options": [
+        "light brown wooden bookcase with multiple rectangular compartments",
+        "white ceramic round standing sink"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 0.7800731968667249
+    },
+    {
+      "id": "sample3",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bathroom_v201_Part2/50b0c0c2/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bathroom_v201_Part2/50b0c0c2/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the cylindrical teal ceramic plant container?",
+      "user_2_question": "Which object is closer in distance to the cylindrical teal ceramic plant container?",
+      "options": [
+        "rectangular dark textured wall art with abstract light patterns, possibly made of fabric or canvas",
+        "dark brown wooden cabinet with multiple compartments"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 0.8707870099567632
+    },
+    {
+      "id": "sample4",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/LivingRoom_v201_Part6/5818c1e0/Image_0_0_0048_0.png",
+      "user_2_image": "/img/LivingRoom_v201_Part6/5818c1e0/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular white wood-like TV stand with open shelves?",
+      "user_2_question": "Which object is closer in distance to the rectangular white wood-like TV stand with open shelves?",
+      "options": [
+        "rectangular black glossy monitor",
+        "rectangular white wood single cabinet"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 1.0066943402870292
+    },
+    {
+      "id": "sample5",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Kitchen_v201_Part1/7aba51cd/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Kitchen_v201_Part1/7aba51cd/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular black metallic oven?",
+      "user_2_question": "Which object is closer in distance to the rectangular black metallic oven?",
+      "options": [
+        "rectangular dark brown wooden kitchen space with a glossy finish",
+        "cylindrical brown wooden large plant container"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 1.9007105872947387
+    },
+    {
+      "id": "sample6",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part4/7f0def03/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part4/7f0def03/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular pink fabric mattress?",
+      "user_2_question": "Which object is closer in distance to the rectangular pink fabric mattress?",
+      "options": [
+        "rectangular black metal desk",
+        "rectangular dark brown wooden cell shelf"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 1.1133804311289657
+    },
+    {
+      "id": "sample7",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular light green soft fabric mattress?",
+      "user_2_question": "Which object is closer in distance to the rectangular light green soft fabric mattress?",
+      "options": [
+        "rectangular dark green plastic large plant container",
+        "rectangular dark brown wooden cell shelf with multiple compartments"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 2.060615740600899
+    },
+    {
+      "id": "sample8",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular black wooden shelf with multiple compartments?",
+      "user_2_question": "Which object is closer in distance to the rectangular black wooden shelf with multiple compartments?",
+      "options": [
+        "tall and slender floor lamp with light green metallic base and fabric shade",
+        "rectangular pink soft fabric mattress"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 2.8614260362362525
+    },
+    {
+      "id": "sample9",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular pink soft fabric mattress?",
+      "user_2_question": "Which object is closer in distance to the rectangular pink soft fabric mattress?",
+      "options": [
+        "circular dark brown ceramic plant container",
+        "tall and slender light green metallic floor lamp with fabric shade"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 3.0180223560567403
+    },
+    {
+      "id": "sample10",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part4/7f0def03/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part4/7f0def03/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular pink fabric mattress?",
+      "user_2_question": "Which object is closer in distance to the rectangular pink fabric mattress?",
+      "options": [
+        "rectangular black metal desk",
+        "rectangular pink fabric bed"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 5.191146334130801
+    },
+    {
+      "id": "sample11",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the tall, thin, black metallic floor lamp located near the bookshelf?",
+      "user_2_question": "Which object is closer in distance to the tall, thin, black metallic floor lamp located near the bookshelf?",
+      "options": [
+        "tall and slender white metallic floor lamp",
+        "dark brown wooden cell shelf with multiple rectangular compartments"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 4.421830241444411
+    },
+    {
+      "id": "sample12",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/LivingRoom_v201_Part7/253e4972/Image_0_0_0048_0.png",
+      "user_2_image": "/img/LivingRoom_v201_Part7/253e4972/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the tall rectangular white wood-like large shelf?",
+      "user_2_question": "Which object is closer in distance to the tall rectangular white wood-like large shelf?",
+      "options": [
+        "tall narrow light brown wooden single cabinet",
+        "circular white metallic desk lamp"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 1.1683476109473032
+    },
+    {
+      "id": "sample13",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular light green soft fabric mattress?",
+      "user_2_question": "Which object is closer in distance to the rectangular light green soft fabric mattress?",
+      "options": [
+        "rectangular dark green plastic plant container",
+        "rectangular purple and pink plastic monitor"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 3.3104160025441285
+    },
+    {
+      "id": "sample14",
+      "question_type": "relative_distance",
+      "user_1_image": "/img/LivingRoom_v201_Part2/5e79c187/Image_0_0_0048_0.png",
+      "user_2_image": "/img/LivingRoom_v201_Part2/5e79c187/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is closer in distance to the rectangular white plastic monitor?",
+      "user_2_question": "Which object is closer in distance to the rectangular white plastic monitor?",
+      "options": [
+        "rectangular white fabric sofa",
+        "rectangular white wooden cell shelf"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 4.593368188255828
+    }
+  ]

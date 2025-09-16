@@ -103,6 +103,10 @@
         return `<li><strong>Counting Tasks:</strong> For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>`;
       case 'spatial':
         return `<li>For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</li>`;
+      case 'anchor':
+        return `<li>For anchor questions, you might see objects in different positions. Discuss the anchor object and its location with your partner.</li>`;
+      case 'relative_distance':
+        return `<li>For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</li>`;
       default:
         return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
     }

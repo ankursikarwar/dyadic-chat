@@ -1,0 +1,138 @@
+[
+    {
+      "id": "sample1",
+      "question_type": "anchor",
+      "user_1_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_1_0_0048_0.png",
+      "user_1_question": "Which object can be seen in both views of the room?",
+      "user_2_question": "Which object can be seen in both views of the room?",
+      "options": [
+        "rectangular pink soft fabric mattress",
+        "tall and slender light green metallic floor lamp with fabric shade",
+        "large black wooden shelf with multiple compartments",
+        "dark brown ceramic circular large plant container"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 69
+    },
+    {
+      "id": "sample2",
+      "question_type": "anchor",
+      "user_1_image": "/img/Bathroom_v201_Part2/62c46e51/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bathroom_v201_Part2/62c46e51/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is visible in both views of the room?",
+      "user_2_question": "Which object is visible in both views of the room?",
+      "options": [
+        "rounded white ceramic toilet with a grayish texture",
+        "light brown wooden bookcase with multiple compartments",
+        "transparent cylindrical glass plant container with visible brown soil",
+        "white ceramic standing sink"
+      ],
+      "user_1_gt_answer": 2,
+      "user_2_gt_answer": 2,
+      "difficulty": 63
+    },
+    {
+      "id": "sample3",
+      "question_type": "anchor",
+      "user_1_image": "/img/LivingRoom_v201_Part6/5818c1e0/Image_0_0_0048_0.png",
+      "user_2_image": "/img/LivingRoom_v201_Part6/5818c1e0/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is visible in both views of the room?",
+      "user_2_question": "Which object is visible in both views of the room?",
+      "options": [
+        "circular white metallic desk lamp",
+        "L-shaped light green fabric sofa",
+        "circular brown ceramic large plant container",
+        "rectangular white wood-like TV stand with open shelves"
+      ],
+      "user_1_gt_answer": 3,
+      "user_2_gt_answer": 3,
+      "difficulty": 67
+    },
+    {
+      "id": "sample4",
+      "question_type": "anchor",
+      "user_1_image": "/img/Bathroom_v201_Part2/13bd5e3f/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bathroom_v201_Part2/13bd5e3f/Image_1_0_0048_0.png",
+      "user_1_question": "Which of the following items can be seen in both views of the room?",
+      "user_2_question": "Which of the following items can be seen in both views of the room?",
+      "options": [
+        "dark brown wooden bookcase with multiple compartments",
+        "brown metallic bowl",
+        "white ceramic toilet with a rounded bowl and lid, featuring some speckles",
+        "dark ceramic bowl"
+      ],
+      "user_1_gt_answer": 2,
+      "user_2_gt_answer": 2,
+      "difficulty": 89
+    },
+    {
+      "id": "sample5",
+      "question_type": "anchor",
+      "user_1_image": "/img/Bathroom_v201_Part2/62c46e51/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bathroom_v201_Part2/62c46e51/Image_1_0_0048_0.png",
+      "user_1_question": "Which of the following objects can be seen in both views of the room?",
+      "user_2_question": "Which of the following objects can be seen in both views of the room?",
+      "options": [
+        "rectangular light brown wooden cell shelf with open compartments",
+        "white ceramic toilet with a rounded bowl and lid, featuring some grayish texture",
+        "simple light brown wooden bookcase with multiple compartments",
+        "round white ceramic standing sink"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 81
+    },
+    {
+      "id": "sample6",
+      "question_type": "anchor",
+      "user_1_image": "/img/LivingRoom_v201_Part2/2f1190f5/Image_0_0_0048_0.png",
+      "user_2_image": "/img/LivingRoom_v201_Part2/2f1190f5/Image_1_0_0048_0.png",
+      "user_1_question": "Which object can be seen in both views of the room?",
+      "user_2_question": "Which object can be seen in both views of the room?",
+      "options": [
+        "circular white metallic desk lamp",
+        "rectangular black wooden simple desk",
+        "L-shaped green fabric sofa",
+        "single cabinet with rectangular shape, multiple compartments, light brown wood"
+      ],
+      "user_1_gt_answer": 3,
+      "user_2_gt_answer": 3,
+      "difficulty": 86
+    },
+    {
+      "id": "sample7",
+      "question_type": "anchor",
+      "user_1_image": "/img/Bathroom_v201_Part2/6d53108/Image_0_0_0048_0.png",
+      "user_2_image": "/img/Bathroom_v201_Part2/6d53108/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is visible in both views of the room?",
+      "user_2_question": "Which object is visible in both views of the room?",
+      "options": [
+        "dark green rectangular canvas or fabric wall art with colorful abstract patterns",
+        "light gray ceramic standard toilet with a rounded tank and bowl",
+        "purple cylindrical ceramic plant container",
+        "white wood-like single cabinet with multiple compartments located near the toilet"
+      ],
+      "user_1_gt_answer": 1,
+      "user_2_gt_answer": 1,
+      "difficulty": 82
+    },
+    {
+      "id": "sample8",
+      "question_type": "anchor",
+      "user_1_image": "/img/LivingRoom_v201_Part7/253e4972/Image_0_0_0048_0.png",
+      "user_2_image": "/img/LivingRoom_v201_Part7/253e4972/Image_1_0_0048_0.png",
+      "user_1_question": "Which object is visible in both views of the room?",
+      "user_2_question": "Which object is visible in both views of the room?",
+      "options": [
+        "l-shaped purple fabric sofa",
+        "rectangular light brown wooden TV stand",
+        "tall and narrow light brown wooden cabinet",
+        "circular greenish-blue metallic plant container"
+      ],
+      "user_1_gt_answer": 0,
+      "user_2_gt_answer": 0,
+      "difficulty": 92
+    }
+  ]
