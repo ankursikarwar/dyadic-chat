@@ -467,41 +467,26 @@
           });
         }
 
-        // Handle pen and paper follow-up question with a small delay to ensure DOM is ready
-        setTimeout(() => {
-          const penPaperSelect = document.getElementById('pen_paper');
-          const penPaperFollowup = document.getElementById('pen_paper_followup');
-          const sketchedMapSelect = document.getElementById('sketched_map');
+        // Handle pen and paper follow-up question
+        const penPaperSelect = document.getElementById('pen_paper');
+        const penPaperFollowup = document.getElementById('pen_paper_followup');
 
-          console.log('[DyadicChat] Setting up pen and paper follow-up:', {
-            penPaperSelect: !!penPaperSelect,
-            penPaperFollowup: !!penPaperFollowup,
-            sketchedMapSelect: !!sketchedMapSelect
-          });
-
-          if (penPaperSelect && penPaperFollowup && sketchedMapSelect) {
-            penPaperSelect.addEventListener('change', function() {
-              console.log('[DyadicChat] Pen paper select changed to:', this.value);
-              if (this.value === 'yes') {
-                penPaperFollowup.style.display = 'block';
+        if (penPaperSelect && penPaperFollowup) {
+          const sketchedMapSelect = penPaperFollowup.querySelector('select[name="sketched_map"]');
+          penPaperSelect.addEventListener('change', function() {
+            if (this.value === 'yes') {
+              penPaperFollowup.style.display = 'block';
+              if (sketchedMapSelect) {
                 sketchedMapSelect.setAttribute('required', 'required');
-                console.log('[DyadicChat] Showing follow-up question');
-              } else {
-                penPaperFollowup.style.display = 'none';
-                sketchedMapSelect.removeAttribute('required');
-                sketchedMapSelect.value = ''; // Clear the value when hidden
-                console.log('[DyadicChat] Hiding follow-up question');
               }
-            });
-            console.log('[DyadicChat] Pen paper event listener attached successfully');
-          } else {
-            console.warn('[DyadicChat] Could not find pen paper elements:', {
-              penPaperSelect: !!penPaperSelect,
-              penPaperFollowup: !!penPaperFollowup,
-              sketchedMapSelect: !!sketchedMapSelect
-            });
-          }
-        }, 100); // Small delay to ensure DOM is ready
+            } else {
+              penPaperFollowup.style.display = 'none';
+              if (sketchedMapSelect) {
+                sketchedMapSelect.removeAttribute('required');
+              }
+            }
+          });
+        }
 
         // Handle form submission
         const form = document.getElementById('post-study-survey');
