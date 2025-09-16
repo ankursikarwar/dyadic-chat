@@ -542,6 +542,7 @@ function transformRoomData(room) {
         pid: survey.answerData.pid,
         rt_formatted: survey.answerData.rt_formatted
       },
+      timingData: survey.timingData, // Include timing data in transformed survey
       submittedAt: survey.submittedAt,
       submittedAt_formatted: survey.submittedAt_formatted
     };
@@ -558,6 +559,7 @@ function transformRoomData(room) {
     
     // Debug: Log timing data
     console.log(`[DyadicChat] Timing data for ${userRole}:`, timingData);
+    console.log(`[DyadicChat] Survey object for ${userRole}:`, survey);
     
     // Calculate different reaction times
     const calculateRT = (startTime, endTime) => {
