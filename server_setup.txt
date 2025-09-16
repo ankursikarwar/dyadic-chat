@@ -1,0 +1,4 @@
+sudo yum update -y
+sudo yum install nodejs npm -y
+sudo yum install git
+git clone https://github.com/ankursikarwar/dyadic-chat.git
