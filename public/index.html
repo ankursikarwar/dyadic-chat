@@ -135,7 +135,7 @@
       }
 
       // Default instructions showing all question types
-      const INSTRUCTIONS_PAGE_HTML = generateInstructions('all_types');
+      // Instructions will be generated dynamically based on server QUESTION_TYPE
 const SIDEBAR_INSTR_HTML = `\
 <div class="instr instr-aesthetic">
   <style>
@@ -177,7 +177,7 @@ const consentTrial = {
 };
       const instructionsTrial = { 
         type: jsPsychInstructions, 
-        pages: [INSTRUCTIONS_PAGE_HTML], 
+        pages: ['<div class="instr instr-aesthetic"><div class="dc-spinner"></div><div style="text-align:center; margin-top:20px;">Loading instructions...</div></div>'], // Placeholder, will be updated dynamically
         show_clickable_nav: true, 
         button_label_next: "Start chat", 
         button_label_previous: "Back",
@@ -186,6 +186,28 @@ const consentTrial = {
           if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
             window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           }
+          
+          // Fetch question type and update instructions dynamically
+          fetch('/api/question-type')
+            .then(response => response.json())
+            .then(data => {
+              const questionType = data.questionType;
+              console.log('[DyadicChat] Question type from server:', questionType);
+              
+              // Update the instructions content
+              const instructionsElement = document.querySelector('.jspsych-instructions');
+              if (instructionsElement) {
+                instructionsElement.innerHTML = generateInstructions(questionType);
+              }
+            })
+            .catch(error => {
+              console.warn('[DyadicChat] Failed to fetch question type, using default:', error);
+              // Fallback to all types if server fails
+              const instructionsElement = document.querySelector('.jspsych-instructions');
+              if (instructionsElement) {
+                instructionsElement.innerHTML = generateInstructions('all_types');
+              }
+            });
         }
       };
       const chatTrial = {

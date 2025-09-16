@@ -14,9 +14,11 @@ const MAX_TURNS = Number(process.env.MAX_TURNS || 10); // one turn = two message
 const REQUIRE_DISTINCT_PID = process.env.REQUIRE_DISTINCT_PID !== '0';
 const BLOCK_REPEAT_PID = String(process.env.BLOCK_REPEAT_PID || 'false').toLowerCase() === 'true';
 const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'false').toLowerCase() !== 'false';
+const QUESTION_TYPE = process.env.QUESTION_TYPE || 'all_types';
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
 app.get('/', (_req, res) => { res.set('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'index.html')); });
+app.get('/api/question-type', (_req, res) => { res.json({ questionType: QUESTION_TYPE }); });
 
 // ---------- Load items ----------
 let items = [];
