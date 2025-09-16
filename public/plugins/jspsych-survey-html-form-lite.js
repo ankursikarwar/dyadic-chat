@@ -3,7 +3,7 @@
     constructor(jsPsych){ this.jsPsych = jsPsych; }
     trial(display_element, trial){
       const btn = trial.button_label || 'Continue';
-      const html = '<div style="max-width:900px;margin:0 auto;color:#fff;">'
+      const html = '<div style="max-width:1400px;margin:0 auto;color:#fff;">'
         + '<form id="jspsych-survey-html-form-lite">'
         + (trial.html || '')
         + '<div style="margin-top:12px;"><button class="jspsych-btn" id="jspsych-survey-html-form-lite-next">'

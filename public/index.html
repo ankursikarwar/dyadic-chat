@@ -20,7 +20,7 @@
       .jspsych-content { color:#fff; }
       .jspsych-btn { background:#1f1f22; color:#fff; border:1px solid #555; border-radius:10px; padding:10px 14px; }
       a, p, li, h1, h2, h3 { color:#fff; }
-      .consent-box { margin-top:20px; max-height:55vh; overflow:auto; padding:12px; border:1px solid #444; border-radius:10px; background:#0b0b0b; text-align:left; }
+      .consent-box { margin-top:20px; max-height:55vh; overflow:auto; padding:12px; border:1px solid #444; border-radius:10px; background:#0b0b0b; text-align:left; max-width:1400px; margin-left:auto; margin-right:auto; font-family: 'Arial', 'Helvetica', sans-serif; font-size:16px; line-height:1.6; }
       .consent-actions { margin-top:12px; }
       .consent-actions label { display:flex; align-items:center; gap:8px; }
       .instr { text-align:justify; max-width:1400px; margin:0 auto; padding: 0 10px; }
@@ -41,14 +41,16 @@
       const CONSENT_HTML = `
         <div class="consent-box">
           <h2>Consent</h2>
-          <p>Please read the study information below. By checking the box, you confirm that you are 18+, and consent to participate.</p>
+          <p>Please read the information below. By checking the box, you confirm that you consent to participate in the study.</p>
           <ul>
-            <li>Your chat and answers will be recorded for research.</li>
-            <li>Do not share any personal or identifying information.</li>
-            <li>You may withdraw at any time by closing the window.</li>
+            <li>I agree to the anonymous use of the data in research presentations, publications, and online interactive sites to illustrate the findings.</li>
+            <li>I agree that the collected data could be used in related follow-up studies.</li>
+            <li>I agree to the use of the data in a not-for-profit anonymous corpus for research purposes which others will have access to.</li>
+            <li>I agree to not share any personal or identifying information.</li>
+            <li>I understand that I can withdraw at any time by closing the window.</li>
           </ul>
           <div class="consent-actions">
-            <label><input type="checkbox" name="consent" required> I have read the information and I consent to participate.</label>
+            <label><input type="checkbox" name="consent" required> I have read the information and I consent to participate in the study.</label>
           </div>
         </div>`;
 

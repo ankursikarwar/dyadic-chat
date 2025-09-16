@@ -339,6 +339,32 @@
               </div>
 
               <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Were the instructions clear and easy to follow throughout the task?</label>
+                <select name="instructions_clear" id="instructions_clear" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <option value="">Select an option</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+                <div id="instructions_feedback" style="margin-top:10px; display:none;">
+                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please explain what was unclear about the instructions:</label>
+                  <textarea name="instructions_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide specific feedback about what was unclear..."></textarea>
+                </div>
+              </div>
+
+              <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you have a clear understanding of both the task and the question being asked?</label>
+                <select name="task_understanding" id="task_understanding" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <option value="">Select an option</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+                <div id="task_feedback" style="margin-top:10px; display:none;">
+                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please explain what was unclear about the task or question:</label>
+                  <textarea name="task_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide specific feedback about what was unclear..."></textarea>
+                </div>
+              </div>
+
+              <div style="margin-bottom:20px;">
                 <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use any pen or paper to help you answer the question?</label>
                 <select name="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
                   <option value="">Select an option</option>
@@ -385,6 +411,32 @@
         `;
         
         display_element.innerHTML = feedbackHTML;
+
+        // Handle dynamic feedback fields
+        const instructionsSelect = document.getElementById('instructions_clear');
+        const taskSelect = document.getElementById('task_understanding');
+        const instructionsFeedback = document.getElementById('instructions_feedback');
+        const taskFeedback = document.getElementById('task_feedback');
+
+        if (instructionsSelect && instructionsFeedback) {
+          instructionsSelect.addEventListener('change', function() {
+            if (this.value === 'no') {
+              instructionsFeedback.style.display = 'block';
+            } else {
+              instructionsFeedback.style.display = 'none';
+            }
+          });
+        }
+
+        if (taskSelect && taskFeedback) {
+          taskSelect.addEventListener('change', function() {
+            if (this.value === 'no') {
+              taskFeedback.style.display = 'block';
+            } else {
+              taskFeedback.style.display = 'none';
+            }
+          });
+        }
 
         // Handle form submission
         const form = document.getElementById('post-study-survey');
