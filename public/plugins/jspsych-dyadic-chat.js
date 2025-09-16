@@ -471,21 +471,32 @@
         const penPaperSelect = document.getElementById('pen_paper');
         const penPaperFollowup = document.getElementById('pen_paper_followup');
 
+        console.log('Pen paper elements found:', {
+          penPaperSelect: !!penPaperSelect,
+          penPaperFollowup: !!penPaperFollowup
+        });
+
         if (penPaperSelect && penPaperFollowup) {
           const sketchedMapSelect = penPaperFollowup.querySelector('select[name="sketched_map"]');
+          console.log('Sketched map select found:', !!sketchedMapSelect);
+          
           penPaperSelect.addEventListener('change', function() {
+            console.log('Pen paper changed to:', this.value);
             if (this.value === 'yes') {
               penPaperFollowup.style.display = 'block';
+              console.log('Showing follow-up');
               if (sketchedMapSelect) {
                 sketchedMapSelect.setAttribute('required', 'required');
               }
             } else {
               penPaperFollowup.style.display = 'none';
+              console.log('Hiding follow-up');
               if (sketchedMapSelect) {
                 sketchedMapSelect.removeAttribute('required');
               }
             }
           });
+          console.log('Event listener attached');
         }
 
         // Handle form submission
