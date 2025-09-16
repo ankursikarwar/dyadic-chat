@@ -280,7 +280,7 @@
       function showCombinedFeedbackAndSurvey(userAnswer) {
         const isCorrect = userAnswer === correctAnswer;
         const feedbackHTML = `
-          <div style="max-width:800px; margin:0 auto; padding:40px 20px; color:#fff; text-align:left;">
+          <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:#fff; text-align:left;">
             <!-- Answer Feedback Section -->
             <div style="text-align:center; margin-bottom:40px;">
               <h2 style="margin-bottom:30px; color:#fff;">Answer Submitted!</h2>
