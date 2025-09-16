@@ -240,7 +240,10 @@ io.on('connection', (socket) => {
           }
         },
         pairedAt: Date.now(),
-        closed: true
+        closed: true,
+        userRoles: {
+          [socket.id]: 'unknown' // Can't determine role for disconnected room
+        }
       };
       
       try {
@@ -320,18 +323,22 @@ io.on('connection', (socket) => {
         id: roomId, users:[a,b], item,
         messages:[], answers:{}, finished:{}, surveys:{},
         msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
-        nextSenderId:null, pairedAt: Date.now()
+        nextSenderId:null, pairedAt: Date.now(),
+        userRoles: {
+          [a.id]: 'user_1',  // First user (starts conversation)
+          [b.id]: 'user_2'   // Second user
+        }
       };
       rooms.set(roomId, room);
 
       console.log(`[DyadicChat] Sending paired event to ${a.id} and ${b.id}`);
       io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type }, min_turns: MAX_TURNS });
       io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type }, min_turns: MAX_TURNS });
-      const starter = Math.random() < 0.5 ? a : b;
-      room.nextSenderId = starter.id;
-      io.to(starter.id).emit('turn:you');
-      io.to((starter.id===a.id)?b.id:a.id).emit('turn:wait');
-      console.log(`[DyadicChat] Pairing complete, ${starter.id} starts first`);
+      // User 1 (first user in queue) always starts the conversation
+      room.nextSenderId = a.id;
+      io.to(a.id).emit('turn:you');
+      io.to(b.id).emit('turn:wait');
+      console.log(`[DyadicChat] Pairing complete, ${a.id} (user_1) starts first`);
     } else {
       console.log(`[DyadicChat] Not enough users in queue (${queue.length}), waiting for more`);
     }
@@ -346,7 +353,8 @@ function persistRoom(room){
       id: room.id, item: room.item.id || room.item.image_url,
       minTurns: room.minTurns, messages: room.messages,
       answers: room.answers, surveys: room.surveys, 
-      pairedAt: room.pairedAt, closed: room.chatClosed
+      pairedAt: room.pairedAt, closed: room.chatClosed,
+      userRoles: room.userRoles
     }) + "\n";
     fs.appendFileSync(path.join(dir, 'transcripts.ndjson'), line);
     console.log('[DyadicChat] Saved transcript', room.id);

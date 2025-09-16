@@ -6,6 +6,8 @@
     "user_2_image": "/img/sample_4.jpg",
     "user_1_question": "How many total lamps are there in the room?",
     "user_2_question": "How many total lamps are there in the room?",
+    "user_1_gt_answer": "4",
+    "user_2_gt_answer": "4",
     "options": [
       "4",
       "5",
