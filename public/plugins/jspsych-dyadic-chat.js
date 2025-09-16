@@ -100,7 +100,7 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li><strong>Counting Task:</strong> <strong style="color: #ff6666;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>`;
+        return `<li><strong>Counting Task:</strong> <span style="color: #ff6666;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
       case 'spatial':
         return `<li>For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</li>`;
       case 'anchor':
