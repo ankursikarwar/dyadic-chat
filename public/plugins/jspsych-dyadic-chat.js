@@ -81,7 +81,7 @@
     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
     <li>You can send a maximum of ${minMessages} messages to your partner.</li>
     <li>You can submit an answer only after you have sent ${minMessages} messages to your partner.</li>
-    <li>Strict turn-taking:  
+    <li>Strict turn-taking:
       <ol type="a">
         <li>You cannot send two consecutive messages to your partner.</li>
         <li>You must wait for your partner to reply before sending your next message.</li>
@@ -152,10 +152,10 @@
           '          <h3 class="dc-goal-title">Goal: Answer the Following Question</h3>',
           '          <div class="dc-question">', goalQ, '</div>',
           '          <div id="dc-answer-group" class="dc-answers">',
-                     opts.map(function(opt){
+                     opts.map(function(opt, index){
                        return [
                          '<label class="dc-answer-option">',
-                         '  <input type="radio" name="dc-answer" value="', String(opt).replace(/"/g,'&quot;'), '" disabled />',
+                         '  <input type="radio" name="dc-answer" value="', String(index), '" disabled />',
                          '  <span>', String(opt), '</span>',
                          '</label>'
                        ].join('');
@@ -577,10 +577,10 @@
         lastPongTime = Date.now();
       });
 
-      socket.on('end:partner', function(){
+    socket.on('end:partner', function(){
         stopHeartbeat();
-        try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
-        try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
+      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
+      try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
       });
 
     }
