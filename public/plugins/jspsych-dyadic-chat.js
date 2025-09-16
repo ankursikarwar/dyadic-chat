@@ -202,7 +202,7 @@
       let correctAnswerIndex = null; // Store the correct answer index for this user
       let correctAnswerText = null; // Store the correct answer text for this user
       let answerOptions = null; // Store the answer options array
-      const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      let t0 = null; // Will be set when users get paired
 
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
@@ -272,6 +272,13 @@
       function submitAnswer(){
         const el = document.querySelector('input[name="dc-answer"]:checked');
         if (!el) return;
+        
+        // Safety check: ensure t0 is set (should be set when paired)
+        if (t0 === null) {
+          console.warn('[DyadicChat] t0 not set, using current time as fallback');
+          t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        }
+        
         const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rt = Math.round(nowTs - t0);
         
@@ -608,6 +615,9 @@
       /* duplicate removed */
 
       socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
+        // Set reaction time start point when users get paired
+        t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        
         // Store the correct answer index, text, and options for this user
         correctAnswerIndex = p.item.correct_answer;
         answerOptions = p.item.options;

@@ -72,6 +72,40 @@ let completedItems = new Set(loadJson(completedPath, { completed: [] }).complete
 function markPidSeen(pid){ if (!pid) return; if (!seenPidsMap[pid]){ seenPidsMap[pid]=true; saveJsonAtomic(seenPath, seenPidsMap); } }
 function markItemCompleted(id){ if (!id) return; if (!completedItems.has(id)){ completedItems.add(id); saveJsonAtomic(completedPath, { completed: Array.from(completedItems) }); } }
 
+// Utility functions for human-readable time formatting
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  return {
+    iso: date.toISOString(),
+    readable: date.toLocaleString('en-US', { 
+      timeZone: 'UTC',
+      year: 'numeric',
+      month: '2-digit', 
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }),
+    unix: timestamp
+  };
+}
+
+function formatReactionTime(rtMs) {
+  const seconds = Math.floor(rtMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  const remainingMs = rtMs % 1000;
+  
+  return {
+    milliseconds: rtMs,
+    seconds: (rtMs / 1000).toFixed(2),
+    human: minutes > 0 ? 
+      `${minutes}m ${remainingSeconds}s` : 
+      `${remainingSeconds}.${remainingMs.toString().padStart(3, '0')}s`
+  };
+}
+
 // ---------- Pairing ----------
 const queue = [];
 const rooms = new Map();
@@ -223,7 +257,14 @@ io.on('connection', (socket) => {
       return;
     }
     const text = String(msg.text || '').slice(0, 2000);
-    const rec = { who: socket.id, pid: socket.prolific.PID, text, t: Date.now() };
+    const now = Date.now();
+    const rec = { 
+      who: socket.id, 
+      pid: socket.prolific.PID, 
+      text, 
+      t: now,
+      t_formatted: formatTimestamp(now)
+    };
     room.messages.push(rec);
 
     room.msgCount = (room.msgCount || 0) + 1;
@@ -250,7 +291,15 @@ io.on('connection', (socket) => {
       return;
     }
     const room = rooms.get(roomId);
-    room.answers[socket.id] = { pid: socket.prolific.PID, choice: payload.choice, rt: payload.rt, t: Date.now() };
+    const now = Date.now();
+    room.answers[socket.id] = { 
+      pid: socket.prolific.PID, 
+      choice: payload.choice, 
+      rt: payload.rt, 
+      rt_formatted: formatReactionTime(payload.rt),
+      t: now,
+      t_formatted: formatTimestamp(now)
+    };
     room.finished[socket.id] = true;
     // Don't send end:self here - user should continue to survey page
 
@@ -320,11 +369,16 @@ io.on('connection', (socket) => {
     const { survey, answerData } = payload;
     
     // Store survey data for this user
+    const now = Date.now();
     room.surveys[socket.id] = {
       pid: socket.prolific.PID,
       survey: survey,
-      answerData: answerData,
-      submittedAt: Date.now()
+      answerData: {
+        ...answerData,
+        rt_formatted: formatReactionTime(answerData.rt)
+      },
+      submittedAt: now,
+      submittedAt_formatted: formatTimestamp(now)
     };
     
     console.log(`[DyadicChat] User ${socket.id} submitted survey data`);
@@ -381,7 +435,9 @@ io.on('connection', (socket) => {
         id: roomId, users:[a,b], item,
         messages:[], answers:{}, finished:{}, surveys:{},
         msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
-        nextSenderId:null, pairedAt: Date.now(),
+        nextSenderId:null, 
+        pairedAt: Date.now(),
+        pairedAt_formatted: formatTimestamp(Date.now()),
         userRoles: {
           [a.id]: 'user_1',  // First user (starts conversation)
           [b.id]: 'user_2'   // Second user
