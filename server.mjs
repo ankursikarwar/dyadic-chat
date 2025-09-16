@@ -350,6 +350,9 @@ io.on('connection', (socket) => {
         closed: true,
         userRoles: {
           [socket.id]: 'unknown' // Can't determine role for disconnected room
+        },
+        userPids: {
+          [socket.id]: socket.prolific.PID || 'unknown'
         }
       };
       
@@ -442,6 +445,10 @@ io.on('connection', (socket) => {
         userRoles: {
           [a.id]: 'user_1',  // First user (starts conversation)
           [b.id]: 'user_2'   // Second user
+        },
+        userPids: {
+          [a.id]: a.prolific.PID || 'unknown',
+          [b.id]: b.prolific.PID || 'unknown'
         }
       };
       rooms.set(roomId, room);
@@ -578,10 +585,21 @@ function transformRoomData(room) {
       waiting_page_time: calculateRT(timingData.waitingPageStartTime, timingData.chatBeginTime) || answer.rt_formatted,
       chat_begin_to_first_msg_rt: calculateRT(timingData.chatBeginTime, timingData.firstMessageTime) || answer.rt_formatted,
       chat_end_to_answer_rt: calculateRT(timingData.chatEndTime, timingData.answerSubmitTime) || answer.rt_formatted,
+      survey_rt: calculateRT(timingData.answerSubmitTime, timingData.surveySubmitTime) || answer.rt_formatted,
       total_experiment_time: calculateRT(timingData.consentPageStartTime, timingData.surveySubmitTime) || answer.rt_formatted
     };
   });
   
+  // Create reverse mapping from PID to user role
+  const pidToUserRole = {};
+  Object.keys(room.userRoles).forEach(socketId => {
+    const userRole = room.userRoles[socketId];
+    const pid = room.userPids[socketId];
+    if (pid && userRole) {
+      pidToUserRole[pid] = userRole;
+    }
+  });
+
   return {
     room_id: room.id,
     id: item.id || 'unknown',
@@ -609,7 +627,9 @@ function transformRoomData(room) {
     rts: rts,
     pairedAt: room.pairedAt,
     closed: true,
-    userRoles: room.userRoles
+    userRoles: room.userRoles,
+    userPids: room.userPids,
+    pidToUserRole: pidToUserRole
   };
 }
 
