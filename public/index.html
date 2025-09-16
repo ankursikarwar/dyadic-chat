@@ -113,12 +113,12 @@
       function getQuestionTypeSpecificInstructions(questionType) {
         switch(questionType) {
           case 'count':
-            return `<li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp. You have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>`;
+            return `<li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>`;
           case 'spatial':
             return `<li>For instance, if the question is "Where is the red chair located?", you might see the chair on the left side of your view while your partner sees it on the right side of their view. You need to discuss the spatial relationships and positions to determine the correct answer.</li>`;
           case 'all_types':
             return `
-            <li><strong>Counting Tasks:</strong> For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp. You have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
+            <li><strong>Counting Tasks:</strong> For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
             <li><strong>Spatial Tasks:</strong> For instance, if the question is "Where is the red chair located?", you might see the chair on the left side of your view while your partner sees it on the right side of their view. You need to discuss the spatial relationships and positions to determine the correct answer.</li>
             <li><strong>Other Tasks:</strong> You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
           default:
@@ -142,7 +142,7 @@ const SIDEBAR_INSTR_HTML = `\
     <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
-    <li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp. You have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
+    <li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
     <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
     <li>Strict turn-taking:
       <ol type="a">

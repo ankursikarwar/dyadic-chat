@@ -1,12 +1,12 @@
-/*! DyadicChat plugin — vG6h-zoom4-clamp2-instr */
+/*! DyadicChat plugin — vG6h-zoom4-clamp2-instr-msg */
 (function(){
   'use strict';
-  const BUILD='vG6h-zoom4-clamp2-instr'; console.log('[DyadicChat plugin]', BUILD);
+  const BUILD='vG6h-zoom4-clamp2-instr-msg'; console.log('[DyadicChat plugin]', BUILD);
 
   const info = { name: 'dyadic-chat', parameters: {
     socketUrl: { type: String, default: '' },
     prolific: { type: Object, default: {} },
-    min_turns: { type: Number, default: 10 },
+    min_messages: { type: Number, default: 10 },
     wait_timeout_sec: { type: Number, default: 120 },
     goal_question: { type: String, default: '' },
     answer_options: { type: Array,  default: [] },
@@ -41,7 +41,7 @@
       '.dc-answers { display:block; width:100%; max-width:720px; margin:8px auto; text-align:left; min-height:0; max-height:100%; overflow:auto; }',
       '.dc-answer-option { display:flex; align-items:center; justify-content:flex-start; gap:8px; margin:8px !important; }',
       '.dc-answer-option span { font-size:17px !important; }',
-      '.dc-availability-note { margin-top:8px; margin-bottom:9px; font-size:15px; font-weight:bold; color:var(--muted); }',
+      '.dc-availability-note { margin-top:8px; margin-bottom:3px; font-size:15px; font-weight:bold; color:var(--muted); }',
       '#dc-submit { font-size:16px; margin-top:auto; margin-bottom:4px; }',
       '.dc-right { display:grid; grid-template-rows: auto minmax(0,1fr) auto auto; row-gap:7px; height:100%; min-height:0; box-sizing:border-box; }',
       '.dc-chatbox { min-height:0; height:auto; overflow:auto; background:var(--panel-alt); border:1px solid var(--border); border-radius:var(--radius); padding:8px; }',
@@ -63,7 +63,7 @@
     ].join('');
   }
 
-  function generateSidebarInstructions(questionType) {
+  function generateSidebarInstructions(questionType, minMessages = 10) {
     const baseInstructions = `
 <div class="instr instr-aesthetic">
   <style>
@@ -75,18 +75,20 @@
 </style>
   <h2>Instructions</h2>
   <ol class="nice">
+    <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
-    <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
-    <li>Strict turn-taking:
+    <li>You can send a maximum of ${minMessages} messages to your partner.</li>
+    <li>You can submit an answer only after you have sent ${minMessages} messages to your partner.</li>
+    <li>Strict turn-taking:  
       <ol type="a">
-        <li>Send a message only after your partner replies.</li>
-        <li>No two consecutive messages from the same person.</li>
+        <li>You cannot send two consecutive messages to your partner.</li>
+        <li>You must wait for your partner to reply before sending your next message.</li>
       </ol>
     </li>
     <li>You may zoom in on the image to inspect details.</li>
-    <li>After the turns are completed, select the best option you think is correct and click "Submit Answer".</li>
+    <li>After the chat is completed, select the best option you think is correct and click "Submit Answer".</li>
     <li>Do not share personal information.</li>
   </ol>
 </div>
@@ -97,7 +99,7 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'count':
-        return `<li>For counting questions, you might see different numbers of items in your view. Discuss with your partner to avoid overcounting or undercounting.</li>`;
+        return `<li><strong>Counting Tasks:</strong> For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>`;
       case 'spatial':
         return `<li>For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</li>`;
       default:
@@ -125,7 +127,7 @@
 
       function htmlChat(p){
         const item = (p && p.item) || null;
-        const minTurns = (p && p.min_turns) || trial.min_turns;
+        const minMessages = (p && p.min_turns) || trial.min_messages;
         const imgHtml = (item && item.image_url)
           ? '<div class="dc-image-viewport"><img id="dc-scene" src="' + item.image_url + '" alt="scene"></div>'
             + '<div class="dc-zoom-controls">'
@@ -141,7 +143,7 @@
           '<div class="dc-root">',
           '  <div class="dc-grid">',
           '    <section class="dc-panel dc-left" style="overflow:auto; min-height:0;">',
-                    '      <div class="dc-instructions">', (p && p.item && p.item.question_type) ? generateSidebarInstructions(p.item.question_type) : (trial.instructions_html || ''), '</div>',
+                    '      <div class="dc-instructions">', (p && p.item && p.item.question_type) ? generateSidebarInstructions(p.item.question_type, minMessages) : (trial.instructions_html || ''), '</div>',
           '    </section>',
           '    <section class="dc-center">',
           '      <div class="dc-image">', imgHtml, '</div>',
@@ -159,7 +161,7 @@
                        ].join('');
                      }).join(''),
           '          </div>',
-          '          <div class="dc-availability-note">Only becomes accessible when ' + String(minTurns) + ' turns are completed.</div>',
+          '          <div class="dc-availability-note">Note: Submit button becomes accessible when ' + String(minMessages) + ' messages are sent.</div>',
           '          <button id="dc-submit" class="dc-btn dc-submit" disabled>Submit Answer</button>',
           '        </div>',
           '      </section>',
@@ -168,8 +170,8 @@
           '      <div class="dc-title-row">',
           '        <div class="dc-title">ChatBox</div>',
           '        <div class="dc-small" style="font-size:14px; font-weight:bold;">',
-          '          <span>Number of Turns&nbsp;&nbsp;</span>',
-          '          <span id="dc-turns">0</span> / <span id="dc-turns-total">', String(minTurns), '</span>',
+          '          <span>Number of Messages&nbsp;&nbsp;</span>',
+          '          <span id="dc-messages">0</span> / <span id="dc-messages-total">', String(minMessages), '</span>',
           '        </div>',
           '      </div>',
           '      <div id="dc-chat" class="dc-chatbox" aria-live="polite"></div>',
@@ -198,24 +200,25 @@
       socket.on('blocked:repeat_pid', function(){ showBlocked('You have already participated in this study (one session per Prolific account).'); });
       socket.on('blocked:deck_complete', function(){ showBlocked('This study is currently full. All items have been completed. Thank you!'); });
 
-      function updateTurns(){
-        var completedTurns = Math.floor(msgCount / 2);
-        var a = document.getElementById('dc-turns'); if (a) a.textContent = String(completedTurns);
+      function updateMessages(){
+        var completedMessages = Math.floor(msgCount / 2);
+        var a = document.getElementById('dc-messages'); if (a) a.textContent = String(completedMessages);
         var sendBtn = document.getElementById('dc-send');
         var msg = document.getElementById('dc-msg');
         var allow = myTurn && !chatClosed;
         if (sendBtn) sendBtn.disabled = !allow;
-        if (msg) msg.disabled = !allow;
+        // Allow typing even when it's not their turn, but disable sending
+        if (msg) msg.disabled = chatClosed;
         var ansInputs = Array.prototype.slice.call(document.querySelectorAll('input[name="dc-answer"]'));
         var submitBtn = document.getElementById('dc-submit');
-        var threshold = ((pairedPayload && pairedPayload.min_turns) || trial.min_turns || 10);
-        var canAnswer = chatClosed || (completedTurns >= threshold);
+        var threshold = ((pairedPayload && pairedPayload.min_messages) || trial.min_messages || 10);
+        var canAnswer = chatClosed || (completedMessages >= threshold);
         ansInputs.forEach(function(el){ el.disabled = !canAnswer; });
         if (submitBtn) submitBtn.disabled = !canAnswer;
         var hint = document.getElementById('dc-hint');
         if (hint){
-          if (chatClosed) hint.textContent = 'Maximum number of turns reached. Answer the question now.';
-          else hint.textContent = myTurn ? 'It’s your turn. Type your message.' : 'Only one message at a time. Wait for your partner to respond.';
+          if (chatClosed) hint.textContent = 'Maximum number of messages reached. Submit your answer now.';
+          else hint.textContent = myTurn ? 'It’s your turn. Send your message.' : 'Only one message at a time. Wait for your partner to respond.';
         }
       }
 
@@ -242,7 +245,7 @@
         const text = (el && el.value || '').trim(); if (!text) return;
         if (!myTurn || chatClosed) return;
         addLine('Me', text);
-        msgCount += 1; updateTurns();
+        msgCount += 1; updateMessages();
         socket.emit('chat:message', { text: text });
         el.value = '';
         if (el && el.classList.contains('dc-textarea')) { el.style.height = 'auto'; el.style.overflowY = 'hidden'; }
@@ -256,7 +259,7 @@
         socket.emit('answer:submit', { choice: el.value, rt: rt });
         
         // Store the answer data for the survey
-        window.__answerData = { turns: Math.floor(msgCount/2), choice: el.value, rt: rt };
+        window.__answerData = { messages: Math.floor(msgCount/2), choice: el.value, rt: rt, pid: pidLabel };
         
         // Show survey instead of ending immediately
         showSurvey();
