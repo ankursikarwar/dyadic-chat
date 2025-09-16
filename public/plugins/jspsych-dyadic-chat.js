@@ -488,14 +488,13 @@
         if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
         setupTextarea();
         setupZoom();
-        updateTurns();
         startHeartbeat(); // Start heartbeat monitoring
       });
 
-      socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateTurns(); });
-      socket.on('turn:you', function(){ myTurn = true; updateTurns(); });
-      socket.on('turn:wait', function(){ myTurn = false; updateTurns(); });
-      socket.on('chat:closed', function(){ chatClosed = true; updateTurns(); });
+      socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateMessages(); });
+      socket.on('turn:you', function(){ myTurn = true; updateMessages(); });
+      socket.on('turn:wait', function(){ myTurn = false; updateMessages(); });
+      socket.on('chat:closed', function(){ chatClosed = true; updateMessages(); });
       // Heartbeat mechanism
       function startHeartbeat() {
         heartbeatInterval = setInterval(() => {
