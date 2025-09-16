@@ -346,8 +346,8 @@
                   <option value="no">No</option>
                 </select>
                 <div id="instructions_feedback" style="margin-top:10px; display:none;">
-                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please explain what was unclear about the instructions:</label>
-                  <textarea name="instructions_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide specific feedback about what was unclear..."></textarea>
+                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please briefly explain what was unclear about the instructions:</label>
+                  <textarea name="instructions_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide brief feedback about what was unclear..."></textarea>
                 </div>
               </div>
 
@@ -359,8 +359,8 @@
                   <option value="no">No</option>
                 </select>
                 <div id="task_feedback" style="margin-top:10px; display:none;">
-                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please explain what was unclear about the task or question:</label>
-                  <textarea name="task_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide specific feedback about what was unclear..."></textarea>
+                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please briefly explain what was unclear about the task or question:</label>
+                  <textarea name="task_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide brief feedback about what was unclear..."></textarea>
                 </div>
               </div>
 
@@ -419,21 +419,35 @@
         const taskFeedback = document.getElementById('task_feedback');
 
         if (instructionsSelect && instructionsFeedback) {
+          const instructionsTextarea = instructionsFeedback.querySelector('textarea[name="instructions_feedback"]');
           instructionsSelect.addEventListener('change', function() {
             if (this.value === 'no') {
               instructionsFeedback.style.display = 'block';
+              if (instructionsTextarea) {
+                instructionsTextarea.setAttribute('required', 'required');
+              }
             } else {
               instructionsFeedback.style.display = 'none';
+              if (instructionsTextarea) {
+                instructionsTextarea.removeAttribute('required');
+              }
             }
           });
         }
 
         if (taskSelect && taskFeedback) {
+          const taskTextarea = taskFeedback.querySelector('textarea[name="task_feedback"]');
           taskSelect.addEventListener('change', function() {
             if (this.value === 'no') {
               taskFeedback.style.display = 'block';
+              if (taskTextarea) {
+                taskTextarea.setAttribute('required', 'required');
+              }
             } else {
               taskFeedback.style.display = 'none';
+              if (taskTextarea) {
+                taskTextarea.removeAttribute('required');
+              }
             }
           });
         }
