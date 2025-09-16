@@ -217,7 +217,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('survey:submit', (payload={}) => {
+  socket.on('survey:submit', (payload={}, callback) => {
     console.log(`[DyadicChat] Received survey submission from ${socket.id}:`, payload);
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
@@ -280,6 +280,11 @@ io.on('connection', (socket) => {
       console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
     } else {
       console.log(`[DyadicChat] Waiting for both users to complete study and surveys before cleaning up room ${roomId}`);
+    }
+    
+    // Send acknowledgment back to client
+    if (callback) {
+      callback({ success: true, message: 'Survey data received' });
     }
   });
 

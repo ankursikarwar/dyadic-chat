@@ -365,6 +365,8 @@
       }
 
       function showSurvey(){
+        console.log('[DyadicChat] Showing survey...');
+        console.log('[DyadicChat] Answer data:', window.__answerData);
         const surveyHTML = `
           <div style="max-width:800px; margin:0 auto; padding:40px 20px; color:#fff; text-align:left;">
             <h2 style="text-align:center; margin-bottom:30px; color:#fff;">Post-Study Survey</h2>
@@ -449,20 +451,27 @@
 
         // Handle form submission
         const form = document.getElementById('post-study-survey');
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
+        console.log('[DyadicChat] Survey form found:', form);
+        if (form) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('[DyadicChat] Survey form submitted');
           const formData = new FormData(form);
           const surveyData = {};
           for (const [key, value] of formData.entries()) {
             surveyData[key] = value;
           }
+          console.log('[DyadicChat] Survey data collected:', surveyData);
           
           // Send survey data to server
           console.log('[DyadicChat] Submitting survey data:', surveyData);
+          console.log('[DyadicChat] Socket connection state:', window.socket?.connected);
           if (window.socket) {
             window.socket.emit('survey:submit', {
               survey: surveyData,
               answerData: window.__answerData
+            }, (response) => {
+              console.log('[DyadicChat] Survey submission response:', response);
             });
             console.log('[DyadicChat] Survey data sent to server');
           } else {
@@ -480,6 +489,9 @@
           self.jsPsych.finishTrial(finalData);
           redirectToProlific();
         });
+        } else {
+          console.error('[DyadicChat] Survey form not found in DOM');
+        }
       }
 
       display_element.innerHTML = htmlWait();
