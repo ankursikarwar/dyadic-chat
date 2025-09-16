@@ -117,23 +117,11 @@ io.on('connection', (socket) => {
       // Mark this user as finished
       room.finished[socket.id] = true;
       
-      // If there's a partner, notify them and put them back in queue
+      // If there's a partner, notify them (but don't re-queue them)
       if (other) {
         try { 
           io.to(other.id).emit('end:partner'); 
-          console.log(`[DyadicChat] Notified partner ${other.id} of disconnect`);
-          
-          // Put the remaining user back in the queue for re-pairing (only if not already in queue)
-          other.currentRoom = null;
-          if (queue.indexOf(other) === -1) {
-            queue.push(other);
-            console.log(`[DyadicChat] Put remaining user ${other.id} back in queue`);
-            
-            // Try to pair them with someone else
-            tryPair();
-          } else {
-            console.log(`[DyadicChat] User ${other.id} already in queue, skipping`);
-          }
+          console.log(`[DyadicChat] Notified partner ${other.id} of disconnect - they must refresh to rejoin`);
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
         }
@@ -153,12 +141,8 @@ io.on('connection', (socket) => {
   socket.on('chat:message', (msg={}) => {
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
-      // Room no longer exists, put user back in queue
-      socket.currentRoom = null;
-      if (queue.indexOf(socket) === -1) {
-        queue.push(socket);
-        tryPair();
-      }
+      // Room no longer exists, ignore the message
+      console.log(`[DyadicChat] User ${socket.id} tried to send message to non-existent room ${roomId}`);
       return;
     }
     const room = rooms.get(roomId);
@@ -191,12 +175,8 @@ io.on('connection', (socket) => {
   socket.on('answer:submit', (payload={}) => {
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
-      // Room no longer exists, put user back in queue
-      socket.currentRoom = null;
-      if (queue.indexOf(socket) === -1) {
-        queue.push(socket);
-        tryPair();
-      }
+      // Room no longer exists, ignore the submission
+      console.log(`[DyadicChat] User ${socket.id} tried to submit answer to non-existent room ${roomId}`);
       return;
     }
     const room = rooms.get(roomId);
