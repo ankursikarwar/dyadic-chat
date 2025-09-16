@@ -114,26 +114,35 @@ io.on('connection', (socket) => {
       const room = rooms.get(roomId);
       const other = room.users.find(u => u.id !== socket.id);
       
+      // Check if this user had already completed the study
+      const wasAlreadyFinished = room.finished[socket.id];
+      
       // Mark this user as finished
       room.finished[socket.id] = true;
       
-      // If there's a partner, notify them (but don't re-queue them)
-      if (other) {
+      // Only notify partner if they hadn't completed the study yet
+      if (other && !wasAlreadyFinished) {
         try { 
           io.to(other.id).emit('end:partner'); 
           console.log(`[DyadicChat] Notified partner ${other.id} of disconnect - they must refresh to rejoin`);
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
         }
+      } else if (other && wasAlreadyFinished) {
+        console.log(`[DyadicChat] User ${socket.id} disconnected after completing study, partner can continue`);
       }
       
-      // Always clean up the room when someone disconnects
-      try { 
-        persistRoom(room);
-        rooms.delete(roomId);
-        console.log(`[DyadicChat] Cleaned up room ${roomId} due to disconnect`);
-      } catch(e) {
-        console.error('[DyadicChat] Error cleaning up room:', e);
+      // Only clean up the room if both users are finished OR if the partner wasn't finished
+      if ((room.finished[other?.id] && other) || !other) {
+        try { 
+          persistRoom(room);
+          rooms.delete(roomId);
+          console.log(`[DyadicChat] Cleaned up room ${roomId} - both users finished or no partner`);
+        } catch(e) {
+          console.error('[DyadicChat] Error cleaning up room:', e);
+        }
+      } else {
+        console.log(`[DyadicChat] Room ${roomId} kept active - partner can still complete study`);
       }
     }
   });
