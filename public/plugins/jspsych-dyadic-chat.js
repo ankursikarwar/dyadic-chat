@@ -458,11 +458,15 @@
           }
           
           // Send survey data to server
+          console.log('[DyadicChat] Submitting survey data:', surveyData);
           if (window.socket) {
             window.socket.emit('survey:submit', {
               survey: surveyData,
               answerData: window.__answerData
             });
+            console.log('[DyadicChat] Survey data sent to server');
+          } else {
+            console.error('[DyadicChat] No socket connection available for survey submission');
           }
           
           // Combine answer data with survey data

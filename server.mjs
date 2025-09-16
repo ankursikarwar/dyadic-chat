@@ -199,18 +199,26 @@ io.on('connection', (socket) => {
     const [a,b] = room.users;
     
     // Only clean up the room when both users have completed the study
-    // (surveys will be saved when they're submitted, even if room is cleaned up)
     if (room.finished[a.id] && room.finished[b.id]){
       try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
-      persistRoom(room);
-      rooms.delete(room.id);
-      console.log(`[DyadicChat] Both users completed study, cleaned up room ${roomId}`);
+      
+      // Check if both users have also submitted surveys
+      if (room.surveys[a.id] && room.surveys[b.id]) {
+        // Both users completed study and submitted surveys
+        persistRoom(room);
+        rooms.delete(room.id);
+        console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
+      } else {
+        // Both users completed study but not all surveys submitted yet
+        console.log(`[DyadicChat] Both users completed study, waiting for surveys before cleaning up room ${roomId}`);
+      }
     } else {
       console.log(`[DyadicChat] User ${socket.id} completed study, partner can still continue`);
     }
   });
 
   socket.on('survey:submit', (payload={}) => {
+    console.log(`[DyadicChat] Received survey submission from ${socket.id}:`, payload);
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
       console.log(`[DyadicChat] User ${socket.id} tried to submit survey to non-existent room ${roomId} - saving survey data anyway`);
@@ -259,13 +267,19 @@ io.on('connection', (socket) => {
     };
     
     console.log(`[DyadicChat] User ${socket.id} submitted survey data`);
+    console.log(`[DyadicChat] Room ${roomId} surveys after update:`, room.surveys);
     
-    // Save the room data immediately with the survey
-    try {
+    // Check if both users have completed study and submitted surveys
+    const [a,b] = room.users;
+    if (room.finished[a.id] && room.finished[b.id] && 
+        room.surveys[a.id] && room.surveys[b.id]) {
+      // Both users completed study and submitted surveys
+      try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
       persistRoom(room);
-      console.log(`[DyadicChat] Saved room ${roomId} with survey data`);
-    } catch(e) {
-      console.error('[DyadicChat] Error saving room with survey:', e);
+      rooms.delete(room.id);
+      console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
+    } else {
+      console.log(`[DyadicChat] Waiting for both users to complete study and surveys before cleaning up room ${roomId}`);
     }
   });
 
