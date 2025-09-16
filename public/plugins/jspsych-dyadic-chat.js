@@ -120,6 +120,16 @@
       let pairedPayload = null;
       const pidLabel = (trial.prolific && trial.prolific.PID) || 'DEBUG_LOCAL';
       
+      // Additional timing tracking - declare variables first
+      let consentPageStartTime = null;
+      let instructionsPageStartTime = null;
+      let waitingPageStartTime = null;
+      let chatBeginTime = null;
+      let firstMessageTime = null;
+      let chatEndTime = null;
+      let answerSubmitTime = null;
+      let surveySubmitTime = null;
+      
       // Set consent page start time
       consentPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
       
@@ -209,16 +219,6 @@
       let correctAnswerText = null; // Store the correct answer text for this user
       let answerOptions = null; // Store the answer options array
       let t0 = null; // Will be set when users get paired
-      
-      // Additional timing tracking
-      let consentPageStartTime = null;
-      let instructionsPageStartTime = null;
-      let waitingPageStartTime = null;
-      let chatBeginTime = null;
-      let firstMessageTime = null;
-      let chatEndTime = null;
-      let answerSubmitTime = null;
-      let surveySubmitTime = null;
 
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
