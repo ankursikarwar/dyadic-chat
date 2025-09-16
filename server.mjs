@@ -97,7 +97,9 @@ io.on('connection', (socket) => {
   // Clear any existing room assignment for reconnecting users
   socket.currentRoom = null;
   
+  console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
   queue.push(socket);
+  console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
   tryPair();
 
   socket.on('disconnect', (reason) => {
@@ -115,19 +117,23 @@ io.on('connection', (socket) => {
       // Mark this user as finished
       room.finished[socket.id] = true;
       
-      // If there's a partner still connected, notify them and put them back in queue
-      if (other && other.connected) {
+      // If there's a partner, notify them and put them back in queue
+      if (other) {
         try { 
           io.to(other.id).emit('end:partner'); 
           console.log(`[DyadicChat] Notified partner ${other.id} of disconnect`);
           
-          // Put the remaining user back in the queue for re-pairing
+          // Put the remaining user back in the queue for re-pairing (only if not already in queue)
           other.currentRoom = null;
-          queue.push(other);
-          console.log(`[DyadicChat] Put remaining user ${other.id} back in queue`);
-          
-          // Try to pair them with someone else
-          tryPair();
+          if (queue.indexOf(other) === -1) {
+            queue.push(other);
+            console.log(`[DyadicChat] Put remaining user ${other.id} back in queue`);
+            
+            // Try to pair them with someone else
+            tryPair();
+          } else {
+            console.log(`[DyadicChat] User ${other.id} already in queue, skipping`);
+          }
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
         }
@@ -212,11 +218,22 @@ io.on('connection', (socket) => {
   });
 
   function tryPair(){
+    console.log(`[DyadicChat] tryPair called, queue length: ${queue.length}`);
     if (queue.length >= 2){
       const a = queue.shift();
       const b = queue.shift();
-            if (REQUIRE_DISTINCT_PID && a?.prolific?.PID === b?.prolific?.PID) { queue.unshift(a); queue.push(b); return; }
-const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+      console.log(`[DyadicChat] Attempting to pair ${a.id} (PID: ${a.prolific?.PID}) with ${b.id} (PID: ${b.prolific?.PID})`);
+      
+      if (REQUIRE_DISTINCT_PID && a?.prolific?.PID === b?.prolific?.PID) { 
+        console.log(`[DyadicChat] Same PID detected, re-queuing users`);
+        queue.unshift(a); 
+        queue.push(b); 
+        return; 
+      }
+      
+      const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+      console.log(`[DyadicChat] Creating room ${roomId} for users ${a.id} and ${b.id}`);
+      
       a.join(roomId); b.join(roomId);
       a.currentRoom = roomId; b.currentRoom = roomId;
 
@@ -231,12 +248,16 @@ const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
       };
       rooms.set(roomId, room);
 
+      console.log(`[DyadicChat] Sending paired event to ${a.id} and ${b.id}`);
       io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type }, min_turns: MAX_TURNS });
-    io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type }, min_turns: MAX_TURNS });
+      io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type }, min_turns: MAX_TURNS });
       const starter = Math.random() < 0.5 ? a : b;
       room.nextSenderId = starter.id;
       io.to(starter.id).emit('turn:you');
       io.to((starter.id===a.id)?b.id:a.id).emit('turn:wait');
+      console.log(`[DyadicChat] Pairing complete, ${starter.id} starts first`);
+    } else {
+      console.log(`[DyadicChat] Not enough users in queue (${queue.length}), waiting for more`);
     }
   }
 });
