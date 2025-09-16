@@ -17,8 +17,13 @@ const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'f
 const QUESTION_TYPE = process.env.QUESTION_TYPE || 'all_types';
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
-app.get('/', (_req, res) => { res.set('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'index.html')); });
-app.get('/api/question-type', (_req, res) => { res.json({ questionType: QUESTION_TYPE }); });
+app.get('/', (_req, res) => { 
+  res.set('Cache-Control','no-store'); 
+  res.sendFile(path.join(__dirname, 'public', 'index.html')); 
+});
+app.get('/api/config', (_req, res) => { 
+  res.json({ questionType: QUESTION_TYPE, maxTurns: MAX_TURNS }); 
+});
 
 // ---------- Load items ----------
 let items = [];

@@ -175,55 +175,50 @@ const consentTrial = {
     }
   }
 };
-      const instructionsTrial = { 
-        type: jsPsychInstructions, 
-        pages: ['<div class="instr instr-aesthetic"><div class="dc-spinner"></div><div style="text-align:center; margin-top:20px;">Loading instructions...</div></div>'], // Placeholder, will be updated dynamically
-        show_clickable_nav: true, 
-        button_label_next: "Start chat", 
-        button_label_previous: "Back",
-        on_load: function() {
-          // Track instructions page start time
-          if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
-            window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-          }
-          
-          // Fetch question type and update instructions dynamically
-          fetch('/api/question-type')
-            .then(response => response.json())
-            .then(data => {
-              const questionType = data.questionType;
-              console.log('[DyadicChat] Question type from server:', questionType);
-              
-              // Update the instructions content
-              const instructionsElement = document.querySelector('.jspsych-instructions');
-              if (instructionsElement) {
-                instructionsElement.innerHTML = generateInstructions(questionType);
-              }
-            })
-            .catch(error => {
-              console.warn('[DyadicChat] Failed to fetch question type, using default:', error);
-              // Fallback to all types if server fails
-              const instructionsElement = document.querySelector('.jspsych-instructions');
-              if (instructionsElement) {
-                instructionsElement.innerHTML = generateInstructions('all_types');
-              }
-            });
+      // Fetch server config first, then initialize jsPsych
+      async function initializeExperiment() {
+        let serverConfig = { questionType: 'all_types', maxTurns: 10 };
+        
+        try {
+          const response = await fetch('/api/config');
+          serverConfig = await response.json();
+          console.log('[DyadicChat] Server config:', serverConfig);
+        } catch (error) {
+          console.warn('[DyadicChat] Failed to fetch server config, using defaults:', error);
         }
-      };
-      const chatTrial = {
-        type: jsPsychDyadicChat,
-        socketUrl: window.location.origin,
-        prolific: { PID: pidFromUrl },
-        min_turns: 10,
-        goal_question: '',
-        answer_options: ['A','B','C','D'],
-        wait_timeout_sec: 120,
-        instructions_html: SIDEBAR_INSTR_HTML,
-        image_url: '',
-        question_type: 'default'
-      };
 
-      jsPsych.run([consentTrial, instructionsTrial, chatTrial]);
+        const instructionsTrial = { 
+          type: jsPsychInstructions, 
+          pages: [generateInstructions(serverConfig.questionType)], // Use server config
+          show_clickable_nav: true, 
+          button_label_next: "Start chat", 
+          button_label_previous: "Back",
+          on_load: function() {
+            // Track instructions page start time
+            if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
+              window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+            }
+          }
+        };
+
+        const chatTrial = {
+          type: jsPsychDyadicChat,
+          socketUrl: window.location.origin,
+          prolific: { PID: pidFromUrl },
+          min_turns: serverConfig.maxTurns, // Use server config
+          goal_question: '',
+          answer_options: ['A','B','C','D'],
+          wait_timeout_sec: 120,
+          instructions_html: SIDEBAR_INSTR_HTML,
+          image_url: '',
+          question_type: serverConfig.questionType // Use server config
+        };
+
+        jsPsych.run([consentTrial, instructionsTrial, chatTrial]);
+      }
+
+      // Initialize the experiment
+      initializeExperiment();
     </script>
   </body>
 </html>
