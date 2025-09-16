@@ -372,12 +372,20 @@
               </div>
 
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use any pen or paper to help you answer the question?</label>
-                <select name="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use pen and paper to sketch or do any rough work while answering the question?</label>
+                <select name="pen_paper" id="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
                   <option value="">Select an option</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </select>
+                <div id="pen_paper_followup" style="margin-top:10px; display:none;">
+                  <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Did you sketch a rough map of the room to help answer the question?</label>
+                  <select name="sketched_map" id="sketched_map" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                    <option value="">Select an option</option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                  </select>
+                </div>
               </div>
 
               <div style="margin-bottom:20px;">
@@ -455,6 +463,24 @@
               if (taskTextarea) {
                 taskTextarea.removeAttribute('required');
               }
+            }
+          });
+        }
+
+        // Handle pen and paper follow-up question
+        const penPaperSelect = document.getElementById('pen_paper');
+        const penPaperFollowup = document.getElementById('pen_paper_followup');
+        const sketchedMapSelect = document.getElementById('sketched_map');
+
+        if (penPaperSelect && penPaperFollowup && sketchedMapSelect) {
+          penPaperSelect.addEventListener('change', function() {
+            if (this.value === 'yes') {
+              penPaperFollowup.style.display = 'block';
+              sketchedMapSelect.setAttribute('required', 'required');
+            } else {
+              penPaperFollowup.style.display = 'none';
+              sketchedMapSelect.removeAttribute('required');
+              sketchedMapSelect.value = ''; // Clear the value when hidden
             }
           });
         }
@@ -665,7 +691,7 @@
         stopHeartbeat();
       try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
       try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
-      });
+    });
 
     socket.on('connection_lost', function(){
         stopHeartbeat();
