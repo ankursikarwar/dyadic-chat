@@ -193,6 +193,13 @@
       let lastPongTime = Date.now();
       const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
 
+      function redirectToProlific() {
+        // Redirect to Prolific completion URL after a short delay
+        setTimeout(() => {
+          window.location.href = 'https://app.prolific.com/submissions/complete?cc=CSI75HQB';
+        }, 2000); // 2 second delay to show completion message
+      }
+
       function showBlocked(msg){
         display_element.innerHTML = styleTag() + '<div class="dc-wait"><div class="dc-spinner"></div><div style="font-size:18px;color:#d0d4d9;margin-top:8px;">' + msg + '</div></div>';
         try { self.jsPsych.finishTrial({ blocked: msg }); } catch {}
@@ -457,8 +464,9 @@
           };
           
           // Show completion message and end trial
-          display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Thank you for completing the study! Your responses have been submitted. You may close this tab.</div>';
+          display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
           self.jsPsych.finishTrial(finalData);
+          redirectToProlific();
         });
       }
 

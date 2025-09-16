@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 const MAX_TURNS = Number(process.env.MAX_TURNS || 10); // one turn = two messages (both users)
 const REQUIRE_DISTINCT_PID = process.env.REQUIRE_DISTINCT_PID !== '0';
 const BLOCK_REPEAT_PID = String(process.env.BLOCK_REPEAT_PID || 'false').toLowerCase() === 'true';
-const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'true').toLowerCase() !== 'false';
+const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'false').toLowerCase() !== 'false';
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
 app.get('/', (_req, res) => { res.set('Cache-Control','no-store'); res.sendFile(path.join(__dirname, 'public', 'index.html')); });
