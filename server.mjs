@@ -194,7 +194,7 @@ io.on('connection', (socket) => {
     const room = rooms.get(roomId);
     room.answers[socket.id] = { pid: socket.prolific.PID, choice: payload.choice, rt: payload.rt, t: Date.now() };
     room.finished[socket.id] = true;
-    io.to(socket.id).emit('end:self');
+    // Don't send end:self here - user should continue to survey page
 
     const [a,b] = room.users;
     
@@ -332,8 +332,8 @@ io.on('connection', (socket) => {
       rooms.set(roomId, room);
 
       console.log(`[DyadicChat] Sending paired event to ${a.id} and ${b.id}`);
-      io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type }, min_turns: MAX_TURNS });
-      io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type }, min_turns: MAX_TURNS });
+      io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type, correct_answer: item.user_1_gt_answer }, min_turns: MAX_TURNS });
+      io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type, correct_answer: item.user_2_gt_answer }, min_turns: MAX_TURNS });
       // User 1 (first user in queue) always starts the conversation
       room.nextSenderId = a.id;
       io.to(a.id).emit('turn:you');

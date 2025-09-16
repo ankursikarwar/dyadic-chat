@@ -191,6 +191,7 @@
       let msgCount = 0;
       let heartbeatInterval = null;
       let lastPongTime = Date.now();
+      let correctAnswer = null; // Store the correct answer for this user
       const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
 
       function redirectToProlific() {
@@ -272,8 +273,150 @@
         
         socket.emit('answer:submit', { choice: el.value, rt: rt });
         
-        // Show survey instead of ending immediately
-        showSurvey();
+        // Show combined feedback and survey page
+        showCombinedFeedbackAndSurvey(el.value);
+      }
+
+      function showCombinedFeedbackAndSurvey(userAnswer) {
+        const isCorrect = userAnswer === correctAnswer;
+        const feedbackHTML = `
+          <div style="max-width:800px; margin:0 auto; padding:40px 20px; color:#fff; text-align:left;">
+            <!-- Answer Feedback Section -->
+            <div style="text-align:center; margin-bottom:40px;">
+              <h2 style="margin-bottom:30px; color:#fff;">Answer Submitted!</h2>
+              
+              <div style="background:#0b0b0b; padding:30px; border-radius:12px; border:1px solid #3e3e42; margin-bottom:30px;">
+                <div style="font-size:24px; margin-bottom:20px;">
+                  ${isCorrect ? 
+                    '<span style="color:#4CAF50;">✓ Correct!</span>' : 
+                    '<span style="color:#f44336;">✗ Incorrect</span>'
+                  }
+                </div>
+                
+                <div style="font-size:18px; margin-bottom:15px;">
+                  <strong>Your answer:</strong> ${userAnswer}
+                </div>
+                
+                <div style="font-size:18px; margin-bottom:20px;">
+                  <strong>Correct answer:</strong> ${correctAnswer}
+                </div>
+                
+                ${!isCorrect ? 
+                  '<div style="font-size:16px; color:#ff9800; margin-top:15px;">Don\'t worry! This was a collaborative task, and the goal was to work together to find the answer.</div>' : 
+                  '<div style="font-size:16px; color:#4CAF50; margin-top:15px;">Great job! You and your partner worked together successfully.</div>'
+                }
+              </div>
+            </div>
+
+            <!-- Survey Section -->
+            <h2 style="text-align:center; margin-bottom:30px; color:#fff;">Post-Study Survey</h2>
+            <p style="margin-bottom:25px; font-size:16px; line-height:1.5;">Thank you for participating! Please answer a few brief questions about your experience.</p>
+            
+            <form id="post-study-survey" style="background:#0b0b0b; padding:25px; border-radius:12px; border:1px solid #3e3e42;">
+              
+              <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How difficult was the collaborative task?</label>
+                <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <option value="">Select difficulty level</option>
+                  <option value="very_easy">Very Easy</option>
+                  <option value="easy">Easy</option>
+                  <option value="moderate">Moderate</option>
+                  <option value="difficult">Difficult</option>
+                  <option value="very_difficult">Very Difficult</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use any pen or paper to help you answer the question?</label>
+                <select name="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <option value="">Select an option</option>
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How well did you communicate with your partner?</label>
+                <select name="communication" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <option value="">Select communication quality</option>
+                  <option value="excellent">Excellent</option>
+                  <option value="good">Good</option>
+                  <option value="fair">Fair</option>
+                  <option value="poor">Poor</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom:20px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How confident are you in your final answer? (1 = Not confident, 5 = Very confident)</label>
+                <select name="confidence" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <option value="">Select confidence level</option>
+                  <option value="1">1 - Not confident</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5 - Very confident</option>
+                </select>
+              </div>
+
+              <div style="margin-bottom:25px;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Any additional comments about the study?</label>
+                <textarea name="comments" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Optional comments..."></textarea>
+              </div>
+
+              <div style="text-align:center;">
+                <button type="submit" style="background:linear-gradient(135deg, #4CAF50, #45a049); color:#fff; border:none; padding:15px 30px; font-size:16px; border-radius:8px; cursor:pointer; font-weight:bold; box-shadow:0 4px 8px rgba(0,0,0,0.3); transition:all 0.3s ease;">
+                  Submit Survey & Complete Study
+                </button>
+              </div>
+            </form>
+          </div>
+        `;
+        
+        display_element.innerHTML = feedbackHTML;
+
+        // Handle form submission
+        const form = document.getElementById('post-study-survey');
+        console.log('[DyadicChat] Survey form found:', form);
+        if (form) {
+          form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('[DyadicChat] Survey form submitted');
+            const formData = new FormData(form);
+            const surveyData = {};
+            for (const [key, value] of formData.entries()) {
+              surveyData[key] = value;
+            }
+            console.log('[DyadicChat] Survey data collected:', surveyData);
+            
+            // Send survey data to server
+            console.log('[DyadicChat] Submitting survey data:', surveyData);
+            console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
+            if (window.__socket) {
+              window.__socket.emit('survey:submit', {
+                survey: surveyData,
+                answerData: window.__answerData
+              }, (response) => {
+                console.log('[DyadicChat] Survey submission response:', response);
+              });
+              console.log('[DyadicChat] Survey data sent to server');
+            } else {
+              console.error('[DyadicChat] No socket connection available for survey submission');
+            }
+            
+            // Combine answer data with survey data
+            const finalData = {
+              ...window.__answerData,
+              survey: surveyData
+            };
+            
+            // Show completion message and end trial
+            display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
+            self.jsPsych.finishTrial(finalData);
+            redirectToProlific();
+          });
+        } else {
+          console.error('[DyadicChat] Survey form not found in DOM');
+        }
       }
 
       function setupTextarea(){
@@ -368,135 +511,6 @@
         onReady();
       }
 
-      function showSurvey(){
-        console.log('[DyadicChat] Showing survey...');
-        console.log('[DyadicChat] Answer data:', window.__answerData);
-        const surveyHTML = `
-          <div style="max-width:800px; margin:0 auto; padding:40px 20px; color:#fff; text-align:left;">
-            <h2 style="text-align:center; margin-bottom:30px; color:#fff;">Post-Study Survey</h2>
-            <p style="margin-bottom:25px; font-size:16px; line-height:1.5;">Thank you for participating! Please answer a few brief questions about your experience.</p>
-            
-            <form id="post-study-survey" style="background:#0b0b0b; padding:25px; border-radius:12px; border:1px solid #3e3e42;">
-              
-              <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How difficult was the collaborative task?</label>
-                <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
-                  <option value="">Select an option</option>
-                  <option value="very_easy">Very Easy</option>
-                  <option value="easy">Easy</option>
-                  <option value="moderate">Moderate</option>
-                  <option value="difficult">Difficult</option>
-                  <option value="very_difficult">Very Difficult</option>
-                </select>
-              </div>
-
-              <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use any pen or paper to help you answer the question?</label>
-                <select name="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
-                  <option value="">Select an option</option>
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-              </div>
-
-              <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How well did you and your partner communicate?</label>
-                <select name="communication" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
-                  <option value="">Select an option</option>
-                  <option value="excellent">Excellent</option>
-                  <option value="good">Good</option>
-                  <option value="fair">Fair</option>
-                  <option value="poor">Poor</option>
-                  <option value="very_poor">Very Poor</option>
-                </select>
-              </div>
-
-              <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How confident are you in your answer?</label>
-                <div style="display:flex; gap:15px; flex-wrap:wrap;">
-                  <label style="display:flex; align-items:center; gap:5px;">
-                    <input type="radio" name="confidence" value="1" required>
-                    <span>1 (Not confident)</span>
-                  </label>
-                  <label style="display:flex; align-items:center; gap:5px;">
-                    <input type="radio" name="confidence" value="2">
-                    <span>2</span>
-                  </label>
-                  <label style="display:flex; align-items:center; gap:5px;">
-                    <input type="radio" name="confidence" value="3">
-                    <span>3</span>
-                  </label>
-                  <label style="display:flex; align-items:center; gap:5px;">
-                    <input type="radio" name="confidence" value="4">
-                    <span>4</span>
-                  </label>
-                  <label style="display:flex; align-items:center; gap:5px;">
-                    <input type="radio" name="confidence" value="5">
-                    <span>5 (Very confident)</span>
-                  </label>
-                </div>
-              </div>
-
-              <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Any additional comments about the study?</label>
-                <textarea name="comments" placeholder="Optional feedback..." style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; min-height:80px; resize:vertical;"></textarea>
-              </div>
-
-              <div style="text-align:center; margin-top:30px;">
-                <button type="submit" style="background:linear-gradient(135deg, #4CAF50, #45a049); color:#fff; border:none; padding:15px 30px; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; box-shadow:0 4px 15px rgba(76, 175, 80, 0.3);">
-                  Submit Survey
-                </button>
-              </div>
-            </form>
-          </div>
-        `;
-
-        display_element.innerHTML = surveyHTML;
-
-        // Handle form submission
-        const form = document.getElementById('post-study-survey');
-        console.log('[DyadicChat] Survey form found:', form);
-        if (form) {
-          form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            console.log('[DyadicChat] Survey form submitted');
-          const formData = new FormData(form);
-          const surveyData = {};
-          for (const [key, value] of formData.entries()) {
-            surveyData[key] = value;
-          }
-          console.log('[DyadicChat] Survey data collected:', surveyData);
-          
-          // Send survey data to server
-          console.log('[DyadicChat] Submitting survey data:', surveyData);
-          console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
-          if (window.__socket) {
-            window.__socket.emit('survey:submit', {
-              survey: surveyData,
-              answerData: window.__answerData
-            }, (response) => {
-              console.log('[DyadicChat] Survey submission response:', response);
-            });
-            console.log('[DyadicChat] Survey data sent to server');
-          } else {
-            console.error('[DyadicChat] No socket connection available for survey submission');
-          }
-          
-          // Combine answer data with survey data
-          const finalData = {
-            ...window.__answerData,
-            survey: surveyData
-          };
-          
-          // Show completion message and end trial
-          display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
-          self.jsPsych.finishTrial(finalData);
-          redirectToProlific();
-        });
-        } else {
-          console.error('[DyadicChat] Survey form not found in DOM');
-        }
-      }
 
       display_element.innerHTML = htmlWait();
       // 5-minute pairing timeout
@@ -516,6 +530,8 @@
       /* duplicate removed */
 
       socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
+        // Store the correct answer for this user
+        correctAnswer = p.item.correct_answer;
         display_element.innerHTML = htmlChat(p);
         let pairedPayload = p;
         const sendBtn = document.getElementById('dc-send');
@@ -560,17 +576,7 @@
         try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
         try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
       });
-      socket.on('end:self', function(){
-        stopHeartbeat();
-        // Store the answer data for the survey (if not already stored)
-        if (!window.__answerData) {
-          window.__answerData = { turns: Math.floor(msgCount/2), ended: 'self' };
-        }
-        // Store socket reference before it might be lost
-        window.__socket = socket;
-        // Show survey instead of ending immediately
-        showSurvey();
-      });
+
     }
   }
 
