@@ -4,4 +4,4 @@ data/deck_state.json
 data/seen_pids.json
 data/transcripts.ndjson
 data/completed_items.json
-# public/img/
+public/img/

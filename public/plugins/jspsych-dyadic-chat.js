@@ -191,7 +191,9 @@
       let msgCount = 0;
       let heartbeatInterval = null;
       let lastPongTime = Date.now();
-      let correctAnswer = null; // Store the correct answer for this user
+      let correctAnswerIndex = null; // Store the correct answer index for this user
+      let correctAnswerText = null; // Store the correct answer text for this user
+      let answerOptions = null; // Store the answer options array
       const t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
 
       function redirectToProlific() {
@@ -278,7 +280,9 @@
       }
 
       function showCombinedFeedbackAndSurvey(userAnswer) {
-        const isCorrect = userAnswer === correctAnswer;
+        // Convert user's answer to index for comparison
+        const userAnswerIndex = parseInt(userAnswer);
+        const isCorrect = userAnswerIndex === correctAnswerIndex;
         const feedbackHTML = `
           <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:#fff; text-align:left;">
             <!-- Answer Feedback Section -->
@@ -294,11 +298,11 @@
                 </div>
                 
                 <div style="font-size:18px; margin-bottom:15px;">
-                  <strong>Your answer:</strong> ${userAnswer}
+                  <strong>Your answer:</strong> ${answerOptions[userAnswerIndex]}
                 </div>
                 
                 <div style="font-size:18px; margin-bottom:20px;">
-                  <strong>Correct answer:</strong> ${correctAnswer}
+                  <strong>Correct answer:</strong> ${correctAnswerText}
                 </div>
                 
                 ${!isCorrect ? 
@@ -530,8 +534,10 @@
       /* duplicate removed */
 
       socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
-        // Store the correct answer for this user
-        correctAnswer = p.item.correct_answer;
+        // Store the correct answer index, text, and options for this user
+        correctAnswerIndex = p.item.correct_answer;
+        answerOptions = p.item.options;
+        correctAnswerText = answerOptions[correctAnswerIndex];
         display_element.innerHTML = htmlChat(p);
         let pairedPayload = p;
         const sendBtn = document.getElementById('dc-send');
