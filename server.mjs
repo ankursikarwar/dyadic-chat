@@ -206,6 +206,27 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on('survey:submit', (payload={}) => {
+    const roomId = socket.currentRoom;
+    if (!roomId || !rooms.has(roomId)) {
+      console.log(`[DyadicChat] User ${socket.id} tried to submit survey to non-existent room ${roomId}`);
+      return;
+    }
+    
+    const room = rooms.get(roomId);
+    const { survey, answerData } = payload;
+    
+    // Store survey data for this user
+    room.surveys[socket.id] = {
+      pid: socket.prolific.PID,
+      survey: survey,
+      answerData: answerData,
+      submittedAt: Date.now()
+    };
+    
+    console.log(`[DyadicChat] User ${socket.id} submitted survey data`);
+  });
+
   // Heartbeat mechanism to detect actual disconnections
   socket.on('ping', () => {
     socket.emit('pong');
@@ -236,7 +257,7 @@ io.on('connection', (socket) => {
 
       const room = {
         id: roomId, users:[a,b], item,
-        messages:[], answers:{}, finished:{},
+        messages:[], answers:{}, finished:{}, surveys:{},
         msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
         nextSenderId:null, pairedAt: Date.now()
       };
@@ -263,7 +284,8 @@ function persistRoom(room){
     const line = JSON.stringify({
       id: room.id, item: room.item.id || room.item.image_url,
       minTurns: room.minTurns, messages: room.messages,
-      answers: room.answers, pairedAt: room.pairedAt, closed: room.chatClosed
+      answers: room.answers, surveys: room.surveys, 
+      pairedAt: room.pairedAt, closed: room.chatClosed
     }) + "\n";
     fs.appendFileSync(path.join(dir, 'transcripts.ndjson'), line);
     console.log('[DyadicChat] Saved transcript', room.id);

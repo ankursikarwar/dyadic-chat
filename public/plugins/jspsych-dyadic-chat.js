@@ -386,7 +386,7 @@
 
               <div style="margin-bottom:20px;">
                 <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use any pen or paper to help you answer the question?</label>
-                <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <select name="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
                   <option value="">Select an option</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
@@ -455,6 +455,14 @@
           const surveyData = {};
           for (const [key, value] of formData.entries()) {
             surveyData[key] = value;
+          }
+          
+          // Send survey data to server
+          if (window.socket) {
+            window.socket.emit('survey:submit', {
+              survey: surveyData,
+              answerData: window.__answerData
+            });
           }
           
           // Combine answer data with survey data
