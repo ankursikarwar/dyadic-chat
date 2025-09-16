@@ -164,7 +164,17 @@ const SIDEBAR_INSTR_HTML = `\
   </ol>
 </div>
 `;
-const consentTrial = { type: jsPsychSurveyHtmlForm, html: CONSENT_HTML, button_label: "Continue" };
+const consentTrial = { 
+  type: jsPsychSurveyHtmlForm, 
+  html: CONSENT_HTML, 
+  button_label: "Continue",
+  on_load: function() {
+    // Track consent page start time globally
+    if (typeof window !== 'undefined' && window.consentPageStartTime === undefined) {
+      window.consentPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+    }
+  }
+};
       const instructionsTrial = { 
         type: jsPsychInstructions, 
         pages: [INSTRUCTIONS_PAGE_HTML], 

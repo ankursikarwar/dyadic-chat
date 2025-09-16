@@ -130,10 +130,8 @@
       let answerSubmitTime = null;
       let surveySubmitTime = null;
       
-      // Set consent page start time
-      consentPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-      
-      // Get instructions page start time from global scope
+      // Get timing from global scope
+      consentPageStartTime = window.consentPageStartTime;
       instructionsPageStartTime = window.instructionsPageStartTime;
 
       function htmlWait(){
@@ -552,6 +550,11 @@
               answerSubmitTime,
               surveySubmitTime
             });
+            
+            // Validate timing data
+            if (!consentPageStartTime || !instructionsPageStartTime || !waitingPageStartTime || !chatBeginTime) {
+              console.warn('[DyadicChat] Missing critical timing data!');
+            }
             
             // Send survey data to server
             console.log('[DyadicChat] Submitting survey data:', surveyData);
