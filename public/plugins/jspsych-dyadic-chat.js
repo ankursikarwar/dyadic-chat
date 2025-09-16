@@ -263,10 +263,14 @@
         if (!el) return;
         const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rt = Math.round(nowTs - t0);
-        socket.emit('answer:submit', { choice: el.value, rt: rt });
         
-        // Store the answer data for the survey
+        // Store the answer data for the survey BEFORE sending to server
         window.__answerData = { messages: Math.floor(msgCount/2), choice: el.value, rt: rt, pid: pidLabel };
+        
+        // Store socket reference before it might be lost
+        window.__socket = socket;
+        
+        socket.emit('answer:submit', { choice: el.value, rt: rt });
         
         // Show survey instead of ending immediately
         showSurvey();
@@ -465,9 +469,9 @@
           
           // Send survey data to server
           console.log('[DyadicChat] Submitting survey data:', surveyData);
-          console.log('[DyadicChat] Socket connection state:', window.socket?.connected);
-          if (window.socket) {
-            window.socket.emit('survey:submit', {
+          console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
+          if (window.__socket) {
+            window.__socket.emit('survey:submit', {
               survey: surveyData,
               answerData: window.__answerData
             }, (response) => {
@@ -562,6 +566,8 @@
         if (!window.__answerData) {
           window.__answerData = { turns: Math.floor(msgCount/2), ended: 'self' };
         }
+        // Store socket reference before it might be lost
+        window.__socket = socket;
         // Show survey instead of ending immediately
         showSurvey();
       });
