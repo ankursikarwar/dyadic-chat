@@ -657,6 +657,12 @@
       try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
       });
 
+    socket.on('connection_lost', function(){
+        stopHeartbeat();
+      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#ff6b6b;">Connection lost. Please refresh the page to start a new session.</div>'; } catch(e){}
+      try { window.jsPsych.finishTrial({ ended: 'connection_lost' }); } catch(e){}
+      });
+
     }
   }
 

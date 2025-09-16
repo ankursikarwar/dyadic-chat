@@ -76,6 +76,64 @@ function markItemCompleted(id){ if (!id) return; if (!completedItems.has(id)){ c
 const queue = [];
 const rooms = new Map();
 
+// Track server state to disconnect existing users on any failure
+let serverStarting = true;
+
+// Disconnect all existing users when server starts (after any failure/restart)
+io.on('connection', (socket) => {
+  if (serverStarting) {
+    // Send failure message and disconnect
+    io.to(socket.id).emit('connection_lost');
+    setTimeout(() => socket.disconnect(true), 100);
+    return;
+  }
+});
+
+// Mark server as fully started after a brief delay
+setTimeout(() => {
+  serverStarting = false;
+  console.log('[DyadicChat] Server fully started - accepting new connections');
+}, 2000);
+
+// Handle server shutdown/failure gracefully
+process.on('SIGINT', () => {
+  console.log('[DyadicChat] Server shutting down...');
+  // Notify all connected users before shutdown
+  io.emit('connection_lost');
+  setTimeout(() => {
+    process.exit(0);
+  }, 1000);
+});
+
+process.on('SIGTERM', () => {
+  console.log('[DyadicChat] Server terminated...');
+  // Notify all connected users before shutdown
+  io.emit('connection_lost');
+  setTimeout(() => {
+    process.exit(0);
+  }, 1000);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('[DyadicChat] Uncaught exception:', error);
+  // Notify all connected users before crash
+  io.emit('connection_lost');
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[DyadicChat] Unhandled rejection at:', promise, 'reason:', reason);
+  // Notify all connected users before crash
+  io.emit('connection_lost');
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
+});
+
 io.on('connection', (socket) => {
   const pid = (socket.handshake.query && String(socket.handshake.query.pid||'').trim()) || 'DEBUG_LOCAL';
   socket.prolific = { PID: pid };
