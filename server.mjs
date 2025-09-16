@@ -325,6 +325,7 @@ io.on('connection', (socket) => {
 
   socket.on('survey:submit', (payload={}, callback) => {
     console.log(`[DyadicChat] Received survey submission from ${socket.id}:`, payload);
+    console.log(`[DyadicChat] Timing data received:`, payload.timingData);
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
       console.log(`[DyadicChat] User ${socket.id} tried to submit survey to non-existent room ${roomId} - saving survey data anyway`);
@@ -332,8 +333,8 @@ io.on('connection', (socket) => {
       // Even if room doesn't exist, try to save the survey data
       // This can happen if the room was cleaned up but user is still submitting survey
       const surveyData = {
-        id: roomId,
-        item: 'unknown',
+        room_id: roomId,
+        id: 'unknown',
         minTurns: 0,
         messages: [],
         answers: {},
@@ -555,10 +556,17 @@ function transformRoomData(room) {
     // Get timing data if available
     const timingData = survey?.timingData || {};
     
+    // Debug: Log timing data
+    console.log(`[DyadicChat] Timing data for ${userRole}:`, timingData);
+    
     // Calculate different reaction times
     const calculateRT = (startTime, endTime) => {
-      if (!startTime || !endTime) return null;
+      if (!startTime || !endTime) {
+        console.log(`[DyadicChat] Missing timing data: startTime=${startTime}, endTime=${endTime}`);
+        return null;
+      }
       const rt = Math.round(endTime - startTime);
+      console.log(`[DyadicChat] Calculated RT: ${rt}ms`);
       return formatReactionTime(rt);
     };
     
@@ -573,8 +581,8 @@ function transformRoomData(room) {
   });
   
   return {
-    id: room.id,
-    item: item.id || 'unknown',
+    room_id: room.id,
+    id: item.id || 'unknown',
     question_type: item.question_type || 'unknown',
     user_1_image: item.user_1_image || '',
     user_2_image: item.user_2_image || '',

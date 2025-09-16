@@ -541,6 +541,18 @@
             // Track survey submit time
             surveySubmitTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
             
+            // Debug: Log timing data before sending
+            console.log('[DyadicChat] Timing data being sent:', {
+              consentPageStartTime,
+              instructionsPageStartTime,
+              waitingPageStartTime,
+              chatBeginTime,
+              firstMessageTime,
+              chatEndTime,
+              answerSubmitTime,
+              surveySubmitTime
+            });
+            
             // Send survey data to server
             console.log('[DyadicChat] Submitting survey data:', surveyData);
             console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
