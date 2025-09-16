@@ -32,7 +32,7 @@
       '.dc-image-viewport.grabbing{ cursor:grabbing; }',
       '#dc-scene{ width:auto; height:auto; max-width:100%; max-height:100%; user-select:none; -webkit-user-drag:none; will-change:transform; transform-origin:center center; pointer-events:none; }',
       '.dc-zoom-controls{ position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:5; }',
-      '.dc-zoom-btn{ padding:6px 10px; border-radius:8px; border:1px solid var(--border); background:rgba(0,0,0,0.65); color:#fff; cursor:pointer; pointer-events:auto; }',
+      '.dc-zoom-btn{ padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(0,0,0,0.65); color:#fff; cursor:pointer; pointer-events:auto; font-weight:bold; font-size:16px; }',
       '.dc-center { display:grid; grid-template-rows: minmax(0,55%) minmax(0,45%); height:100%; min-height:0; box-sizing:border-box; row-gap:16px; }',
       '.dc-center-bottom.single-box { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:12px 12px 14px 12px; min-height:0; overflow:auto; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow: var(--shadow); }',
       '.dc-goal-title { margin-top:5px; margin-bottom:15px; color:#fff; font-weight:700; font-size:25px; }',
