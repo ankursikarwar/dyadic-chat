@@ -119,6 +119,12 @@
       const self = this;
       let pairedPayload = null;
       const pidLabel = (trial.prolific && trial.prolific.PID) || 'DEBUG_LOCAL';
+      
+      // Set consent page start time
+      consentPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      
+      // Get instructions page start time from global scope
+      instructionsPageStartTime = window.instructionsPageStartTime;
 
       function htmlWait(){
         return styleTag() + [
@@ -203,6 +209,16 @@
       let correctAnswerText = null; // Store the correct answer text for this user
       let answerOptions = null; // Store the answer options array
       let t0 = null; // Will be set when users get paired
+      
+      // Additional timing tracking
+      let consentPageStartTime = null;
+      let instructionsPageStartTime = null;
+      let waitingPageStartTime = null;
+      let chatBeginTime = null;
+      let firstMessageTime = null;
+      let chatEndTime = null;
+      let answerSubmitTime = null;
+      let surveySubmitTime = null;
 
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
@@ -264,6 +280,12 @@
         if (!myTurn || chatClosed) return;
         addLine('Me', text);
         msgCount += 1; updateMessages();
+        
+        // Track first message time
+        if (!firstMessageTime) {
+          firstMessageTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        }
+        
         socket.emit('chat:message', { text: text });
         el.value = '';
         if (el && el.classList.contains('dc-textarea')) { el.style.height = 'auto'; el.style.overflowY = 'hidden'; }
@@ -281,6 +303,9 @@
         
         const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rt = Math.round(nowTs - t0);
+        
+        // Track answer submit time
+        answerSubmitTime = nowTs;
         
         // Store the answer data for the survey BEFORE sending to server
         window.__answerData = { messages: Math.floor(msgCount/2), choice: el.value, rt: rt, pid: pidLabel };
@@ -513,13 +538,26 @@
             }
             console.log('[DyadicChat] Survey data collected:', surveyData);
             
+            // Track survey submit time
+            surveySubmitTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+            
             // Send survey data to server
             console.log('[DyadicChat] Submitting survey data:', surveyData);
             console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
             if (window.__socket) {
               window.__socket.emit('survey:submit', {
                 survey: surveyData,
-                answerData: window.__answerData
+                answerData: window.__answerData,
+                timingData: {
+                  consentPageStartTime,
+                  instructionsPageStartTime,
+                  waitingPageStartTime,
+                  chatBeginTime,
+                  firstMessageTime,
+                  chatEndTime,
+                  answerSubmitTime,
+                  surveySubmitTime
+                }
               }, (response) => {
                 console.log('[DyadicChat] Survey submission response:', response);
               });
@@ -638,6 +676,10 @@
 
 
       display_element.innerHTML = htmlWait();
+      
+      // Set waiting page start time
+      waitingPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      
       // 5-minute pairing timeout
       (function(){
         const TIMEOUT_MS = 5 * 60 * 1000;
@@ -658,6 +700,9 @@
         // Set reaction time start point when users get paired
         t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         
+        // Set chat begin time
+        chatBeginTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        
         // Store the correct answer index, text, and options for this user
         correctAnswerIndex = p.item.correct_answer;
         answerOptions = p.item.options;
@@ -676,7 +721,13 @@
       socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateMessages(); });
       socket.on('turn:you', function(){ myTurn = true; updateMessages(); });
       socket.on('turn:wait', function(){ myTurn = false; updateMessages(); });
-      socket.on('chat:closed', function(){ chatClosed = true; updateMessages(); });
+      socket.on('chat:closed', function(){ 
+        chatClosed = true; 
+        updateMessages(); 
+        
+        // Track chat end time
+        chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+      });
       // Heartbeat mechanism
       function startHeartbeat() {
         heartbeatInterval = setInterval(() => {

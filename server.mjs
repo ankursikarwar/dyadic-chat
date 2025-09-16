@@ -365,7 +365,7 @@ io.on('connection', (socket) => {
     }
     
     const room = rooms.get(roomId);
-    const { survey, answerData } = payload;
+    const { survey, answerData, timingData } = payload;
     
     // Store survey data for this user
     const now = Date.now();
@@ -376,6 +376,7 @@ io.on('connection', (socket) => {
         ...answerData,
         rt_formatted: formatReactionTime(answerData.rt)
       },
+      timingData: timingData,
       submittedAt: now,
       submittedAt_formatted: formatTimestamp(now)
     };
@@ -462,16 +463,144 @@ function persistRoom(room){
   try {
     const dir = path.join(__dirname, 'data');
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    const line = JSON.stringify({
-      id: room.id, item: room.item.id || room.item.image_url,
-      minTurns: room.minTurns, messages: room.messages,
-      answers: room.answers, surveys: room.surveys, 
-      pairedAt: room.pairedAt, closed: room.chatClosed,
-      userRoles: room.userRoles
-    }) + "\n";
+    
+    // Transform room data to match the new structure
+    const transformedData = transformRoomData(room);
+    const line = JSON.stringify(transformedData) + "\n";
     fs.appendFileSync(path.join(dir, 'transcripts.ndjson'), line);
     console.log('[DyadicChat] Saved transcript', room.id);
-  } catch(e){}
+  } catch(e){
+    console.error('[DyadicChat] Error saving transcript:', e);
+  }
+}
+
+function transformRoomData(room) {
+  const item = room.item;
+  const [user1, user2] = room.users;
+  
+  // Get user roles
+  const user1Role = room.userRoles[user1.id] || 'user_1';
+  const user2Role = room.userRoles[user2.id] || 'user_2';
+  
+  // Transform messages
+  const transformedMessages = room.messages.map(msg => ({
+    id: room.userRoles[msg.who] || 'unknown',
+    who: msg.who,
+    pid: msg.pid,
+    text: msg.text,
+    t: msg.t,
+    t_formatted: msg.t_formatted
+  }));
+  
+  // Transform answers
+  const transformedAnswers = {};
+  if (room.answers[user1.id]) {
+    const answer1 = room.answers[user1.id];
+    transformedAnswers[user1Role] = {
+      id: user1Role,
+      who: user1.id,
+      pid: answer1.pid,
+      choice_idx: parseInt(answer1.choice),
+      choice_text: item.options[parseInt(answer1.choice)],
+      rt: answer1.rt,
+      rt_formatted: answer1.rt_formatted,
+      t: answer1.t,
+      t_formatted: answer1.t_formatted
+    };
+  }
+  if (room.answers[user2.id]) {
+    const answer2 = room.answers[user2.id];
+    transformedAnswers[user2Role] = {
+      id: user2Role,
+      who: user2.id,
+      pid: answer2.pid,
+      choice_idx: parseInt(answer2.choice),
+      choice_text: item.options[parseInt(answer2.choice)],
+      rt: answer2.rt,
+      rt_formatted: answer2.rt_formatted,
+      t: answer2.t,
+      t_formatted: answer2.t_formatted
+    };
+  }
+  
+  // Transform surveys
+  const transformedSurveys = {};
+  Object.keys(room.surveys).forEach(socketId => {
+    const survey = room.surveys[socketId];
+    const userRole = room.userRoles[socketId] || 'unknown';
+    transformedSurveys[userRole] = {
+      id: userRole,
+      who: socketId,
+      pid: survey.pid,
+      survey: survey.survey,
+      answerData: {
+        msgs: survey.answerData.messages,
+        choice_idx: parseInt(survey.answerData.choice),
+        choice_text: item.options[parseInt(survey.answerData.choice)],
+        rt: survey.answerData.rt,
+        pid: survey.answerData.pid,
+        rt_formatted: survey.answerData.rt_formatted
+      },
+      submittedAt: survey.submittedAt,
+      submittedAt_formatted: survey.submittedAt_formatted
+    };
+  });
+  
+  // Calculate reaction times breakdown
+  const rts = {};
+  Object.keys(transformedAnswers).forEach(userRole => {
+    const answer = transformedAnswers[userRole];
+    const survey = transformedSurveys[userRole];
+    
+    // Get timing data if available
+    const timingData = survey?.timingData || {};
+    
+    // Calculate different reaction times
+    const calculateRT = (startTime, endTime) => {
+      if (!startTime || !endTime) return null;
+      const rt = Math.round(endTime - startTime);
+      return formatReactionTime(rt);
+    };
+    
+    rts[userRole] = {
+      consent_page_rt: calculateRT(timingData.consentPageStartTime, timingData.instructionsPageStartTime) || answer.rt_formatted,
+      instructions_page_rt: calculateRT(timingData.instructionsPageStartTime, timingData.waitingPageStartTime) || answer.rt_formatted,
+      waiting_page_time: calculateRT(timingData.waitingPageStartTime, timingData.chatBeginTime) || answer.rt_formatted,
+      chat_begin_to_first_msg_rt: calculateRT(timingData.chatBeginTime, timingData.firstMessageTime) || answer.rt_formatted,
+      chat_end_to_answer_rt: calculateRT(timingData.chatEndTime, timingData.answerSubmitTime) || answer.rt_formatted,
+      total_experiment_time: calculateRT(timingData.consentPageStartTime, timingData.surveySubmitTime) || answer.rt_formatted
+    };
+  });
+  
+  return {
+    id: room.id,
+    item: item.id || 'unknown',
+    question_type: item.question_type || 'unknown',
+    user_1_image: item.user_1_image || '',
+    user_2_image: item.user_2_image || '',
+    user_1_question: item.user_1_question || '',
+    user_2_question: item.user_2_question || '',
+    options: item.options || [],
+    user_1_gt_answer_idx: item.user_1_gt_answer || 0,
+    user_2_gt_answer_idx: item.user_2_gt_answer || 0,
+    user_1_gt_answer_text: item.options ? item.options[item.user_1_gt_answer] : '',
+    user_2_gt_answer_text: item.options ? item.options[item.user_2_gt_answer] : '',
+    difficulty_uni: item.difficulty_uni || null,
+    difficulty_int: item.difficulty_int || null,
+    difficulty: item.difficulty || null,
+    minTurns: room.minTurns || 4,
+    messages: transformedMessages,
+    user_1_answer_idx: transformedAnswers.user_1 ? transformedAnswers.user_1.choice_idx : null,
+    user_1_answer_text: transformedAnswers.user_1 ? transformedAnswers.user_1.choice_text : '',
+    user_2_answer_idx: transformedAnswers.user_2 ? transformedAnswers.user_2.choice_idx : null,
+    user_2_answer_text: transformedAnswers.user_2 ? transformedAnswers.user_2.choice_text : '',
+    answers: transformedAnswers,
+    surveys: transformedSurveys,
+    rts: rts,
+    pairedAt: room.pairedAt,
+    closed: true,
+    userRoles: room.userRoles
+  };
 }
 
 server.listen(PORT, () => console.log('[DyadicChat] Listening on http://localhost:' + PORT));

@@ -165,7 +165,19 @@ const SIDEBAR_INSTR_HTML = `\
 </div>
 `;
 const consentTrial = { type: jsPsychSurveyHtmlForm, html: CONSENT_HTML, button_label: "Continue" };
-      const instructionsTrial = { type: jsPsychInstructions, pages: [INSTRUCTIONS_PAGE_HTML], show_clickable_nav: true, button_label_next: "Start chat", button_label_previous: "Back" };
+      const instructionsTrial = { 
+        type: jsPsychInstructions, 
+        pages: [INSTRUCTIONS_PAGE_HTML], 
+        show_clickable_nav: true, 
+        button_label_next: "Start chat", 
+        button_label_previous: "Back",
+        on_load: function() {
+          // Track instructions page start time
+          if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
+            window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+          }
+        }
+      };
       const chatTrial = {
         type: jsPsychDyadicChat,
         socketUrl: window.location.origin,
