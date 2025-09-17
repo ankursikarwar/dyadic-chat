@@ -78,7 +78,7 @@
     <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
-    <strong style="color: #ff6666;"><li>For correctly answering the question, you will be rewarded with a bonus payment.</li></strong>
+    <li style="color: #ff6666;"><strong>For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
     <li>You can send a maximum of ${minMessages} messages to your partner.</li>
     <li>You can submit an answer only after you have sent ${minMessages} messages to your partner.</li>
