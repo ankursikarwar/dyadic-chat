@@ -25,14 +25,33 @@ app.get('/api/config', (_req, res) => {
   res.json({ questionType: QUESTION_TYPE, maxTurns: MAX_TURNS }); 
 });
 
-// ---------- Load items ----------
+// ---------- Load items based on question type ----------
 let items = [];
 try {
-  const p = path.join(__dirname, 'data', 'items.json');
+  // Choose JSON file based on QUESTION_TYPE environment variable
+  let jsonFile = 'items.json'; // Default
+  switch (QUESTION_TYPE) {
+    case 'counting':
+      jsonFile = 'items.json';
+      break;
+    case 'anchor':
+      jsonFile = 'anchors.json';
+      break;
+    case 'relative_distance':
+      jsonFile = 'rel_dists.json';
+      break;
+    case 'spatial':
+      jsonFile = 'items.json'; // Fallback to items.json for spatial
+      break;
+    default:
+      jsonFile = 'items.json'; // Default for 'all_types' or unknown
+  }
+  
+  const p = path.join(__dirname, 'data', jsonFile);
   items = JSON.parse(fs.readFileSync(p, 'utf-8'));
-  console.log('[DyadicChat] Loaded items:', items.length);
+  console.log(`[DyadicChat] Loaded ${items.length} items from ${jsonFile} for question_type: ${QUESTION_TYPE}`);
 } catch (e) {
-  console.warn('[DyadicChat] No items.json; using sample.', e.message);
+  console.warn(`[DyadicChat] No ${jsonFile}; using sample.`, e.message);
   items = [{
     id: 'sample1',
     image_url: '/img/sample.jpg',
