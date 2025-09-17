@@ -114,11 +114,38 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li style="color: #8bd5ff;"><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+              <ol type="i">
+                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+                 <li style="color: #8bd5ff;"><strong>Example Question: "What is the total number of lamps in the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                 <ol type="a" style="margin-left: 20px;">
+                   <li style="color: #8bd5ff;"><strong>4</strong></li>
+                   <li style="color: #8bd5ff;"><strong>3</strong></li>
+                   <li style="color: #8bd5ff;"><strong>1</strong></li>
+                   <li style="color: #8bd5ff;"><strong>2</strong></li>
+                 </ol>
+                <li style="color: #8bd5ff;"><strong>You might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+              </ol>
+              </li>`;
       case 'spatial':
         return `<li style="color: #8bd5ff;"><strong>Spatial Task:</strong> <span style="color: #8bd5ff;">For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</span></li>`;
       case 'anchor':
-        return `<li style="color: #8bd5ff;"><strong>Anchor Task:</strong> <span style="color: #8bd5ff;">For anchor questions, you might see objects in different positions. Discuss the anchor object and its location with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+              <ol type="i">
+                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+                 <li style="color: #8bd5ff;"><strong>Example Question: "Which object appears in both your and your partner's views of the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                 <ol type="a" style="margin-left: 20px;">
+                   <li style="color: #8bd5ff;"><strong>rectangular black desk with white metal legs</strong></li>
+                   <li style="color: #8bd5ff;"><strong>large tall wide light wood shelf with multiple compartments</strong></li>
+                   <li style="color: #8bd5ff;"><strong>tall beige floor lamp with cylindrical fabric shade and metal or wooden base</strong></li>
+                   <li style="color: #8bd5ff;"><strong>bed with green textured mattress and wooden frame with four cylindrical legs</strong></li>
+                 </ol>
+                <li style="color: #8bd5ff;"><strong>The goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+              </ol>
+              </li>`;
       case 'relative_distance':
         return `<li style="color: #8bd5ff;"><strong>Relative Distance Task:</strong> <span style="color: #8bd5ff;">For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</span></li>`;
       default:
