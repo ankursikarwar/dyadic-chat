@@ -100,13 +100,13 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li><strong>Counting Task:</strong> <span style="color:rgb(86, 46, 46);">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
       case 'spatial':
-        return `<li><strong>Spatial Task</strong> <span style="color:rgb(86, 46, 46);">For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Spatial Task:</strong> <span style="color: #8bd5ff;">For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</span></li>`;
       case 'anchor':
-        return `<li><strong>Anchor Task</strong> <span style="color:rgb(86, 46, 46);">For anchor questions, you might see objects in different positions. Discuss the anchor object and its location with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Anchor Task:</strong> <span style="color: #8bd5ff;">For anchor questions, you might see objects in different positions. Discuss the anchor object and its location with your partner.</span></li>`;
       case 'relative_distance':
-        return `<li><strong>Relative Distance Task</strong> <span style="color:rgb(86, 46, 46);">For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Relative Distance Task:</strong> <span style="color: #8bd5ff;">For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</span></li>`;
       default:
         return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
     }
