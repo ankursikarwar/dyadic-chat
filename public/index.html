@@ -41,7 +41,7 @@
       const CONSENT_HTML = `
         <div class="consent-box">
           <h2>Consent</h2>
-          <p>Please read the information below. By checking the box, you confirm that you consent to participate in the study.</p>
+          <p>Please read the information below. By checking the box, you confirm that you consent to participate in this study.</p>
           <ul>
             <li>I agree to the anonymous use of the data in research presentations, publications, and online interactive sites to illustrate the findings.</li>
             <li>I agree that the collected data could be used in related follow-up studies.</li>
@@ -55,7 +55,7 @@
         </div>`;
 
       // Function to generate instructions based on question type
-      function generateInstructions(questionType) {
+      function generateInstructions(questionType, maxTurns) {
         const baseInstructions = `
 <div class="instr instr-aesthetic instr-page-top" style="margin-top: 28px;">
   <style>
@@ -66,12 +66,11 @@
   </style>
   <h2>Instructions</h2>
   <ol class="nice">
-    <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
-    <li>You and your partner will each see different views of the same room.</li>
+    <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
-    <li style="color: #ff6666;"><strong style="color: #ff6666;">For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
     ${getQuestionTypeSpecificInstructions(questionType)}
-    <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
+    <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
+    <li>You can submit an answer only after you have sent ${maxTurns} total messages to your partner.</li>
     <li>Strict turn-taking:
       <ol type="a">
         <li>Send a message only after your partner replies.</li>
@@ -79,35 +78,42 @@
       </ol>
     </li>
     <li>You may zoom in on the image to inspect details.</li>
-    <li>After the turns are completed, select the best option you think is correct and click "Submit Answer".</li>
+    <li>After the messages are completed, select the best option you think is correct and click "Submit Answer".</li>
     <li>Do not share personal information.</li>
   </ol>
   
-  <div style="margin-top: 30px; text-align: center;">
+  <div style="margin-top: 50px; text-align: center;">
     <h3 style="margin-bottom: 20px; color: #fff;">Example: Different Views of the Same Scene</h3>
     <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
       <div style="text-align: center;">
         <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
-        <img src="https://via.placeholder.com/300x200/1f1f22/8bd5ff?text=Your+View+%28Count%3A+2+lamps%29" 
+        <img src="/inst_img/${questionType}_your_view.png" 
              alt="Your view example" 
-             style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 300px; height: auto;">
-        <p style="font-size: 12px; color: #8bd5ff; margin-top: 5px;">You see 2 lamps</p>
+             style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+        <p style="font-size: 16px; color: #8bd5ff; margin-top: 5px;">You see 2 lamps</p>
       </div>
       <div style="text-align: center;">
         <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
-        <img src="https://via.placeholder.com/300x200/1f1f22/ff6b6e?text=Partner+View+%28Count%3A+1+lamp%29" 
+        <img src="/inst_img/${questionType}_partner_view.png"
              alt="Partner's view example" 
-             style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 300px; height: auto;">
-        <p style="font-size: 12px; color: #ff6b6e; margin-top: 5px;">Partner sees 1 lamp</p>
+             style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+        <p style="font-size: 16px; color: #ff6b6e; margin-top: 5px;">Partner sees 3 lamps</p>
       </div>
     </div>
-    <div style="margin-top: 15px; font-size: 14px; color: #d0d4d9;">
+    <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
       <p><strong>Question:</strong> "How many lamps are there in total?"</p>
-      <p><strong>Answer:</strong> 2 (not 3!) - You need to discuss to avoid counting the same lamp twice.</p>
+      <!-- <p><strong>Options:</strong></p> -->
+        <ol type="a" style="text-align: center; list-style-position: inside; color: #8bd5ff;">
+          <li>4</li>
+          <li>3</li>
+          <li>5</li>
+          <li>6</li>
+        </ol>
+      <p><strong>Answer:</strong> 4 (not 5!) - You need to communicate with your partner to avoid counting the same lamp twice.</p>
     </div>
   </div>
   
-  <p>Click "Start chat" when you are ready.</p>
+  <p>Click "Begin Task" when you are ready.</p>
 </div>
 `;
         return baseInstructions;
@@ -116,24 +122,39 @@
       function getQuestionTypeSpecificInstructions(questionType) {
         switch(questionType) {
           case 'counting':
-            return `<li><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
+            return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+              <ol type="i">
+                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+                 <li style="color: #8bd5ff;"><strong>Example Question: "What is the total number of lamps in the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                 <ol type="a" style="margin-left: 20px;">
+                   <li style="color: #8bd5ff;"><strong>4</strong></li>
+                   <li style="color: #8bd5ff;"><strong>3</strong></li>
+                   <li style="color: #8bd5ff;"><strong>1</strong></li>
+                   <li style="color: #8bd5ff;"><strong>2</strong></li>
+                 </ol>
+                <li style="color: #8bd5ff;"><strong>You might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+              </ol>
+              </li>`;
+            // return `<li><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
           case 'spatial':
             return `<li><strong>Spatial Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "Where is the red chair located?", you might see the chair on the left side of your view while your partner sees it on the right side of their view. You need to discuss the spatial relationships and positions to determine the correct answer.</span></li>`;
           case 'anchor':
-            return `<li><strong>Anchor Question Task:</strong> <span style="color: #8bd5ff;">
+            return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
               <ol type="i">
-                <li>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</li>
-                <li>Both of you will be given a multiple choice question about the room with only one correct answer.</li>
-                <li>Example Question: "Which object appears in both your and your partner's views of the room?"</li>
-                  <ol type="a"> Options:
-                    <li>A. rectangular black desk with white metal legs</li>
-                    <li>B. large tall wide light wood shelf with multiple compartments</li>
-                    <li>C. tall beige floor lamp with cylindrical fabric shade and metal or wooden base</li>
-                    <li>D. bed with green textured mattress and wooden frame with four cylindrical legs</li>
-                  </ol>
-                <li>The goal here is to discuss with your partner to determine the correct answer.</li>
+                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+                 <li style="color: #8bd5ff;"><strong>Example Question: "Which object appears in both your and your partner's views of the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                 <ol type="a" style="margin-left: 20px;">
+                   <li style="color: #8bd5ff;"><strong>rectangular black desk with white metal legs</strong></li>
+                   <li style="color: #8bd5ff;"><strong>large tall wide light wood shelf with multiple compartments</strong></li>
+                   <li style="color: #8bd5ff;"><strong>tall beige floor lamp with cylindrical fabric shade and metal or wooden base</strong></li>
+                   <li style="color: #8bd5ff;"><strong>bed with green textured mattress and wooden frame with four cylindrical legs</strong></li>
+                 </ol>
+                <li style="color: #8bd5ff;"><strong>The goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
               </ol>
-              </span></li>`;
+              </li>`;
           case 'relative_distance':
             return `<li><strong>Relative Distance Task:</strong> <span style="color: #8bd5ff;">For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</span></li>`;
           case 'all_types':
@@ -174,9 +195,9 @@ const consentTrial = {
 
         const instructionsTrial = { 
           type: jsPsychInstructions, 
-          pages: [generateInstructions(serverConfig.questionType)], // Use server config
+          pages: [generateInstructions(serverConfig.questionType, serverConfig.maxTurns)], // Use server config
           show_clickable_nav: true, 
-          button_label_next: "Start chat", 
+          button_label_next: "Begin Task", 
           button_label_previous: "Back",
           on_load: function() {
             // Track instructions page start time

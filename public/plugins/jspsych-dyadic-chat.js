@@ -75,7 +75,7 @@
 </style>
   <h2>Instructions</h2>
   <ol class="nice">
-    <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
+    <!-- <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
     <li style="color: #ff6666;"><strong style="color: #ff6666;">For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
@@ -90,6 +90,20 @@
     </li>
     <li>You may zoom in on the image to inspect details.</li>
     <li>After the chat is completed, select the best option you think is correct and click "Submit Answer".</li>
+    <li>Do not share personal information.</li> -->
+    <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
+    <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+    ${getQuestionTypeSpecificSidebarInstructions(questionType)}
+    <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
+    <li>You can submit an answer only after you have sent ${minMessages} total messages to your partner.</li>
+    <li>Strict turn-taking:
+      <ol type="a">
+        <li>Send a message only after your partner replies.</li>
+        <li>No two consecutive messages from the same person.</li>
+      </ol>
+    </li>
+    <li>You may zoom in on the image to inspect details.</li>
+    <li>After the messages are completed, select the best option you think is correct and click "Submit Answer".</li>
     <li>Do not share personal information.</li>
   </ol>
 </div>
