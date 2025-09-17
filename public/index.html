@@ -69,6 +69,7 @@
     <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+    <li><strong>For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
     ${getQuestionTypeSpecificInstructions(questionType)}
     <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
     <li>Strict turn-taking:
@@ -134,36 +135,7 @@
         }
       }
 
-      // Default instructions showing all question types
-      // Instructions will be generated dynamically based on server QUESTION_TYPE
-const SIDEBAR_INSTR_HTML = `\
-<div class="instr instr-aesthetic">
-  <style>
-    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
-    .instr-aesthetic li { margin: 6px 0; }
-    .instr-aesthetic ol[type="a"] { margin-top: 6px; }
-    .instr-aesthetic h2 { margin-bottom: 10px; }
-    .consent-box h2 { margin: 0 0 12px 0; }
-</style>
-  <h2>Instructions</h2>
-  <ol class="nice">
-    <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
-    <li>You and your partner will each see different views of the same room.</li>
-    <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
-    <li>For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</li>
-    <li>You can submit an answer only after the required number of turns in the chat is completed.</li>
-    <li>Strict turn-taking:
-      <ol type="a">
-        <li>Send a message only after your partner replies.</li>
-        <li>No two consecutive messages from the same person.</li>
-      </ol>
-    </li>
-    <li>You may zoom in on the image to inspect details.</li>
-    <li>After the turns are completed, select the best option you think is correct and click “Submit Answer”.</li>
-    <li>Do not share personal information.</li>
-  </ol>
-</div>
-`;
+      // Instructions are generated dynamically based on server QUESTION_TYPE
 const consentTrial = { 
   type: jsPsychSurveyHtmlForm, 
   html: CONSENT_HTML, 
@@ -209,7 +181,6 @@ const consentTrial = {
           goal_question: '',
           answer_options: ['A','B','C','D'],
           wait_timeout_sec: 120,
-          instructions_html: SIDEBAR_INSTR_HTML,
           image_url: '',
           question_type: serverConfig.questionType // Use server config
         };

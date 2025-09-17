@@ -10,7 +10,6 @@
     wait_timeout_sec: { type: Number, default: 120 },
     goal_question: { type: String, default: '' },
     answer_options: { type: Array,  default: [] },
-    instructions_html: { type: String, default: '' },
     image_url: { type: String, default: '' },
     question_type: { type: String, default: 'default' }
   }};
@@ -79,6 +78,7 @@
     <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+    <li><strong>For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
     <li>You can send a maximum of ${minMessages} messages to your partner.</li>
     <li>You can submit an answer only after you have sent ${minMessages} messages to your partner.</li>
