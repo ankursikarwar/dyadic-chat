@@ -214,7 +214,7 @@
           '      <div class="dc-image">', imgHtml, '</div>',
           '      <section class="dc-center-bottom single-box">',
           '        <div class="dc-qa-wrap">',
-          '          <h3 class="dc-goal-title">Goal: Answer the Following Question</h3>',
+          '          <h3 class="dc-goal-title">Goal: Discuss with your partner to answer the following question correctly.</h3>',
           '          <div class="dc-question">', goalQ, '</div>',
           '          <div id="dc-answer-group" class="dc-answers">',
                      opts.map(function(opt, index){
