@@ -51,13 +51,9 @@ try {
   items = JSON.parse(fs.readFileSync(p, 'utf-8'));
   console.log(`[DyadicChat] Loaded ${items.length} items from ${jsonFile} for question_type: ${QUESTION_TYPE}`);
 } catch (e) {
-  console.warn(`[DyadicChat] No ${jsonFile}; using sample.`, e.message);
-  items = [{
-    id: 'sample1',
-    image_url: '/img/sample.jpg',
-    goal_question: 'How many total shelves are visible across all bookcases?',
-    options: ['8','9','10','12']
-  }];
+  console.error(`[DyadicChat] Failed to load ${jsonFile}:`, e.message);
+  console.error(`[DyadicChat] Server cannot start without data. Exiting...`);
+  process.exit(1);
 }
 
 // ---------- Persistent deck (no repeats until cycle completes) ----------
