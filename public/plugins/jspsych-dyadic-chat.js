@@ -135,7 +135,7 @@
           <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
           <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
           <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to help their partner answer the question correctly.</strong></li>
-          <li style="color: #8bd5ff;"><strong>You can either be the person who is given the question or the person who is helping the partner.</strong></li>
+          <li style="color: #8bd5ff;"><strong>You can either be the person who has been given the question or the person who is helping the partner.</strong></li>
           <li style="color: #8bd5ff;"><strong>Example Question: "From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
           <ol type="a" style="margin-left: 20px;">
             <li style="color: #8bd5ff;"><strong>left</strong></li>
@@ -165,7 +165,39 @@
               </ol>
               </li>`;
       case 'relative_distance':
-        return `<li style="color: #8bd5ff;"><strong>Relative Distance Task:</strong> <span style="color: #8bd5ff;">For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+              <ol type="i">
+                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Both of you will be given a two-choice question about the room with only one correct answer.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Example Question: "Which object among the options is closer to the sofa (long rectangular shape, rounded armrests, light beige patterned fabric)?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                <ol type="a" style="margin-left: 20px;">
+                  <li style="color: #8bd5ff;"><strong>rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks</strong></li>
+                  <li style="color: #8bd5ff;"><strong>tall light brown wooden shelf with two vertical columns containing books and small decorative items</strong></li>
+                </ol>
+                <li style="color: #8bd5ff;"><strong>The object mentioned in the question will be in both views. However, one of the objects in the options will only be in your view and the other object in the options will only be in your partner's view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
+              </ol>
+              </li>`;
+      case 'perspective_taking':
+        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+              <ol type="i">
+                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to provide help to their partner.</strong></li>
+                <li style="color: #8bd5ff;"><strong>You can either be the person who has been given the question or the person who is helping the partner.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Example Question: "From your partner's perspective, where is the tall black wooden shelf with multiple square compartments filled with books and items located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                <ol type="a" style="margin-left: 20px;">
+                  <li style="color: #8bd5ff;"><strong>left</strong></li>
+                  <li style="color: #8bd5ff;"><strong>behind-right</strong></li>
+                  <li style="color: #8bd5ff;"><strong>front-right</strong></li>
+                  <li style="color: #8bd5ff;"><strong>behind</strong></li>
+                </ol>
+                <li style="color: #8bd5ff;"><strong>The object mentioned in the question will only be in the view of the person who has been given the question. And not in the view of the other person.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
+              </ol>
+              </li>`;
       default:
         return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
     }
