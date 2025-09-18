@@ -94,9 +94,8 @@
     <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
-    <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
     <li>You can submit an answer only after you have sent ${minMessages} total messages to your partner.</li>
-    <li>Strict turn-taking:
+    <li>Taking turns:
       <ol type="a">
         <li>Send a message only after your partner replies.</li>
         <li>No two consecutive messages from the same person.</li>
@@ -122,28 +121,47 @@
                  <ol type="a" style="margin-left: 20px;">
                    <li style="color: #8bd5ff;"><strong>4</strong></li>
                    <li style="color: #8bd5ff;"><strong>3</strong></li>
-                   <li style="color: #8bd5ff;"><strong>1</strong></li>
-                   <li style="color: #8bd5ff;"><strong>2</strong></li>
+                   <li style="color: #8bd5ff;"><strong>5</strong></li>
+                   <li style="color: #8bd5ff;"><strong>6</strong></li>
                  </ol>
                 <li style="color: #8bd5ff;"><strong>You might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
               </ol>
               </li>`;
       case 'spatial':
-        return `<li style="color: #8bd5ff;"><strong>Spatial Task:</strong> <span style="color: #8bd5ff;">For spatial questions, you might see objects in different positions. Discuss the spatial relationships and locations with your partner.</span></li>`;
+        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+          <ol type="i">
+          <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+          <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+          <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to help their partner answer the question correctly.</strong></li>
+          <li style="color: #8bd5ff;"><strong>You can either be the person who is given the question or the person who is helping the partner.</strong></li>
+          <li style="color: #8bd5ff;"><strong>Example Question: "From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+          <ol type="a" style="margin-left: 20px;">
+            <li style="color: #8bd5ff;"><strong>left</strong></li>
+            <li style="color: #8bd5ff;"><strong>behind-right</strong></li>
+            <li style="color: #8bd5ff;"><strong>front-right</strong></li>
+            <li style="color: #8bd5ff;"><strong>behind</strong></li>
+          </ol>
+          <li style="color: #8bd5ff;"><strong>The object mentioned in the question will not be in the view of the person who has been given the question.</strong></li>
+          <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+          <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
+        </ol>
+        </li>`;
       case 'anchor':
         return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
               <ol type="i">
                 <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
                 <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
-                 <li style="color: #8bd5ff;"><strong>Example Question: "Which object appears in both your and your partner's views of the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+                 <li style="color: #8bd5ff;"><strong>Example Question: "Which object appears in both your view and your partner's view of the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
                  <ol type="a" style="margin-left: 20px;">
-                   <li style="color: #8bd5ff;"><strong>rectangular black desk with white metal legs</strong></li>
-                   <li style="color: #8bd5ff;"><strong>large tall wide light wood shelf with multiple compartments</strong></li>
-                   <li style="color: #8bd5ff;"><strong>tall beige floor lamp with cylindrical fabric shade and metal or wooden base</strong></li>
-                   <li style="color: #8bd5ff;"><strong>bed with green textured mattress and wooden frame with four cylindrical legs</strong></li>
+                   <li style="color: #8bd5ff;"><strong>tall white wooden cabinet with a single compartment</strong></li>
+                   <li style="color: #8bd5ff;"><strong>ceramic circular plant container</strong></li>
+                   <li style="color: #8bd5ff;"><strong>square canvas wall art with gray background</strong></li>
+                   <li style="color: #8bd5ff;"><strong>light pink fabric sofa with three cushions and rounded armrests</strong></li>
                  </ol>
-                <li style="color: #8bd5ff;"><strong>The goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
               </ol>
               </li>`;
       case 'relative_distance':
