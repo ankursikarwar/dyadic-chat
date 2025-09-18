@@ -829,9 +829,13 @@
         // Add instructions toggle functionality
         const toggleButton = document.getElementById('toggle-instructions');
         const instructionsContent = document.getElementById('dc-instructions-content');
-        let isMinimized = false;
+        let isMinimized = true; // Default to minimized
 
         if (toggleButton && instructionsContent) {
+          // Set initial state to minimized
+          instructionsContent.style.display = 'none';
+          toggleButton.textContent = 'Expand';
+          
           toggleButton.addEventListener('click', function() {
             if (isMinimized) {
               instructionsContent.style.display = 'block';
