@@ -1,0 +1,689 @@
+{
+    "dataset_name": "Two-Agent Counting Dataset",
+    "version": "1.0",
+    "description": "Counting Experiment",
+    "samples": [
+        {
+            "sample_id": "counting_00000",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part6",
+            "scene_id": "60e9bf01",
+            "user_1_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of lamps in the room?",
+            "user_2_question": "What is the total number of lamps in the room?",
+            "options_user_1": [
+                "2",
+                "5",
+                "4",
+                "3"
+            ],
+            "options_user_2": [
+                "2",
+                "5",
+                "4",
+                "3"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00001",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part6",
+            "scene_id": "6f6919d",
+            "user_1_image": "/img/Bedroom_v201_Part6/6f6919d/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part6/6f6919d/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of beds in the room?",
+            "user_2_question": "What is the total number of beds in the room?",
+            "options_user_1": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00002",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part3",
+            "scene_id": "1571ac1f",
+            "user_1_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of mattresses in the room?",
+            "user_2_question": "What is the total number of mattresses in the room?",
+            "options_user_1": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00003",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part3",
+            "scene_id": "1571ac1f",
+            "user_1_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of windows in the room?",
+            "user_2_question": "What is the total number of windows in the room?",
+            "options_user_1": [
+                "4",
+                "3",
+                "2",
+                "1"
+            ],
+            "options_user_2": [
+                "4",
+                "3",
+                "2",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 2,
+            "user_2_gt_answer_idx": 2,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00004",
+            "question_type": "counting",
+            "room_part": "LivingRoom_v201_Part7",
+            "scene_id": "556d79d7",
+            "user_1_image": "/img/LivingRoom_v201_Part7/556d79d7/Image_0_0_0048_0.png",
+            "user_2_image": "/img/LivingRoom_v201_Part7/556d79d7/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of windows in the room?",
+            "user_2_question": "What is the total number of windows in the room?",
+            "options_user_1": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00005",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part7",
+            "scene_id": "13ab817a",
+            "user_1_image": "/img/Bedroom_v201_Part7/13ab817a/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part7/13ab817a/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of windows in the room?",
+            "user_2_question": "What is the total number of windows in the room?",
+            "options_user_1": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00006",
+            "question_type": "counting",
+            "room_part": "Kitchen_v201_Part2",
+            "scene_id": "77b2907f",
+            "user_1_image": "/img/Kitchen_v201_Part2/77b2907f/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Kitchen_v201_Part2/77b2907f/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of windows in the room?",
+            "user_2_question": "What is the total number of windows in the room?",
+            "options_user_1": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00007",
+            "question_type": "counting",
+            "room_part": "Kitchen_v201_Part1",
+            "scene_id": "7aba51cd",
+            "user_1_image": "/img/Kitchen_v201_Part1/7aba51cd/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Kitchen_v201_Part1/7aba51cd/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of windows in the room?",
+            "user_2_question": "What is the total number of windows in the room?",
+            "options_user_1": [
+                "2",
+                "3",
+                "1",
+                "5"
+            ],
+            "options_user_2": [
+                "2",
+                "3",
+                "1",
+                "5"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00008",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part7",
+            "scene_id": "7f0b6be7",
+            "user_1_image": "/img/Bedroom_v201_Part7/7f0b6be7/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part7/7f0b6be7/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of doors in the room?",
+            "user_2_question": "What is the total number of doors in the room?",
+            "options_user_1": [
+                "2",
+                "1",
+                "3",
+                "5"
+            ],
+            "options_user_2": [
+                "2",
+                "1",
+                "3",
+                "5"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00009",
+            "question_type": "counting",
+            "room_part": "Bathroom_v201_Part3",
+            "scene_id": "1cd4f1a0",
+            "user_1_image": "/img/Bathroom_v201_Part3/1cd4f1a0/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part3/1cd4f1a0/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of shelves in the room?",
+            "user_2_question": "What is the total number of shelves in the room?",
+            "options_user_1": [
+                "5",
+                "3",
+                "4",
+                "2"
+            ],
+            "options_user_2": [
+                "5",
+                "3",
+                "4",
+                "2"
+            ],
+            "user_1_gt_answer_idx": 3,
+            "user_2_gt_answer_idx": 3,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 4,
+            "difficulty_int": 2,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00010",
+            "question_type": "counting",
+            "room_part": "DiningRoom_v201_Part1",
+            "scene_id": "35e947d5",
+            "user_1_image": "/img/DiningRoom_v201_Part1/35e947d5/Image_0_0_0048_0.png",
+            "user_2_image": "/img/DiningRoom_v201_Part1/35e947d5/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of plant containers in the room?",
+            "user_2_question": "What is the total number of plant containers in the room?",
+            "options_user_1": [
+                "1",
+                "2",
+                "4",
+                "3"
+            ],
+            "options_user_2": [
+                "1",
+                "2",
+                "4",
+                "3"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 4,
+            "difficulty_int": 2,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00011",
+            "question_type": "counting",
+            "room_part": "Kitchen_v201_Part2",
+            "scene_id": "744ea61a",
+            "user_1_image": "/img/Kitchen_v201_Part2/744ea61a/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Kitchen_v201_Part2/744ea61a/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of windows in the room?",
+            "user_2_question": "What is the total number of windows in the room?",
+            "options_user_1": [
+                "5",
+                "3",
+                "4",
+                "1"
+            ],
+            "options_user_2": [
+                "5",
+                "3",
+                "4",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "3",
+            "user_2_gt_answer_text": "3",
+            "difficulty_uni": 5,
+            "difficulty_int": 2,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00012",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part7",
+            "scene_id": "13ab817a",
+            "user_1_image": "/img/Bedroom_v201_Part7/13ab817a/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part7/13ab817a/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of mattresses in the room?",
+            "user_2_question": "What is the total number of mattresses in the room?",
+            "options_user_1": [
+                "3",
+                "2",
+                "1",
+                "5"
+            ],
+            "options_user_2": [
+                "3",
+                "2",
+                "1",
+                "5"
+            ],
+            "user_1_gt_answer": 1,
+            "user_2_gt_answer": 1,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00013",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part7",
+            "scene_id": "13ab817a",
+            "user_1_image": "/img/Bedroom_v201_Part7/13ab817a/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part7/13ab817a/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of beds in the room?",
+            "user_2_question": "What is the total number of beds in the room?",
+            "options_user_1": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "2",
+                "5",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00014",
+            "question_type": "counting",
+            "room_part": "Bathroom_v201_Part2",
+            "scene_id": "62c46e51",
+            "user_1_image": "/img/Bathroom_v201_Part2/62c46e51/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part2/62c46e51/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of shelves in the room?",
+            "user_2_question": "What is the total number of shelves in the room?",
+            "options_user_1": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00015",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part7",
+            "scene_id": "13ab817a",
+            "user_1_image": "/img/Bedroom_v201_Part7/13ab817a/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part7/13ab817a/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of lamps in the room?",
+            "user_2_question": "What is the total number of lamps in the room?",
+            "options_user_1": [
+                "4",
+                "3",
+                "2",
+                "1"
+            ],
+            "options_user_2": [
+                "4",
+                "3",
+                "2",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 2,
+            "user_2_gt_answer_idx": 2,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00016",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part5",
+            "scene_id": "16af2a25",
+            "user_1_image": "/img/Bedroom_v201_Part5/16af2a25/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part5/16af2a25/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of lamps in the room?",
+            "user_2_question": "What is the total number of lamps in the room?",
+            "options_user_1": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "options_user_2": [
+                "5",
+                "2",
+                "3",
+                "1"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00017",
+            "question_type": "counting",
+            "room_part": "Bathroom_v201_Part2",
+            "scene_id": "5245658f",
+            "user_1_image": "/img/Bathroom_v201_Part2/5245658f/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part2/5245658f/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of plant containers in the room?",
+            "user_2_question": "What is the total number of plant containers in the room?",
+            "options_user_1": [
+                "2",
+                "4",
+                "5",
+                "3"
+            ],
+            "options_user_2": [
+                "2",
+                "4",
+                "5",
+                "3"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00018",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part7",
+            "scene_id": "13ab817a",
+            "user_1_image": "/img/Bedroom_v201_Part7/13ab817a/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part7/13ab817a/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of wall art pieces in the room?",
+            "user_2_question": "What is the total number of wall art pieces in the room?",
+            "options_user_1": [
+                "2",
+                "4",
+                "5",
+                "3"
+            ],
+            "options_user_2": [
+                "2",
+                "4",
+                "5",
+                "3"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00019",
+            "question_type": "counting",
+            "room_part": "DiningRoom_v201_Part1",
+            "scene_id": "35e947d5",
+            "user_1_image": "/img/DiningRoom_v201_Part1/35e947d5/Image_0_0_0048_0.png",
+            "user_2_image": "/img/DiningRoom_v201_Part1/35e947d5/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of shelves in the room?",
+            "user_2_question": "What is the total number of shelves in the room?",
+            "options_user_1": [
+                "3",
+                "5",
+                "9",
+                "4"
+            ],
+            "options_user_2": [
+                "3",
+                "5",
+                "9",
+                "4"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "5",
+            "user_2_gt_answer_text": "5",
+            "difficulty_uni": 9,
+            "difficulty_int": 4,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00020",
+            "question_type": "counting",
+            "room_part": "DiningRoom_v201_Part2",
+            "scene_id": "3d572b31",
+            "user_1_image": "/img/DiningRoom_v201_Part2/3d572b31/Image_0_0_0048_0.png",
+            "user_2_image": "/img/DiningRoom_v201_Part2/3d572b31/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of chairs in the room?",
+            "user_2_question": "What is the total number of chairs in the room?",
+            "options_user_1": [
+                "5",
+                "3",
+                "2",
+                "6"
+            ],
+            "options_user_2": [
+                "5",
+                "3",
+                "2",
+                "6"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "3",
+            "user_2_gt_answer_text": "3",
+            "difficulty_uni": 6,
+            "difficulty_int": 3,
+            "difficulty": null
+        },
+        {
+            "sample_id": "counting_00021",
+            "question_type": "counting",
+            "room_part": "Bedroom_v201_Part6",
+            "scene_id": "6f6919d",
+            "user_1_image": "/img/Bedroom_v201_Part6/6f6919d/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part6/6f6919d/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "What is the total number of mattresses in the room?",
+            "user_2_question": "What is the total number of mattresses in the room?",
+            "options_user_1": [
+                "2",
+                "4",
+                "5",
+                "3"
+            ],
+            "options_user_2": [
+                "2",
+                "4",
+                "5",
+                "3"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "2",
+            "user_2_gt_answer_text": "2",
+            "difficulty_uni": 3,
+            "difficulty_int": 1,
+            "difficulty": null
+        }
+    ]
+}

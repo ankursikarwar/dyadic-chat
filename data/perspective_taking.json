@@ -1,0 +1,33 @@
+{
+    "dataset_name": "Two-Agent Perspective Taking Dataset",
+    "version": "1.0",
+    "description": "Perspective Taking Experiment",
+    "samples": [
+        {
+            "sample_id": "perspective_taking_00000",
+            "question_type": "perspective_taking",
+            "room_part": "LivingRoom_v201_Part2",
+            "scene_id": "4f16c9aa",
+            "user_1_image": "/img/LivingRoom_v201_Part2/4f16c9aa/Image_0_0_0048_0.png",
+            "user_2_image": "/img/LivingRoom_v201_Part2/4f16c9aa/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": null,
+            "user_2_question": "From your partner's perspective, where is the tall black wooden shelf with multiple square compartments filled with books and items located?",
+            "options_user_1": null,
+            "options_user_2": [
+                "left",
+                "behind-right",
+                "front-right",
+                "behind-left"
+            ],
+            "user_1_gt_answer_idx": null,
+            "user_2_gt_answer_idx": 2,
+            "user_1_gt_answer_text": null,
+            "user_2_gt_answer_text": "front-right",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 2
+        }
+    ]
+}

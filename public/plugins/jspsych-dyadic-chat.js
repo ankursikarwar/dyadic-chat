@@ -238,6 +238,9 @@
       function htmlChat(p){
         const item = (p && p.item) || null;
         const minMessages = (p && p.min_turns) || trial.min_messages;
+        const hasQuestion = item && item.has_question;
+        const hasOptions = item && item.has_options;
+        
         const imgHtml = (item && item.image_url)
           ? '<div class="dc-image-viewport"><img id="dc-scene" src="' + item.image_url + '" alt="scene"></div>'
             + '<div class="dc-zoom-controls">'
@@ -248,6 +251,47 @@
           : '<div style="color:#777">No image</div>';
         const opts = (item && item.options) || trial.answer_options || [];
         const goalQ = (item && item.goal_question) || trial.goal_question || '';
+
+        // Generate different content based on whether user has a question
+        let centerContent;
+        if (hasQuestion && hasOptions) {
+          // User has a question - show normal interface
+          centerContent = [
+            '<section class="dc-center-bottom single-box">',
+            '  <div class="dc-qa-wrap">',
+            '    <h3 class="dc-goal-title">Goal: Discuss with your partner to answer the following question correctly.</h3>',
+            '    <div class="dc-question">', goalQ, '</div>',
+            '    <div id="dc-answer-group" class="dc-answers">',
+            opts.map(function(opt, index){
+              return [
+                '<label class="dc-answer-option">',
+                '  <input type="radio" name="dc-answer" value="', String(index), '" disabled />',
+                '  <span>', String(opt), '</span>',
+                '</label>'
+              ].join('');
+            }).join(''),
+            '    </div>',
+            '    <div class="dc-availability-note">Note: Submit button becomes accessible when ' + String(minMessages) + ' messages are sent.</div>',
+            '    <button id="dc-submit" class="dc-btn dc-submit" disabled>Submit Answer</button>',
+            '  </div>',
+            '</section>'
+          ].join('');
+        } else {
+          // User has no question - show helper interface
+          centerContent = [
+            '<section class="dc-center-bottom single-box">',
+            '  <div class="dc-qa-wrap">',
+            '    <h3 class="dc-goal-title">Goal: Help your partner answer their question correctly.</h3>',
+            '    <div class="dc-question" style="color: #8bd5ff; font-style: italic;">',
+            '      You do not have a question to answer. Your role is to help your partner by discussing what you see in the image and providing information that will help them answer their question correctly.',
+            '    </div>',
+            '    <div class="dc-availability-note" style="color: #8bd5ff;">',
+            '      You will automatically proceed to the survey after ' + String(minMessages) + ' messages are exchanged.',
+            '    </div>',
+            '  </div>',
+            '</section>'
+          ].join('');
+        }
 
         return styleTag() + [
           '<div class="dc-root">',
@@ -266,24 +310,7 @@
           '    </section>',
           '    <section class="dc-center">',
           '      <div class="dc-image">', imgHtml, '</div>',
-          '      <section class="dc-center-bottom single-box">',
-          '        <div class="dc-qa-wrap">',
-          '          <h3 class="dc-goal-title">Goal: Discuss with your partner to answer the following question correctly.</h3>',
-          '          <div class="dc-question">', goalQ, '</div>',
-          '          <div id="dc-answer-group" class="dc-answers">',
-                     opts.map(function(opt, index){
-                       return [
-                         '<label class="dc-answer-option">',
-                         '  <input type="radio" name="dc-answer" value="', String(index), '" disabled />',
-                         '  <span>', String(opt), '</span>',
-                         '</label>'
-                       ].join('');
-                     }).join(''),
-          '          </div>',
-          '          <div class="dc-availability-note">Note: Submit button becomes accessible when ' + String(minMessages) + ' messages are sent.</div>',
-          '          <button id="dc-submit" class="dc-btn dc-submit" disabled>Submit Answer</button>',
-          '        </div>',
-          '      </section>',
+          centerContent,
           '    </section>',
           '    <section class="dc-panel dc-right">',
           '      <div class="dc-title-row">',
@@ -387,6 +414,36 @@
       }
 
       function submitAnswer(){
+        // Check if user has a question to answer
+        if (!window.__userHasQuestion || !window.__userHasOptions) {
+          // User has no question - go directly to survey
+          console.log('[DyadicChat] User has no question, proceeding directly to survey');
+          
+          // Safety check: ensure t0 is set (should be set when paired)
+          if (t0 === null) {
+            console.warn('[DyadicChat] t0 not set, using current time as fallback');
+            t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+          }
+          
+          const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+          const rt = Math.round(nowTs - t0);
+          
+          // Track answer submit time
+          answerSubmitTime = nowTs;
+          
+          // Store empty answer data for the survey (no answer to submit)
+          window.__answerData = { messages: Math.floor(msgCount/2), choice: null, rt: rt, pid: pidLabel };
+          
+          // Store socket reference before it might be lost
+          window.__socket = socket;
+          
+          // Don't emit answer:submit since there's no answer
+          // Go directly to survey
+          showCombinedFeedbackAndSurvey(null);
+          return;
+        }
+        
+        // User has a question - proceed with normal answer submission
         const el = document.querySelector('input[name="dc-answer"]:checked');
         if (!el) return;
         
@@ -415,11 +472,15 @@
       }
 
       function showCombinedFeedbackAndSurvey(userAnswer) {
-        // Convert user's answer to index for comparison
-        const userAnswerIndex = parseInt(userAnswer);
-        const isCorrect = userAnswerIndex === correctAnswerIndex;
-        const feedbackHTML = `
-          <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:#fff; text-align:left;">
+        // Check if user has a question to answer
+        const hasQuestion = window.__userHasQuestion && window.__userHasOptions;
+        
+        let feedbackSection = '';
+        if (hasQuestion && userAnswer !== null) {
+          // User has a question - show answer feedback
+          const userAnswerIndex = parseInt(userAnswer);
+          const isCorrect = userAnswerIndex === correctAnswerIndex;
+          feedbackSection = `
             <!-- Answer Feedback Section -->
             <div style="text-align:center; margin-bottom:40px;">
               <h2 style="margin-bottom:30px; color:#fff;">Answer Submitted!</h2>
@@ -446,6 +507,34 @@
                 }
               </div>
             </div>
+          `;
+        } else {
+          // User has no question - show helper completion message
+          feedbackSection = `
+            <!-- Helper Completion Section -->
+            <div style="text-align:center; margin-bottom:40px;">
+              <h2 style="margin-bottom:30px; color:#fff;">Task Completed!</h2>
+              
+              <div style="background:#0b0b0b; padding:30px; border-radius:12px; border:1px solid #3e3e42; margin-bottom:30px;">
+                <div style="font-size:24px; margin-bottom:20px; color:#8bd5ff;">
+                  ✓ Helper Role Completed
+                </div>
+                
+                <div style="font-size:18px; margin-bottom:20px;">
+                  Thank you for helping your partner! You successfully assisted them by discussing what you saw in the image and providing information to help them answer their question.
+                </div>
+                
+                <div style="font-size:16px; color:#4CAF50; margin-top:15px;">
+                  Great job! You and your partner worked together successfully.
+                </div>
+              </div>
+            </div>
+          `;
+        }
+        
+        const feedbackHTML = `
+          <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:#fff; text-align:left;">
+            ${feedbackSection}
 
             <!-- Survey Section -->
             <h2 style="text-align:center; margin-bottom:30px; color:#fff;">Post-Study Survey</h2>
@@ -815,10 +904,22 @@
         // Set chat begin time
         chatBeginTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         
-        // Store the correct answer index, text, and options for this user
-        correctAnswerIndex = p.item.correct_answer;
-        answerOptions = p.item.options;
-        correctAnswerText = answerOptions[correctAnswerIndex];
+        // Store user's question status and answer data
+        window.__userHasQuestion = p.item.has_question;
+        window.__userHasOptions = p.item.has_options;
+        
+        if (p.item.has_question && p.item.has_options) {
+          // Store the correct answer index, text, and options for this user
+          correctAnswerIndex = p.item.correct_answer;
+          answerOptions = p.item.options;
+          correctAnswerText = answerOptions[correctAnswerIndex];
+        } else {
+          // User has no question - no answer data needed
+          correctAnswerIndex = null;
+          answerOptions = null;
+          correctAnswerText = null;
+        }
+        
         display_element.innerHTML = htmlChat(p);
         let pairedPayload = p;
         const sendBtn = document.getElementById('dc-send');
@@ -859,10 +960,18 @@
       socket.on('turn:wait', function(){ myTurn = false; updateMessages(); });
       socket.on('chat:closed', function(){ 
         chatClosed = true; 
-        updateMessages(); 
+        updateMessages();
         
         // Track chat end time
         chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        
+        // If user has no question, automatically proceed to survey
+        if (!window.__userHasQuestion || !window.__userHasOptions) {
+          console.log('[DyadicChat] Chat closed and user has no question, proceeding to survey');
+          setTimeout(() => {
+            submitAnswer(); // This will handle the no-question case
+          }, 1000); // Small delay to ensure UI updates
+        }
       });
       // Heartbeat mechanism
       function startHeartbeat() {

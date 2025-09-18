@@ -1,0 +1,36 @@
+{
+    "dataset_name": "Two-Agent Counting Dataset",
+    "version": "1.0",
+    "description": "Counting Experiment",
+    "samples": [
+        {
+        "sample_id": "counting_0000000",
+        "question_type": "counting",
+        "room_part": "Bedroom_v201_Part6",
+        "scene_id": "60e9bf01",
+        "user_1_image": "/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
+        "user_2_image": "/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
+        "user_1_question": "What is the total number of lamps in the room?",
+        "user_2_question": "What is the total number of lamps in the room?",
+        "options_user_1": [
+            "2",
+            "5",
+            "4",
+            "3"
+        ],
+        "options_user_2": [
+            "2",
+            "5",
+            "4",
+            "3"
+        ],
+        "user_1_gt_answer": 0,
+        "user_2_gt_answer": 0,
+        "user_1_gt_answer_text": "2",
+        "user_2_gt_answer_text": "2",
+        "difficulty_uni": 3,
+        "difficulty_int": 1,
+        "difficulty": 0.7787257452406959
+        }
+    ]
+}

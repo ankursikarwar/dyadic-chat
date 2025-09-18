@@ -1,0 +1,255 @@
+{
+    "dataset_name": "Two-Agent Anchor Dataset",
+    "version": "1.0",
+    "description": "Anchor Experiment",
+    "samples": [
+        {
+            "sample_id": "anchor_00000",
+            "question_type": "anchor",
+            "room_part": "Bedroom_v201_Part3",
+            "scene_id": "1571ac1f",
+            "user_1_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bedroom_v201_Part3/1571ac1f/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which object can be seen in both views of the room?",
+            "user_2_question": "Which object can be seen in both views of the room?",
+            "options_user_1": [
+                "rectangular pink soft fabric mattress",
+                "tall and slender light green metallic floor lamp with fabric shade",
+                "large black wooden shelf with multiple compartments",
+                "dark brown ceramic circular large plant container"
+            ],
+            "options_user_2": [
+                "rectangular pink soft fabric mattress",
+                "tall and slender light green metallic floor lamp with fabric shade",
+                "large black wooden shelf with multiple compartments",
+                "dark brown ceramic circular large plant container"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "rectangular pink soft fabric mattress",
+            "user_2_gt_answer_text": "rectangular pink soft fabric mattress",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 69
+        },
+        {
+            "sample_id": "anchor_00001",
+            "question_type": "anchor",
+            "room_part": "Bathroom_v201_Part2",
+            "scene_id": "62c46e51",
+            "user_1_image": "/img/Bathroom_v201_Part2/62c46e51/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part2/62c46e51/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which object is visible in both views of the room?",
+            "user_2_question": "Which object is visible in both views of the room?",
+            "options_user_1": [
+                "rounded white ceramic toilet with a grayish texture",
+                "light brown wooden bookcase with multiple compartments",
+                "transparent cylindrical glass plant container with visible brown soil",
+                "white ceramic standing sink"
+            ],
+            "options_user_2": [
+                "rounded white ceramic toilet with a grayish texture",
+                "light brown wooden bookcase with multiple compartments",
+                "transparent cylindrical glass plant container with visible brown soil",
+                "white ceramic standing sink"
+            ],
+            "user_1_gt_answer_idx": 2,
+            "user_2_gt_answer_idx": 2,
+            "user_1_gt_answer_text": "transparent cylindrical glass plant container with visible brown soil",
+            "user_2_gt_answer_text": "transparent cylindrical glass plant container with visible brown soil",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 63
+        },
+        {
+            "sample_id": "anchor_00002",
+            "question_type": "anchor",
+            "room_part": "LivingRoom_v201_Part6",
+            "scene_id": "5818c1e0",
+            "user_1_image": "/img/LivingRoom_v201_Part6/5818c1e0/Image_0_0_0048_0.png",
+            "user_2_image": "/img/LivingRoom_v201_Part6/5818c1e0/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which object is visible in both views of the room?",
+            "user_2_question": "Which object is visible in both views of the room?",
+            "options_user_1": [
+                "circular white metallic desk lamp",
+                "L-shaped light green fabric sofa",
+                "circular brown ceramic large plant container",
+                "rectangular white wood-like TV stand with open shelves"
+            ],
+            "options_user_2": [
+                "circular white metallic desk lamp",
+                "L-shaped light green fabric sofa",
+                "circular brown ceramic large plant container",
+                "rectangular white wood-like TV stand with open shelves"
+            ],
+            "user_1_gt_answer_idx": 3,
+            "user_2_gt_answer_idx": 3,
+            "user_1_gt_answer_text": "rectangular white wood-like TV stand with open shelves",
+            "user_2_gt_answer_text": "rectangular white wood-like TV stand with open shelves",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 67
+        },
+        {
+            "sample_id": "anchor_00003",
+            "question_type": "anchor",
+            "room_part": "Bathroom_v201_Part2",
+            "scene_id": "13bd5e3f",
+            "user_1_image": "/img/Bathroom_v201_Part2/13bd5e3f/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part2/13bd5e3f/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which of the following items can be seen in both views of the room?",
+            "user_2_question": "Which of the following items can be seen in both views of the room?",
+            "options_user_1": [
+                "dark brown wooden bookcase with multiple compartments",
+                "brown metallic bowl",
+                "white ceramic toilet with a rounded bowl and lid, featuring some speckles",
+                "dark ceramic bowl"
+            ],
+            "options_user_2": [
+                "dark brown wooden bookcase with multiple compartments",
+                "brown metallic bowl",
+                "white ceramic toilet with a rounded bowl and lid, featuring some speckles",
+                "dark ceramic bowl"
+            ],
+            "user_1_gt_answer_idx": 2,
+            "user_2_gt_answer_idx": 2,
+            "user_1_gt_answer_text": "white ceramic toilet with a rounded bowl and lid, featuring some speckles",
+            "user_2_gt_answer_text": "white ceramic toilet with a rounded bowl and lid, featuring some speckles",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 89
+        },
+        {
+            "sample_id": "anchor_00004",
+            "question_type": "anchor",
+            "room_part": "Bathroom_v201_Part2",
+            "scene_id": "62c46e51",
+            "user_1_image": "/img/Bathroom_v201_Part2/62c46e51/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part2/62c46e51/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which of the following objects can be seen in both views of the room?",
+            "user_2_question": "Which of the following objects can be seen in both views of the room?",
+            "options_user_1": [
+                "rectangular light brown wooden cell shelf with open compartments",
+                "white ceramic toilet with a rounded bowl and lid, featuring some grayish texture",
+                "simple light brown wooden bookcase with multiple compartments",
+                "round white ceramic standing sink"
+            ],
+            "options_user_2": [
+                "rectangular light brown wooden cell shelf with open compartments",
+                "white ceramic toilet with a rounded bowl and lid, featuring some grayish texture",
+                "simple light brown wooden bookcase with multiple compartments",
+                "round white ceramic standing sink"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "rectangular light brown wooden cell shelf with open compartments",
+            "user_2_gt_answer_text": "rectangular light brown wooden cell shelf with open compartments",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 81
+        },
+        {
+            "sample_id": "anchor_00005",
+            "question_type": "anchor",
+            "room_part": "LivingRoom_v201_Part2",
+            "scene_id": "2f1190f5",
+            "user_1_image": "/img/LivingRoom_v201_Part2/2f1190f5/Image_0_0_0048_0.png",
+            "user_2_image": "/img/LivingRoom_v201_Part2/2f1190f5/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which object can be seen in both views of the room?",
+            "user_2_question": "Which object can be seen in both views of the room?",
+            "options_user_1": [
+                "circular white metallic desk lamp",
+                "rectangular black wooden simple desk",
+                "L-shaped green fabric sofa",
+                "single cabinet with rectangular shape, multiple compartments, light brown wood"
+            ],
+            "options_user_2": [
+                "circular white metallic desk lamp",
+                "rectangular black wooden simple desk",
+                "L-shaped green fabric sofa",
+                "single cabinet with rectangular shape, multiple compartments, light brown wood"
+            ],
+            "user_1_gt_answer_idx": 3,
+            "user_2_gt_answer_idx": 3,
+            "user_1_gt_answer_text": "single cabinet with rectangular shape, multiple compartments, light brown wood",
+            "user_2_gt_answer_text": "single cabinet with rectangular shape, multiple compartments, light brown wood",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 86
+        },
+        {
+            "sample_id": "anchor_00006",
+            "question_type": "anchor",
+            "room_part": "Bathroom_v201_Part2",
+            "scene_id": "6d53108",
+            "user_1_image": "/img/Bathroom_v201_Part2/6d53108/Image_0_0_0048_0.png",
+            "user_2_image": "/img/Bathroom_v201_Part2/6d53108/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which object is visible in both views of the room?",
+            "user_2_question": "Which object is visible in both views of the room?",
+            "options_user_1": [
+                "dark green rectangular canvas or fabric wall art with colorful abstract patterns",
+                "light gray ceramic standard toilet with a rounded tank and bowl",
+                "purple cylindrical ceramic plant container",
+                "white wood-like single cabinet with multiple compartments located near the toilet"
+            ],
+            "options_user_2": [
+                "dark green rectangular canvas or fabric wall art with colorful abstract patterns",
+                "light gray ceramic standard toilet with a rounded tank and bowl",
+                "purple cylindrical ceramic plant container",
+                "white wood-like single cabinet with multiple compartments located near the toilet"
+            ],
+            "user_1_gt_answer_idx": 1,
+            "user_2_gt_answer_idx": 1,
+            "user_1_gt_answer_text": "light gray ceramic standard toilet with a rounded tank and bowl",
+            "user_2_gt_answer_text": "light gray ceramic standard toilet with a rounded tank and bowl",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 82
+        },
+        {
+            "sample_id": "anchor_00007",
+            "question_type": "anchor",
+            "room_part": "LivingRoom_v201_Part7",
+            "scene_id": "253e4972",
+            "user_1_image": "/img/LivingRoom_v201_Part7/253e4972/Image_0_0_0048_0.png",
+            "user_2_image": "/img/LivingRoom_v201_Part7/253e4972/Image_1_0_0048_0.png",
+            "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+            "user_1_question": "Which object is visible in both views of the room?",
+            "user_2_question": "Which object is visible in both views of the room?",
+            "options_user_1": [
+                "l-shaped purple fabric sofa",
+                "rectangular light brown wooden TV stand",
+                "tall and narrow light brown wooden cabinet",
+                "circular greenish-blue metallic plant container"
+            ],
+            "options_user_2": [
+                "l-shaped purple fabric sofa",
+                "rectangular light brown wooden TV stand",
+                "tall and narrow light brown wooden cabinet",
+                "circular greenish-blue metallic plant container"
+            ],
+            "user_1_gt_answer_idx": 0,
+            "user_2_gt_answer_idx": 0,
+            "user_1_gt_answer_text": "l-shaped purple fabric sofa",
+            "user_2_gt_answer_text": "l-shaped purple fabric sofa",
+            "difficulty_uni": null,
+            "difficulty_int": null,
+            "difficulty": 92
+        }
+    ]
+}

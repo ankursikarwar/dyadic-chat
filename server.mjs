@@ -32,23 +32,36 @@ try {
   let jsonFile = 'items.json'; // Default
   switch (QUESTION_TYPE) {
     case 'counting':
-      jsonFile = 'items.json';
+      jsonFile = 'counting.json';
       break;
     case 'anchor':
-      jsonFile = 'anchors.json';
+      jsonFile = 'anchor.json';
       break;
     case 'relative_distance':
-      jsonFile = 'rel_dists.json';
+      jsonFile = 'relative_distance.json';
       break;
     case 'spatial':
-      jsonFile = 'items.json'; // Fallback to items.json for spatial
+      jsonFile = 'spatial.json';
+      break;
+    case 'perspective_taking':
+      jsonFile = 'perspective_taking.json';
       break;
     default:
       jsonFile = 'items.json'; // Default for 'all_types' or unknown
   }
   
   const p = path.join(__dirname, 'data', jsonFile);
-  items = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  const data = JSON.parse(fs.readFileSync(p, 'utf-8'));
+  
+  // Handle both old format (array) and new format (object with samples array)
+  if (Array.isArray(data)) {
+    items = data;
+  } else if (data.samples && Array.isArray(data.samples)) {
+    items = data.samples;
+  } else {
+    throw new Error('Invalid data format: expected array or object with samples array');
+  }
+  
   console.log(`[DyadicChat] Loaded ${items.length} items from ${jsonFile} for question_type: ${QUESTION_TYPE}`);
 } catch (e) {
   console.error(`[DyadicChat] Failed to load ${jsonFile}:`, e.message);
@@ -293,6 +306,26 @@ io.on('connection', (socket) => {
     if (completedTurns >= room.minTurns){
       room.chatClosed = true;
       io.to(roomId).emit('chat:closed');
+      
+      // Mark users without questions as finished automatically
+      const [a, b] = room.users;
+      const item = room.item;
+      
+      // Check if user 1 has no question
+      if (item && (!item.user_1_question || item.user_1_question.trim() === '')) {
+        if (!room.finished[a.id]) {
+          room.finished[a.id] = true;
+          console.log(`[DyadicChat] Auto-marked user ${a.id} as finished (no question)`);
+        }
+      }
+      
+      // Check if user 2 has no question
+      if (item && (!item.user_2_question || item.user_2_question.trim() === '')) {
+        if (!room.finished[b.id]) {
+          room.finished[b.id] = true;
+          console.log(`[DyadicChat] Auto-marked user ${b.id} as finished (no question)`);
+        }
+      }
     }
 
     const other = room.users.find(u => u.id !== socket.id);
@@ -476,8 +509,32 @@ io.on('connection', (socket) => {
       rooms.set(roomId, room);
 
       console.log(`[DyadicChat] Sending paired event to ${a.id} and ${b.id}`);
-      io.to(a.id).emit('paired', { roomId, item: { ...item, image_url: item.user_1_image, goal_question: item.user_1_question, question_type: item.question_type, correct_answer: item.user_1_gt_answer, options: item.options }, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
-      io.to(b.id).emit('paired', { roomId, item: { ...item, image_url: item.user_2_image, goal_question: item.user_2_question, question_type: item.question_type, correct_answer: item.user_2_gt_answer, options: item.options }, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
+      
+      // Map new field names to expected format
+      const itemForUser1 = {
+        ...item,
+        image_url: item.user_1_image,
+        goal_question: item.user_1_question,
+        question_type: item.question_type,
+        correct_answer: item.user_1_gt_answer_idx,
+        options: item.options_user_1 || item.options, // Fallback to options if options_user_1 doesn't exist
+        has_question: !!(item.user_1_question && item.user_1_question.trim() !== ''),
+        has_options: !!(item.options_user_1 && item.options_user_1.length > 0)
+      };
+      
+      const itemForUser2 = {
+        ...item,
+        image_url: item.user_2_image,
+        goal_question: item.user_2_question,
+        question_type: item.question_type,
+        correct_answer: item.user_2_gt_answer_idx,
+        options: item.options_user_2 || item.options, // Fallback to options if options_user_2 doesn't exist
+        has_question: !!(item.user_2_question && item.user_2_question.trim() !== ''),
+        has_options: !!(item.options_user_2 && item.options_user_2.length > 0)
+      };
+      
+      io.to(a.id).emit('paired', { roomId, item: itemForUser1, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
+      io.to(b.id).emit('paired', { roomId, item: itemForUser2, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
       // User 1 (first user in queue) always starts the conversation
       room.nextSenderId = a.id;
       io.to(a.id).emit('turn:you');
@@ -526,12 +583,14 @@ function transformRoomData(room) {
   const transformedAnswers = {};
   if (room.answers[user1.id]) {
     const answer1 = room.answers[user1.id];
+    // Use user-specific options if available, otherwise fall back to general options
+    const user1Options = item.options_user_1 || item.options || [];
     transformedAnswers[user1Role] = {
       id: user1Role,
       who: user1.id,
       pid: answer1.pid,
       choice_idx: parseInt(answer1.choice),
-      choice_text: item.options[parseInt(answer1.choice)],
+      choice_text: user1Options[parseInt(answer1.choice)] || '',
       rt: answer1.rt,
       rt_formatted: answer1.rt_formatted,
       t: answer1.t,
@@ -540,12 +599,14 @@ function transformRoomData(room) {
   }
   if (room.answers[user2.id]) {
     const answer2 = room.answers[user2.id];
+    // Use user-specific options if available, otherwise fall back to general options
+    const user2Options = item.options_user_2 || item.options || [];
     transformedAnswers[user2Role] = {
       id: user2Role,
       who: user2.id,
       pid: answer2.pid,
       choice_idx: parseInt(answer2.choice),
-      choice_text: item.options[parseInt(answer2.choice)],
+      choice_text: user2Options[parseInt(answer2.choice)] || '',
       rt: answer2.rt,
       rt_formatted: answer2.rt_formatted,
       t: answer2.t,
@@ -558,6 +619,8 @@ function transformRoomData(room) {
   Object.keys(room.surveys).forEach(socketId => {
     const survey = room.surveys[socketId];
     const userRole = room.userRoles[socketId] || 'unknown';
+    // Use user-specific options if available, otherwise fall back to general options
+    const userOptions = userRole === 'user_1' ? (item.options_user_1 || item.options || []) : (item.options_user_2 || item.options || []);
     transformedSurveys[userRole] = {
       id: userRole,
       who: socketId,
@@ -566,7 +629,7 @@ function transformRoomData(room) {
       answerData: {
         msgs: survey.answerData.messages,
         choice_idx: parseInt(survey.answerData.choice),
-        choice_text: item.options[parseInt(survey.answerData.choice)],
+        choice_text: userOptions[parseInt(survey.answerData.choice)] || '',
         rt: survey.answerData.rt,
         pid: survey.answerData.pid,
         rt_formatted: survey.answerData.rt_formatted
@@ -622,22 +685,45 @@ function transformRoomData(room) {
     }
   });
 
+  // Get options for ground truth answers - use user-specific options if available
+  const user1Options = item.options_user_1 || item.options || [];
+  const user2Options = item.options_user_2 || item.options || [];
+  
   return {
-    room_id: room.id,
-    id: item.id || 'unknown',
+    // Original JSON fields first
+    sample_id: item.sample_id || item.id || 'unknown',
     question_type: item.question_type || 'unknown',
+    room_part: item.room_part || null,
+    scene_id: item.scene_id || null,
     user_1_image: item.user_1_image || '',
     user_2_image: item.user_2_image || '',
+    user_1_goal: item.user_1_goal || null,
+    user_2_goal: item.user_2_goal || null,
     user_1_question: item.user_1_question || '',
     user_2_question: item.user_2_question || '',
-    options: item.options || [],
-    user_1_gt_answer_idx: item.user_1_gt_answer || 0,
-    user_2_gt_answer_idx: item.user_2_gt_answer || 0,
-    user_1_gt_answer_text: item.options ? item.options[item.user_1_gt_answer] : '',
-    user_2_gt_answer_text: item.options ? item.options[item.user_2_gt_answer] : '',
+    options_user_1: item.options_user_1 || null,
+    options_user_2: item.options_user_2 || null,
+  user_1_gt_answer_idx: item.user_1_gt_answer_idx || 0,
+  user_2_gt_answer_idx: item.user_2_gt_answer_idx || 0,
+  user_1_gt_answer_text: item.user_1_gt_answer_text || user1Options[item.user_1_gt_answer_idx] || '',
+  user_2_gt_answer_text: item.user_2_gt_answer_text || user2Options[item.user_2_gt_answer_idx] || '',
     difficulty_uni: item.difficulty_uni || null,
     difficulty_int: item.difficulty_int || null,
     difficulty: item.difficulty || null,
+    
+    // Include any other fields that might exist in the original item
+    ...Object.fromEntries(
+      Object.entries(item).filter(([key, value]) => 
+        !['id', 'sample_id', 'question_type', 'user_1_image', 'user_2_image', 
+          'user_1_question', 'user_2_question', 'options', 'user_1_gt_answer_idx', 
+          'user_2_gt_answer_idx', 'difficulty_uni', 'difficulty_int', 'difficulty',
+          'room_part', 'scene_id', 'user_1_goal', 'user_2_goal', 'options_user_1', 
+          'options_user_2', 'user_1_gt_answer_text', 'user_2_gt_answer_text'].includes(key)
+      )
+    ),
+    
+    // Study data fields
+    room_id: room.id,
     minTurns: room.minTurns || 4,
     messages: transformedMessages,
     user_1_answer_idx: transformedAnswers.user_1 ? transformedAnswers.user_1.choice_idx : null,
