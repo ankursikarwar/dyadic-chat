@@ -73,7 +73,7 @@
     .instr-aesthetic h2 { margin-bottom: 10px; }
     .consent-box h2 { margin: 0 0 12px 0; }
 </style>
-  <h2>Instructions</h2>
+  <!-- <h2>Instructions</h2> -->
   <ol class="nice">
     <!-- <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
     <li>You and your partner will each see different views of the same room.</li>
