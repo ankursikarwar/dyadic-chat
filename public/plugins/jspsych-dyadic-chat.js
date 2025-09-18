@@ -253,7 +253,11 @@
           '<div class="dc-root">',
           '  <div class="dc-grid">',
           '    <section class="dc-panel dc-left" style="overflow:auto; min-height:0;">',
-                    '      <div class="dc-instructions">', (function() {
+                    '      <div class="dc-instructions-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 10px; background: #2a2a2a; border-radius: 8px;">',
+                    '        <h3 style="margin: 0; color: #fff;">Instructions</h3>',
+                    '        <button id="toggle-instructions" style="background: #8bd5ff; color: #000; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">Minimize</button>',
+                    '      </div>',
+                    '      <div id="dc-instructions-content" class="dc-instructions">', (function() {
                       // Use server question type for sidebar instructions if available, otherwise fall back to item question type
                       const questionTypeForInstructions = p.server_question_type || (p && p.item && p.item.question_type) || 'all_types';
                       console.log('[DyadicChat] Generating sidebar instructions for question_type:', questionTypeForInstructions);
@@ -821,6 +825,26 @@
         if (sendBtn) sendBtn.addEventListener('click', sendMsg);
         const submitBtn = document.getElementById('dc-submit');
         if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
+        
+        // Add instructions toggle functionality
+        const toggleButton = document.getElementById('toggle-instructions');
+        const instructionsContent = document.getElementById('dc-instructions-content');
+        let isMinimized = false;
+
+        if (toggleButton && instructionsContent) {
+          toggleButton.addEventListener('click', function() {
+            if (isMinimized) {
+              instructionsContent.style.display = 'block';
+              toggleButton.textContent = 'Minimize';
+              isMinimized = false;
+            } else {
+              instructionsContent.style.display = 'none';
+              toggleButton.textContent = 'Expand';
+              isMinimized = true;
+            }
+          });
+        }
+        
         setupTextarea();
         setupZoom();
         startHeartbeat(); // Start heartbeat monitoring
