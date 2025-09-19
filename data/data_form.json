@@ -8,6 +8,7 @@
         "question_type": "counting",
         "room_part": "Bedroom_v201_Part6",
         "scene_id": "60e9bf01",
+        "global_map_image": null,
         "user_1_image": "/Bedroom_v201_Part6/60e9bf01/Image_0_0_0048_0.png",
         "user_2_image": "/Bedroom_v201_Part6/60e9bf01/Image_1_0_0048_0.png",
         "user_1_question": "What is the total number of lamps in the room?",

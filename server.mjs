@@ -695,6 +695,7 @@ function transformRoomData(room) {
     question_type: item.question_type || 'unknown',
     room_part: item.room_part || null,
     scene_id: item.scene_id || null,
+    global_map_image: item.global_map_image || null,
     user_1_image: item.user_1_image || '',
     user_2_image: item.user_2_image || '',
     user_1_goal: item.user_1_goal || null,
@@ -703,10 +704,10 @@ function transformRoomData(room) {
     user_2_question: item.user_2_question || '',
     options_user_1: item.options_user_1 || null,
     options_user_2: item.options_user_2 || null,
-  user_1_gt_answer_idx: item.user_1_gt_answer_idx || 0,
-  user_2_gt_answer_idx: item.user_2_gt_answer_idx || 0,
-  user_1_gt_answer_text: item.user_1_gt_answer_text || user1Options[item.user_1_gt_answer_idx] || '',
-  user_2_gt_answer_text: item.user_2_gt_answer_text || user2Options[item.user_2_gt_answer_idx] || '',
+    user_1_gt_answer_idx: item.user_1_gt_answer_idx || 0,
+    user_2_gt_answer_idx: item.user_2_gt_answer_idx || 0,
+    user_1_gt_answer_text: item.user_1_gt_answer_text || user1Options[item.user_1_gt_answer_idx] || '',
+    user_2_gt_answer_text: item.user_2_gt_answer_text || user2Options[item.user_2_gt_answer_idx] || '',
     difficulty_uni: item.difficulty_uni || null,
     difficulty_int: item.difficulty_int || null,
     difficulty: item.difficulty || null,
@@ -714,7 +715,7 @@ function transformRoomData(room) {
     // Include any other fields that might exist in the original item
     ...Object.fromEntries(
       Object.entries(item).filter(([key, value]) => 
-        !['id', 'sample_id', 'question_type', 'user_1_image', 'user_2_image', 
+        !['id', 'sample_id', 'question_type', 'user_1_image', 'user_2_image', 'global_map_image',
           'user_1_question', 'user_2_question', 'options', 'user_1_gt_answer_idx', 
           'user_2_gt_answer_idx', 'difficulty_uni', 'difficulty_int', 'difficulty',
           'room_part', 'scene_id', 'user_1_goal', 'user_2_goal', 'options_user_1', 
