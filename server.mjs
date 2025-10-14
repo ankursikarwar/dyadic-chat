@@ -41,7 +41,7 @@ try {
       jsonFile = 'relative_distance.json';
       break;
     case 'spatial':
-      jsonFile = 'spatial.json';
+      jsonFile = 'spatial_v1.json';
       break;
     case 'perspective_taking':
       jsonFile = 'perspective_taking.json';
