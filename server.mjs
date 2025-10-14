@@ -292,10 +292,10 @@ io.on('connection', (socket) => {
     }
     const text = String(msg.text || '').slice(0, 2000);
     const now = Date.now();
-    const rec = { 
-      who: socket.id, 
-      pid: socket.prolific.PID, 
-      text, 
+    const rec = {
+      who: socket.id,
+      pid: socket.prolific.PID,
+      text,
       t: now,
       t_formatted: formatTimestamp(now)
     };
@@ -306,11 +306,11 @@ io.on('connection', (socket) => {
     if (completedTurns >= room.minTurns){
       room.chatClosed = true;
       io.to(roomId).emit('chat:closed');
-      
+
       // Mark users without questions as finished automatically
       const [a, b] = room.users;
       const item = room.item;
-      
+
       // Check if user 1 has no question
       if (item && (!item.user_1_question || item.user_1_question.trim() === '')) {
         if (!room.finished[a.id]) {
@@ -318,7 +318,7 @@ io.on('connection', (socket) => {
           console.log(`[DyadicChat] Auto-marked user ${a.id} as finished (no question)`);
         }
       }
-      
+
       // Check if user 2 has no question
       if (item && (!item.user_2_question || item.user_2_question.trim() === '')) {
         if (!room.finished[b.id]) {
@@ -335,6 +335,43 @@ io.on('connection', (socket) => {
       io.to(other.id).emit('turn:you');
     }
     io.to(socket.id).emit('turn:wait');
+  });
+
+  socket.on('chat:early_termination', () => {
+    const roomId = socket.currentRoom;
+    if (!roomId || !rooms.has(roomId)) {
+      console.log(`[DyadicChat] User ${socket.id} tried to terminate chat in non-existent room ${roomId}`);
+      return;
+    }
+
+    const room = rooms.get(roomId);
+    console.log(`[DyadicChat] User ${socket.id} terminated chat early in room ${roomId}`);
+
+    // Close the chat for all users in the room
+    room.chatClosed = true;
+
+    // Notify all users in the room that chat ended early
+    io.to(roomId).emit('chat:early_termination');
+
+    // Mark users without questions as finished automatically
+    const [a, b] = room.users;
+    const item = room.item;
+
+    // Check if user 1 has no question
+    if (item && (!item.user_1_question || item.user_1_question.trim() === '')) {
+      if (!room.finished[a.id]) {
+        room.finished[a.id] = true;
+        console.log(`[DyadicChat] Auto-marked user ${a.id} as finished (no question) after early termination`);
+      }
+    }
+
+    // Check if user 2 has no question
+    if (item && (!item.user_2_question || item.user_2_question.trim() === '')) {
+      if (!room.finished[b.id]) {
+        room.finished[b.id] = true;
+        console.log(`[DyadicChat] Auto-marked user ${b.id} as finished (no question) after early termination`);
+      }
+    }
   });
 
   socket.on('answer:submit', (payload={}) => {

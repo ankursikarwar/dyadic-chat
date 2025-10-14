@@ -422,6 +422,9 @@
       function endChatEarly(){
         console.log('[DyadicChat] User clicked End Chat Early button');
 
+        // Emit event to server that this user is ending the chat early
+        socket.emit('chat:early_termination');
+
         // Close the chat
         chatClosed = true;
 
@@ -1040,13 +1043,13 @@
       socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateMessages(); });
       socket.on('turn:you', function(){ myTurn = true; updateMessages(); });
       socket.on('turn:wait', function(){ myTurn = false; updateMessages(); });
-      socket.on('chat:closed', function(){ 
-        chatClosed = true; 
+      socket.on('chat:closed', function(){
+        chatClosed = true;
         updateMessages();
-        
+
         // Track chat end time
         chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        
+
         // If user has no question, automatically proceed to survey
         if (!window.__userHasQuestion || !window.__userHasOptions) {
           console.log('[DyadicChat] Chat closed and user has no question, proceeding to survey');
@@ -1054,6 +1057,38 @@
             submitAnswer(); // This will handle the no-question case
           }, 1000); // Small delay to ensure UI updates
         }
+      });
+      socket.on('chat:early_termination', function(){
+        console.log('[DyadicChat] Other user ended chat early');
+        chatClosed = true;
+        updateMessages();
+
+        // Track chat end time
+        chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+
+        // Update hint to show chat ended early by partner
+        const hint = document.getElementById('dc-hint');
+        if (hint) {
+          hint.textContent = 'Your partner ended the chat early. You can now submit your survey.';
+        }
+
+        // Disable chat input and send button
+        const msgInput = document.getElementById('dc-msg');
+        const sendBtn = document.getElementById('dc-send');
+        if (msgInput) msgInput.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+
+        // Hide early termination button if visible
+        const earlyTerminateDiv = document.getElementById('dc-early-terminate');
+        if (earlyTerminateDiv) {
+          earlyTerminateDiv.style.display = 'none';
+        }
+
+        // Automatically proceed to survey
+        console.log('[DyadicChat] Chat ended early by partner, proceeding to survey');
+        setTimeout(() => {
+          submitAnswer(); // This will handle moving to survey
+        }, 1000); // Small delay to ensure UI updates
       });
       // Heartbeat mechanism
       function startHeartbeat() {
