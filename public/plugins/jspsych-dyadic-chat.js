@@ -56,6 +56,9 @@
       '.dc-textarea{ resize:none; height:auto; min-height:40px; max-height:120px; overflow-y:auto; line-height:1.35; padding:12px 14px; }',
       '.dc-btn { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:linear-gradient(180deg, #1f1f22, #151518); color:#fff; cursor:pointer; white-space:nowrap; }',
       '.dc-btn:disabled { opacity:.5; cursor:not-allowed; }',
+      '.dc-early-terminate { margin-top:8px; }',
+      '#dc-end-chat-early { background: linear-gradient(135deg, #ff9800, #f57c00) !important; border-color: #ff9800 !important; font-weight: bold; }',
+      '#dc-end-chat-early:hover { background: linear-gradient(135deg, #f57c00, #e65100) !important; }',
       '.dc-hint { font-size:14px !important; font-weight:bold; color:#d0d4d9; margin-top:2px !important; padding:0 10px; }','.dc-wait{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;text-align:center;color:#d0d4d9; margin-top:24px; padding-top:24px; padding-top:28px;}','.dc-spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:dcspin 0.9s linear infinite;}','@keyframes dcspin{to{transform:rotate(360deg)}}',
       '@media (max-height: 760px){ .dc-root{ padding:12px; } .dc-grid{ gap:10px; } .dc-center{ grid-template-rows: minmax(0,50%) minmax(0,50%); } .dc-center-bottom.single-box{ padding:10px; } .dc-goal-title{ margin-bottom:10px; font-size:22px; } .dc-question{ max-height:3.2em; } .dc-answer-option span{ font-size:16px !important; } .dc-controls{ margin-top:4px; } }',
       '</style>'
@@ -325,6 +328,9 @@
           '        <textarea id="dc-msg" class="dc-input dc-textarea" rows="1" placeholder="Type your message"></textarea>',
           '        <button id="dc-send" class="dc-btn">Send</button>',
           '      </div>',
+          '      <div id="dc-early-terminate" class="dc-early-terminate" style="display: none; margin-top: 8px;">',
+          '        <button id="dc-end-chat-early" class="dc-btn" style="background: linear-gradient(135deg, #ff9800, #f57c00); width: 100%;">End Chat & Answer Now</button>',
+          '      </div>',
           '      <div id="dc-hint" class="dc-small dc-hint">Only one message at a time. Wait for your partner to respond.</div>',
           '    </section>',
           '  </div>',
@@ -411,6 +417,48 @@
         socket.emit('chat:message', { text: text });
         el.value = '';
         if (el && el.classList.contains('dc-textarea')) { el.style.height = 'auto'; el.style.overflowY = 'hidden'; }
+      }
+
+      function endChatEarly(){
+        console.log('[DyadicChat] User clicked End Chat Early button');
+
+        // Close the chat
+        chatClosed = true;
+
+        // Update UI elements
+        updateMessages();
+
+        // Disable chat input and send button
+        const msgInput = document.getElementById('dc-msg');
+        const sendBtn = document.getElementById('dc-send');
+        if (msgInput) msgInput.disabled = true;
+        if (sendBtn) sendBtn.disabled = true;
+
+        // Hide the early termination button
+        const earlyTerminateDiv = document.getElementById('dc-early-terminate');
+        if (earlyTerminateDiv) {
+          earlyTerminateDiv.style.display = 'none';
+          console.log('[DyadicChat] Early termination button hidden after click');
+        }
+
+        // Track chat end time
+        chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+
+        // Update hint to show chat is closed
+        const hint = document.getElementById('dc-hint');
+        if (hint) {
+          hint.textContent = 'Chat ended early. You can now submit your answer.';
+        }
+
+        // If user has no question, automatically proceed to survey
+        if (!window.__userHasQuestion || !window.__userHasOptions) {
+          console.log('[DyadicChat] Chat ended early and user has no question, proceeding to survey');
+          setTimeout(() => {
+            submitAnswer(); // This will handle the no-question case
+          }, 1000); // Small delay to ensure UI updates
+        }
+
+        console.log('[DyadicChat] Chat ended early by user');
       }
 
       function submitAnswer(){
@@ -907,25 +955,59 @@
         // Store user's question status and answer data
         window.__userHasQuestion = p.item.has_question;
         window.__userHasOptions = p.item.has_options;
-        
+
+        console.log('[DyadicChat] Paired payload:', p);
+        console.log('[DyadicChat] User has question:', p.item.has_question);
+        console.log('[DyadicChat] User has options:', p.item.has_options);
+        console.log('[DyadicChat] Item data:', p.item);
+
         if (p.item.has_question && p.item.has_options) {
           // Store the correct answer index, text, and options for this user
           correctAnswerIndex = p.item.correct_answer;
           answerOptions = p.item.options;
           correctAnswerText = answerOptions[correctAnswerIndex];
-        } else {
-          // User has no question - no answer data needed
-          correctAnswerIndex = null;
-          answerOptions = null;
-          correctAnswerText = null;
+
+          console.log('[DyadicChat] User has question with options - showing early termination button');
+
         }
-        
+
         display_element.innerHTML = htmlChat(p);
         let pairedPayload = p;
-        const sendBtn = document.getElementById('dc-send');
-        if (sendBtn) sendBtn.addEventListener('click', sendMsg);
-        const submitBtn = document.getElementById('dc-submit');
-        if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
+
+        // Now that HTML is rendered, we can safely access DOM elements
+        setTimeout(() => {
+          if (p.item.has_question && p.item.has_options) {
+            console.log('[DyadicChat] User has question with options - showing early termination button');
+
+            // Show early termination button for users with questions
+            const earlyTerminateDiv = document.getElementById('dc-early-terminate');
+            if (earlyTerminateDiv) {
+              earlyTerminateDiv.style.display = 'block';
+              console.log('[DyadicChat] Early termination button shown');
+            } else {
+              console.log('[DyadicChat] Early termination div not found!');
+            }
+          } else {
+            console.log('[DyadicChat] User has no question or no options - hiding early termination button');
+
+            // Hide early termination button for helper users
+            const earlyTerminateDiv = document.getElementById('dc-early-terminate');
+            if (earlyTerminateDiv) {
+              earlyTerminateDiv.style.display = 'none';
+              console.log('[DyadicChat] Early termination button hidden');
+            } else {
+              console.log('[DyadicChat] Early termination div not found!');
+            }
+          }
+
+          // Set up event listeners
+          const sendBtn = document.getElementById('dc-send');
+          if (sendBtn) sendBtn.addEventListener('click', sendMsg);
+          const submitBtn = document.getElementById('dc-submit');
+          if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
+          const endChatEarlyBtn = document.getElementById('dc-end-chat-early');
+          if (endChatEarlyBtn) endChatEarlyBtn.addEventListener('click', endChatEarly);
+        }, 0);
         
         // Add instructions toggle functionality
         const toggleButton = document.getElementById('toggle-instructions');

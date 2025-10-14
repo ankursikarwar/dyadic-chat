@@ -470,76 +470,99 @@ io.on('connection', (socket) => {
   function tryPair(){
     console.log(`[DyadicChat] tryPair called, queue length: ${queue.length}`);
     if (queue.length >= 2){
-      const a = queue.shift();
-      const b = queue.shift();
-      console.log(`[DyadicChat] Attempting to pair ${a.id} (PID: ${a.prolific?.PID}) with ${b.id} (PID: ${b.prolific?.PID})`);
-      
-      if (REQUIRE_DISTINCT_PID && a?.prolific?.PID === b?.prolific?.PID) { 
-        console.log(`[DyadicChat] Same PID detected, re-queuing users`);
-        queue.unshift(a); 
-        queue.push(b); 
-        return; 
-      }
-      
-      const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
-      console.log(`[DyadicChat] Creating room ${roomId} for users ${a.id} and ${b.id}`);
-      
-      a.join(roomId); b.join(roomId);
-      a.currentRoom = roomId; b.currentRoom = roomId;
+      const user1 = queue.shift();
+      const user2 = queue.shift();
+      console.log(`[DyadicChat] Attempting to pair ${user1.id} (PID: ${user1.prolific?.PID}) with ${user2.id} (PID: ${user2.prolific?.PID})`);
 
+      if (REQUIRE_DISTINCT_PID && user1?.prolific?.PID === user2?.prolific?.PID) {
+        console.log(`[DyadicChat] Same PID detected, re-queuing users`);
+        queue.unshift(user1);
+        queue.push(user2);
+        return;
+      }
+
+      const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+      console.log(`[DyadicChat] Creating room ${roomId} for users ${user1.id} and ${user2.id}`);
+
+      // Select item first to determine who should start
       const item = nextItem();
-      try { markPidSeen(a.prolific.PID); markPidSeen(b.prolific.PID); } catch {}
+      try { markPidSeen(user1.prolific.PID); markPidSeen(user2.prolific.PID); } catch {}
+
+      // Find which user should have the question and start
+      const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
+      const user2HasQuestion = !!(item.user_2_question && item.user_2_question.trim() !== '');
+
+      console.log(`[DyadicChat] Item ${item.sample_id}: user1_question="${item.user_1_question}", user2_question="${item.user_2_question}"`);
+
+      // Determine who has the question and should start
+      let userWithQuestion, userWithoutQuestion;
+      if (user1HasQuestion) {
+        userWithQuestion = user1;
+        userWithoutQuestion = user2;
+        console.log(`[DyadicChat] User ${user1.id} (first in queue) has question - they start`);
+      } else if (user2HasQuestion) {
+        userWithQuestion = user2;
+        userWithoutQuestion = user1;
+        console.log(`[DyadicChat] User ${user2.id} (second in queue) has question - they start`);
+      } else {
+        // Neither has question - first in queue starts
+        userWithQuestion = user1;
+        userWithoutQuestion = user2;
+        console.log(`[DyadicChat] Neither has question - ${user1.id} starts as first in queue`);
+      }
+
+      userWithQuestion.join(roomId); userWithoutQuestion.join(roomId);
+      userWithQuestion.currentRoom = roomId; userWithoutQuestion.currentRoom = roomId;
 
       const room = {
-        id: roomId, users:[a,b], item,
+        id: roomId, users:[userWithQuestion, userWithoutQuestion], item,
         messages:[], answers:{}, finished:{}, surveys:{},
         msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
-        nextSenderId:null, 
+        nextSenderId:null,
         pairedAt: Date.now(),
         pairedAt_formatted: formatTimestamp(Date.now()),
         userRoles: {
-          [a.id]: 'user_1',  // First user (starts conversation)
-          [b.id]: 'user_2'   // Second user
+          [userWithQuestion.id]: 'user_1',
+          [userWithoutQuestion.id]: 'user_2'
         },
         userPids: {
-          [a.id]: a.prolific.PID || 'unknown',
-          [b.id]: b.prolific.PID || 'unknown'
+          [userWithQuestion.id]: userWithQuestion.prolific.PID || 'unknown',
+          [userWithoutQuestion.id]: userWithoutQuestion.prolific.PID || 'unknown'
         }
       };
       rooms.set(roomId, room);
 
-      console.log(`[DyadicChat] Sending paired event to ${a.id} and ${b.id}`);
-      
-      // Map new field names to expected format
-      const itemForUser1 = {
+      console.log(`[DyadicChat] Sending paired event to ${userWithQuestion.id} and ${userWithoutQuestion.id}`);
+
+      // Send data based on which user actually has the question
+      const itemForQuestionUser = {
         ...item,
-        image_url: item.user_1_image,
-        goal_question: item.user_1_question,
-        question_type: item.question_type,
-        correct_answer: item.user_1_gt_answer_idx,
-        options: item.options_user_1 || item.options, // Fallback to options if options_user_1 doesn't exist
-        has_question: !!(item.user_1_question && item.user_1_question.trim() !== ''),
-        has_options: !!(item.options_user_1 && item.options_user_1.length > 0)
+        image_url: userWithQuestion === user1 ? item.user_1_image : item.user_2_image,
+        goal_question: userWithQuestion === user1 ? item.user_1_question : item.user_2_question,
+        correct_answer: userWithQuestion === user1 ? item.user_1_gt_answer_idx : item.user_2_gt_answer_idx,
+        options: userWithQuestion === user1 ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        has_question: true, // The user with question gets has_question: true
+        has_options: !!(userWithQuestion === user1 ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
       };
-      
-      const itemForUser2 = {
+
+      const itemForHelperUser = {
         ...item,
-        image_url: item.user_2_image,
-        goal_question: item.user_2_question,
-        question_type: item.question_type,
-        correct_answer: item.user_2_gt_answer_idx,
-        options: item.options_user_2 || item.options, // Fallback to options if options_user_2 doesn't exist
-        has_question: !!(item.user_2_question && item.user_2_question.trim() !== ''),
-        has_options: !!(item.options_user_2 && item.options_user_2.length > 0)
+        image_url: userWithoutQuestion === user1 ? item.user_1_image : item.user_2_image,
+        goal_question: userWithoutQuestion === user1 ? item.user_1_question : item.user_2_question,
+        correct_answer: userWithoutQuestion === user1 ? item.user_1_gt_answer_idx : item.user_2_gt_answer_idx,
+        options: userWithoutQuestion === user1 ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        has_question: false, // The helper user gets has_question: false
+        has_options: false
       };
-      
-      io.to(a.id).emit('paired', { roomId, item: itemForUser1, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
-      io.to(b.id).emit('paired', { roomId, item: itemForUser2, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
-      // User 1 (first user in queue) always starts the conversation
-      room.nextSenderId = a.id;
-      io.to(a.id).emit('turn:you');
-      io.to(b.id).emit('turn:wait');
-      console.log(`[DyadicChat] Pairing complete, ${a.id} (user_1) starts first`);
+
+      io.to(userWithQuestion.id).emit('paired', { roomId, item: itemForQuestionUser, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
+      io.to(userWithoutQuestion.id).emit('paired', { roomId, item: itemForHelperUser, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
+
+      // The user with the question gets the first turn
+      room.nextSenderId = userWithQuestion.id;
+      io.to(userWithQuestion.id).emit('turn:you');
+      io.to(userWithoutQuestion.id).emit('turn:wait');
+      console.log(`[DyadicChat] Pairing complete, ${userWithQuestion.id} (user_1) starts first`);
     } else {
       console.log(`[DyadicChat] Not enough users in queue (${queue.length}), waiting for more`);
     }
