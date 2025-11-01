@@ -17,12 +17,12 @@ const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'f
 const QUESTION_TYPE = process.env.QUESTION_TYPE || 'all_types';
 
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
-app.get('/', (_req, res) => { 
-  res.set('Cache-Control','no-store'); 
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); 
+app.get('/', (_req, res) => {
+  res.set('Cache-Control','no-store');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
-app.get('/api/config', (_req, res) => { 
-  res.json({ questionType: QUESTION_TYPE, maxTurns: MAX_TURNS }); 
+app.get('/api/config', (_req, res) => {
+  res.json({ questionType: QUESTION_TYPE, maxTurns: MAX_TURNS });
 });
 
 // ---------- Load items based on question type ----------
@@ -49,10 +49,10 @@ try {
     default:
       jsonFile = 'items.json'; // Default for 'all_types' or unknown
   }
-  
+
   const p = path.join(__dirname, 'data', jsonFile);
   const data = JSON.parse(fs.readFileSync(p, 'utf-8'));
-  
+
   // Handle both old format (array) and new format (object with samples array)
   if (Array.isArray(data)) {
     items = data;
@@ -61,7 +61,7 @@ try {
   } else {
     throw new Error('Invalid data format: expected array or object with samples array');
   }
-  
+
   console.log(`[DyadicChat] Loaded ${items.length} items from ${jsonFile} for question_type: ${QUESTION_TYPE}`);
 } catch (e) {
   console.error(`[DyadicChat] Failed to load ${jsonFile}:`, e.message);
@@ -112,10 +112,10 @@ function formatTimestamp(timestamp) {
   const date = new Date(timestamp);
   return {
     iso: date.toISOString(),
-    readable: date.toLocaleString('en-US', { 
+    readable: date.toLocaleString('en-US', {
       timeZone: 'UTC',
       year: 'numeric',
-      month: '2-digit', 
+      month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
@@ -131,12 +131,12 @@ function formatReactionTime(rtMs) {
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
   const remainingMs = rtMs % 1000;
-  
+
   return {
     milliseconds: rtMs,
     seconds: (rtMs / 1000).toFixed(2),
-    human: minutes > 0 ? 
-      `${minutes}m ${remainingSeconds}s` : 
+    human: minutes > 0 ?
+      `${minutes}m ${remainingSeconds}s` :
       `${remainingSeconds}.${remainingMs.toString().padStart(3, '0')}s`
   };
 }
@@ -223,7 +223,7 @@ io.on('connection', (socket) => {
 
   // Clear any existing room assignment for reconnecting users
   socket.currentRoom = null;
-  
+
   console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
   queue.push(socket);
   console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
@@ -231,26 +231,26 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', (reason) => {
     console.log(`[DyadicChat] Socket ${socket.id} disconnected: ${reason}`);
-    
+
     // Remove from queue if still waiting
     const qi = queue.indexOf(socket);
     if (qi >= 0) queue.splice(qi, 1);
-    
+
     const roomId = socket.currentRoom;
     if (roomId && rooms.has(roomId)){
       const room = rooms.get(roomId);
       const other = room.users.find(u => u.id !== socket.id);
-      
+
       // Check if this user had already completed the study
       const wasAlreadyFinished = room.finished[socket.id];
-      
+
       // Mark this user as finished
       room.finished[socket.id] = true;
-      
+
       // Only notify partner if they hadn't completed the study yet
       if (other && !wasAlreadyFinished) {
-        try { 
-          io.to(other.id).emit('end:partner'); 
+        try {
+          io.to(other.id).emit('end:partner');
           console.log(`[DyadicChat] Notified partner ${other.id} of disconnect - they must refresh to rejoin`);
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
@@ -258,12 +258,12 @@ io.on('connection', (socket) => {
       } else if (other && wasAlreadyFinished) {
         console.log(`[DyadicChat] User ${socket.id} disconnected after completing study, partner can continue`);
       }
-      
+
       // Clean up the room if:
       // 1. No partner exists, OR
       // 2. Partner is finished AND has submitted survey
       if (!other || (room.finished[other.id] && room.surveys[other.id])) {
-        try { 
+        try {
           persistRoom(room);
           rooms.delete(roomId);
           console.log(`[DyadicChat] Cleaned up room ${roomId} - partner finished and submitted survey or no partner`);
@@ -383,10 +383,10 @@ io.on('connection', (socket) => {
     }
     const room = rooms.get(roomId);
     const now = Date.now();
-    room.answers[socket.id] = { 
-      pid: socket.prolific.PID, 
-      choice: payload.choice, 
-      rt: payload.rt, 
+    room.answers[socket.id] = {
+      pid: socket.prolific.PID,
+      choice: payload.choice,
+      rt: payload.rt,
       rt_formatted: formatReactionTime(payload.rt),
       t: now,
       t_formatted: formatTimestamp(now)
@@ -395,11 +395,11 @@ io.on('connection', (socket) => {
     // Don't send end:self here - user should continue to survey page
 
     const [a,b] = room.users;
-    
+
     // Only clean up the room when both users have completed the study
     if (room.finished[a.id] && room.finished[b.id]){
       try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
-      
+
       // Check if both users have also submitted surveys
       if (room.surveys[a.id] && room.surveys[b.id]) {
         // Both users completed study and submitted surveys
@@ -421,7 +421,7 @@ io.on('connection', (socket) => {
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
       console.log(`[DyadicChat] User ${socket.id} tried to submit survey to non-existent room ${roomId} - saving survey data anyway`);
-      
+
       // Even if room doesn't exist, try to save the survey data
       // This can happen if the room was cleaned up but user is still submitting survey
       const surveyData = {
@@ -447,7 +447,7 @@ io.on('connection', (socket) => {
           [socket.id]: socket.prolific.PID || 'unknown'
         }
       };
-      
+
       try {
         const dir = path.join(__dirname, 'data');
         if (!fs.existsSync(dir)) fs.mkdirSync(dir);
@@ -459,10 +459,10 @@ io.on('connection', (socket) => {
       }
       return;
     }
-    
+
     const room = rooms.get(roomId);
     const { survey, answerData, timingData } = payload;
-    
+
     // Store survey data for this user
     const now = Date.now();
     room.surveys[socket.id] = {
@@ -476,13 +476,22 @@ io.on('connection', (socket) => {
       submittedAt: now,
       submittedAt_formatted: formatTimestamp(now)
     };
-    
+
+    // Mark this user as finished when they submit the survey.
+    // This prevents the disconnect handler from treating a subsequent
+    // disconnect (e.g., closing the tab after survey submission)
+    // as an unexpected early disconnect and notifying the partner.
+    if (!room.finished[socket.id]) {
+      room.finished[socket.id] = true;
+      console.log(`[DyadicChat] Marked user ${socket.id} as finished on survey submission`);
+    }
+
     console.log(`[DyadicChat] User ${socket.id} submitted survey data`);
     console.log(`[DyadicChat] Room ${roomId} surveys after update:`, room.surveys);
-    
+
     // Check if both users have completed study and submitted surveys
     const [a,b] = room.users;
-    if (room.finished[a.id] && room.finished[b.id] && 
+    if (room.finished[a.id] && room.finished[b.id] &&
         room.surveys[a.id] && room.surveys[b.id]) {
       // Both users completed study and submitted surveys
       try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
@@ -492,7 +501,7 @@ io.on('connection', (socket) => {
     } else {
       console.log(`[DyadicChat] Waiting for both users to complete study and surveys before cleaning up room ${roomId}`);
     }
-    
+
     // Send acknowledgment back to client
     if (callback) {
       callback({ success: true, message: 'Survey data received' });
@@ -610,7 +619,7 @@ function persistRoom(room){
   try {
     const dir = path.join(__dirname, 'data');
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    
+
     // Transform room data to match the new structure
     const transformedData = transformRoomData(room);
     const line = JSON.stringify(transformedData) + "\n";
@@ -624,11 +633,11 @@ function persistRoom(room){
 function transformRoomData(room) {
   const item = room.item;
   const [user1, user2] = room.users;
-  
+
   // Get user roles
   const user1Role = room.userRoles[user1.id] || 'user_1';
   const user2Role = room.userRoles[user2.id] || 'user_2';
-  
+
   // Transform messages
   const transformedMessages = room.messages.map(msg => ({
     id: room.userRoles[msg.who] || 'unknown',
@@ -638,7 +647,7 @@ function transformRoomData(room) {
     t: msg.t,
     t_formatted: msg.t_formatted
   }));
-  
+
   // Transform answers
   const transformedAnswers = {};
   if (room.answers[user1.id]) {
@@ -673,7 +682,7 @@ function transformRoomData(room) {
       t_formatted: answer2.t_formatted
     };
   }
-  
+
   // Transform surveys
   const transformedSurveys = {};
   Object.keys(room.surveys).forEach(socketId => {
@@ -699,20 +708,20 @@ function transformRoomData(room) {
       submittedAt_formatted: survey.submittedAt_formatted
     };
   });
-  
+
   // Calculate reaction times breakdown
   const rts = {};
   Object.keys(transformedAnswers).forEach(userRole => {
     const answer = transformedAnswers[userRole];
     const survey = transformedSurveys[userRole];
-    
+
     // Get timing data if available
     const timingData = survey?.timingData || {};
-    
+
     // Debug: Log timing data
     console.log(`[DyadicChat] Timing data for ${userRole}:`, timingData);
     console.log(`[DyadicChat] Survey object for ${userRole}:`, survey);
-    
+
     // Calculate different reaction times
     const calculateRT = (startTime, endTime) => {
       if (!startTime || !endTime) {
@@ -723,7 +732,7 @@ function transformRoomData(room) {
       console.log(`[DyadicChat] Calculated RT: ${rt}ms`);
       return formatReactionTime(rt);
     };
-    
+
     rts[userRole] = {
       consent_page_rt: calculateRT(timingData.consentPageStartTime, timingData.instructionsPageStartTime) || answer.rt_formatted,
       instructions_page_rt: calculateRT(timingData.instructionsPageStartTime, timingData.waitingPageStartTime) || answer.rt_formatted,
@@ -734,7 +743,7 @@ function transformRoomData(room) {
       total_experiment_time: calculateRT(timingData.consentPageStartTime, timingData.surveySubmitTime) || answer.rt_formatted
     };
   });
-  
+
   // Create reverse mapping from PID to user role
   const pidToUserRole = {};
   Object.keys(room.userRoles).forEach(socketId => {
@@ -748,7 +757,7 @@ function transformRoomData(room) {
   // Get options for ground truth answers - use user-specific options if available
   const user1Options = item.options_user_1 || item.options || [];
   const user2Options = item.options_user_2 || item.options || [];
-  
+
   return {
     // Original JSON fields first
     sample_id: item.sample_id || item.id || 'unknown',
@@ -771,18 +780,18 @@ function transformRoomData(room) {
     difficulty_uni: item.difficulty_uni || null,
     difficulty_int: item.difficulty_int || null,
     difficulty: item.difficulty || null,
-    
+
     // Include any other fields that might exist in the original item
     ...Object.fromEntries(
-      Object.entries(item).filter(([key, value]) => 
+      Object.entries(item).filter(([key, value]) =>
         !['id', 'sample_id', 'question_type', 'user_1_image', 'user_2_image', 'global_map_image',
-          'user_1_question', 'user_2_question', 'options', 'user_1_gt_answer_idx', 
+          'user_1_question', 'user_2_question', 'options', 'user_1_gt_answer_idx',
           'user_2_gt_answer_idx', 'difficulty_uni', 'difficulty_int', 'difficulty',
-          'room_part', 'scene_id', 'user_1_goal', 'user_2_goal', 'options_user_1', 
+          'room_part', 'scene_id', 'user_1_goal', 'user_2_goal', 'options_user_1',
           'options_user_2', 'user_1_gt_answer_text', 'user_2_gt_answer_text'].includes(key)
       )
     ),
-    
+
     // Study data fields
     room_id: room.id,
     minTurns: room.minTurns || 4,
