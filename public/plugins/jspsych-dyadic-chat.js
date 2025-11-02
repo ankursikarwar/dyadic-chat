@@ -213,7 +213,7 @@
       const self = this;
       let pairedPayload = null;
       const pidLabel = (trial.prolific && trial.prolific.PID) || 'DEBUG_LOCAL';
-      
+
       // Additional timing tracking - declare variables first
       let consentPageStartTime = null;
       let instructionsPageStartTime = null;
@@ -223,7 +223,7 @@
       let chatEndTime = null;
       let answerSubmitTime = null;
       let surveySubmitTime = null;
-      
+
       // Get timing from global scope
       consentPageStartTime = window.consentPageStartTime;
       instructionsPageStartTime = window.instructionsPageStartTime;
@@ -243,7 +243,7 @@
         const minMessages = (p && p.min_turns) || trial.min_messages;
         const hasQuestion = item && item.has_question;
         const hasOptions = item && item.has_options;
-        
+
         const imgHtml = (item && item.image_url)
           ? '<div class="dc-image-viewport"><img id="dc-scene" src="' + item.image_url + '" alt="scene"></div>'
             + '<div class="dc-zoom-controls">'
@@ -321,6 +321,10 @@
           '        <div class="dc-small" style="font-size:15px; font-weight:bold;">',
           '          <span>Number of Messages&nbsp;</span>',
           '          <span id="dc-messages">0</span> / <span id="dc-messages-total">', String(minMessages), '</span>',
+          (p && p.questionNumber && p.totalQuestions ?
+            '          <div style="margin-top:4px; font-size:13px; color:#8bd5ff;">Question ' + String(p.questionNumber) + ' of ' + String(p.totalQuestions) + '</div>' :
+            ''
+          ),
           '        </div>',
           '      </div>',
           '      <div id="dc-chat" class="dc-chatbox" aria-live="polite"></div>',
@@ -388,17 +392,17 @@
         const box = document.getElementById('dc-chat'); if (!box) return;
         const line = document.createElement('div'); line.className = 'dc-row ' + (who==='Me'?'dc-me':'dc-partner');
         const bubble = document.createElement('span'); bubble.className = 'dc-bubble ' + (who==='Me'?'dc-bubble-me':'dc-bubble-partner');
-        
+
         // Create bold label and text content separately to prevent HTML injection
         const label = document.createElement('b');
         label.textContent = who + ': ';
         const messageText = document.createElement('span');
         messageText.textContent = text;
-        
+
         bubble.appendChild(label);
         bubble.appendChild(messageText);
-        line.appendChild(bubble); 
-        box.appendChild(line); 
+        line.appendChild(bubble);
+        box.appendChild(line);
         box.scrollTop = box.scrollHeight;
       }
 
@@ -408,12 +412,12 @@
         if (!myTurn || chatClosed) return;
         addLine('Me', text);
         msgCount += 1; updateMessages();
-        
+
         // Track first message time
         if (!firstMessageTime) {
           firstMessageTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         }
-        
+
         socket.emit('chat:message', { text: text });
         el.value = '';
         if (el && el.classList.contains('dc-textarea')) { el.style.height = 'auto'; el.style.overflowY = 'hidden'; }
@@ -467,122 +471,90 @@
       function submitAnswer(){
         // Check if user has a question to answer
         if (!window.__userHasQuestion || !window.__userHasOptions) {
-          // User has no question - go directly to survey
-          console.log('[DyadicChat] User has no question, proceeding directly to survey');
-          
+          // User has no question - just notify server
+          console.log('[DyadicChat] User has no question, notifying server');
+
           // Safety check: ensure t0 is set (should be set when paired)
           if (t0 === null) {
             console.warn('[DyadicChat] t0 not set, using current time as fallback');
             t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           }
-          
+
           const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           const rt = Math.round(nowTs - t0);
-          
+
           // Track answer submit time
           answerSubmitTime = nowTs;
-          
-          // Store empty answer data for the survey (no answer to submit)
+
+          // Store empty answer data
           window.__answerData = { messages: Math.floor(msgCount/2), choice: null, rt: rt, pid: pidLabel };
-          
-          // Store socket reference before it might be lost
+
+          // Store socket reference
           window.__socket = socket;
-          
-          // Don't emit answer:submit since there's no answer
-          // Go directly to survey
-          showCombinedFeedbackAndSurvey(null);
+
+          // Notify server (no answer to submit)
+          socket.emit('answer:submit', { choice: null, rt: rt });
+
+          // Show waiting message - will transition to next question or survey
+          display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Waiting for your partner to finish...</div>';
           return;
         }
-        
+
         // User has a question - proceed with normal answer submission
         const el = document.querySelector('input[name="dc-answer"]:checked');
         if (!el) return;
-        
+
         // Safety check: ensure t0 is set (should be set when paired)
         if (t0 === null) {
           console.warn('[DyadicChat] t0 not set, using current time as fallback');
           t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         }
-        
+
         const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rt = Math.round(nowTs - t0);
-        
+
         // Track answer submit time
         answerSubmitTime = nowTs;
-        
-        // Store the answer data for the survey BEFORE sending to server
+
+        // Store the answer data
         window.__answerData = { messages: Math.floor(msgCount/2), choice: el.value, rt: rt, pid: pidLabel };
-        
-        // Store socket reference before it might be lost
+
+        // Store socket reference
         window.__socket = socket;
-        
+
         socket.emit('answer:submit', { choice: el.value, rt: rt });
-        
-        // Show combined feedback and survey page
-        showCombinedFeedbackAndSurvey(el.value);
+
+        // Store last answer for survey feedback (if this is the last question)
+        window.__lastAnswer = el.value;
+
+        // Show waiting message - will transition to next question or survey
+        display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Answer submitted! Waiting for your partner to finish...</div>';
       }
 
       function showCombinedFeedbackAndSurvey(userAnswer) {
-        // Check if user has a question to answer
-        const hasQuestion = window.__userHasQuestion && window.__userHasOptions;
-        
-        let feedbackSection = '';
-        if (hasQuestion && userAnswer !== null) {
-          // User has a question - show answer feedback
-          const userAnswerIndex = parseInt(userAnswer);
-          const isCorrect = userAnswerIndex === correctAnswerIndex;
-          feedbackSection = `
-            <!-- Answer Feedback Section -->
-            <div style="text-align:center; margin-bottom:40px;">
-              <h2 style="margin-bottom:30px; color:#fff;">Answer Submitted!</h2>
-              
-              <div style="background:#0b0b0b; padding:30px; border-radius:12px; border:1px solid #3e3e42; margin-bottom:30px;">
-                <div style="font-size:24px; margin-bottom:20px;">
-                  ${isCorrect ? 
-                    '<span style="color:#4CAF50;">✓ Correct!</span>' : 
-                    '<span style="color:#f44336;">✗ Incorrect</span>'
-                  }
-                </div>
-                
-                <div style="font-size:18px; margin-bottom:15px;">
-                  <strong>Your answer:</strong> ${answerOptions[userAnswerIndex]}
-                </div>
-                
-                <div style="font-size:18px; margin-bottom:20px;">
-                  <strong>Correct answer:</strong> ${correctAnswerText}
-                </div>
-                
-                ${!isCorrect ? 
-                  '<div style="font-size:16px; color:#ff9800; margin-top:15px;">Don\'t worry! This was a collaborative task, and the goal was to work together to find the answer.</div>' : 
-                  '<div style="font-size:16px; color:#4CAF50; margin-top:15px;">Great job! You and your partner worked together successfully.</div>'
-                }
+        // For multi-question sessions, skip individual question feedback
+        // Only show a simple completion message before the survey
+        let feedbackSection = `
+          <!-- Completion Section -->
+          <div style="text-align:center; margin-bottom:40px;">
+            <h2 style="margin-bottom:30px; color:#fff;">All Questions Completed!</h2>
+
+            <div style="background:#0b0b0b; padding:30px; border-radius:12px; border:1px solid #3e3e42; margin-bottom:30px;">
+              <div style="font-size:24px; margin-bottom:20px; color:#4CAF50;">
+                ✓ Thank you for completing all the questions!
+              </div>
+
+              <div style="font-size:18px; margin-bottom:20px;">
+                You and your partner have successfully completed all the collaborative tasks. Please proceed to fill out the survey below.
+              </div>
+
+              <div style="font-size:16px; color:#8bd5ff; margin-top:15px;">
+                Great job working together!
               </div>
             </div>
-          `;
-        } else {
-          // User has no question - show helper completion message
-          feedbackSection = `
-            <!-- Helper Completion Section -->
-            <div style="text-align:center; margin-bottom:40px;">
-              <h2 style="margin-bottom:30px; color:#fff;">Task Completed!</h2>
-              
-              <div style="background:#0b0b0b; padding:30px; border-radius:12px; border:1px solid #3e3e42; margin-bottom:30px;">
-                <div style="font-size:24px; margin-bottom:20px; color:#8bd5ff;">
-                  ✓ Helper Role Completed
-                </div>
-                
-                <div style="font-size:18px; margin-bottom:20px;">
-                  Thank you for helping your partner! You successfully assisted them by discussing what you saw in the image and providing information to help them answer their question.
-                </div>
-                
-                <div style="font-size:16px; color:#4CAF50; margin-top:15px;">
-                  Great job! You and your partner worked together successfully.
-                </div>
-              </div>
-            </div>
-          `;
-        }
-        
+          </div>
+        `;
+
         const feedbackHTML = `
           <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:#fff; text-align:left;">
             ${feedbackSection}
@@ -590,9 +562,9 @@
             <!-- Survey Section -->
             <h2 style="text-align:center; margin-bottom:30px; color:#fff;">Post-Study Survey</h2>
             <p style="margin-bottom:25px; font-size:16px; line-height:1.5;">Thank you for participating! Please answer a few brief questions about your experience.</p>
-            
+
             <form id="post-study-survey" style="background:#0b0b0b; padding:25px; border-radius:12px; border:1px solid #3e3e42;">
-              
+
               <div style="margin-bottom:20px;">
                 <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How difficult was the collaborative task?</label>
                 <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
@@ -684,7 +656,7 @@
             </form>
           </div>
         `;
-        
+
         display_element.innerHTML = feedbackHTML;
 
         // Handle dynamic feedback fields
@@ -739,7 +711,7 @@
         if (penPaperSelect && penPaperFollowup) {
           const sketchedMapSelect = penPaperFollowup.querySelector('select[name="sketched_map"]');
           console.log('Sketched map select found:', !!sketchedMapSelect);
-          
+
           penPaperSelect.addEventListener('change', function() {
             console.log('Pen paper changed to:', this.value);
             if (this.value === 'yes') {
@@ -772,10 +744,10 @@
               surveyData[key] = value;
             }
             console.log('[DyadicChat] Survey data collected:', surveyData);
-            
+
             // Track survey submit time
             surveySubmitTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-            
+
             // Debug: Log timing data before sending
             console.log('[DyadicChat] Timing data being sent:', {
               consentPageStartTime,
@@ -787,12 +759,12 @@
               answerSubmitTime,
               surveySubmitTime
             });
-            
+
             // Validate timing data
             if (!consentPageStartTime || !instructionsPageStartTime || !waitingPageStartTime || !chatBeginTime) {
               console.warn('[DyadicChat] Missing critical timing data!');
             }
-            
+
             // Send survey data to server
             console.log('[DyadicChat] Submitting survey data:', surveyData);
             console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
@@ -817,13 +789,13 @@
             } else {
               console.error('[DyadicChat] No socket connection available for survey submission');
             }
-            
+
             // Combine answer data with survey data
             const finalData = {
               ...window.__answerData,
               survey: surveyData
             };
-            
+
             // Show completion message and end trial
             display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
             self.jsPsych.finishTrial(finalData);
@@ -928,10 +900,10 @@
 
 
       display_element.innerHTML = htmlWait();
-      
+
       // Set waiting page start time
       waitingPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-      
+
       // 5-minute pairing timeout
       (function(){
         const TIMEOUT_MS = 5 * 60 * 1000;
@@ -951,10 +923,10 @@
       socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
         // Set reaction time start point when users get paired
         t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        
+
         // Set chat begin time
         chatBeginTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        
+
         // Store user's question status and answer data
         window.__userHasQuestion = p.item.has_question;
         window.__userHasOptions = p.item.has_options;
@@ -1011,7 +983,7 @@
           const endChatEarlyBtn = document.getElementById('dc-end-chat-early');
           if (endChatEarlyBtn) endChatEarlyBtn.addEventListener('click', endChatEarly);
         }, 0);
-        
+
         // Add instructions toggle functionality
         const toggleButton = document.getElementById('toggle-instructions');
         const instructionsContent = document.getElementById('dc-instructions-content');
@@ -1021,7 +993,7 @@
           // Set initial state to minimized
           instructionsContent.style.display = 'none';
           toggleButton.textContent = 'Expand';
-          
+
           toggleButton.addEventListener('click', function() {
             if (isMinimized) {
               instructionsContent.style.display = 'block';
@@ -1034,7 +1006,7 @@
             }
           });
         }
-        
+
         setupTextarea();
         setupZoom();
         startHeartbeat(); // Start heartbeat monitoring
@@ -1050,12 +1022,16 @@
         // Track chat end time
         chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
 
-        // If user has no question, automatically proceed to survey
+        // If user has no question (helper agent), automatically submit
+        // This notifies the server that they've completed the question
         if (!window.__userHasQuestion || !window.__userHasOptions) {
-          console.log('[DyadicChat] Chat closed and user has no question, proceeding to survey');
+          console.log('[DyadicChat] Chat closed and user has no question, auto-submitting');
           setTimeout(() => {
-            submitAnswer(); // This will handle the no-question case
-          }, 1000); // Small delay to ensure UI updates
+            submitAnswer(); // Auto-submit for helper agents
+          }, 500); // Small delay to ensure UI updates
+        } else {
+          // User has a question - they can manually submit
+          console.log('[DyadicChat] Chat closed, user can submit answer');
         }
       });
       socket.on('chat:early_termination', function(){
@@ -1069,7 +1045,11 @@
         // Update hint to show chat ended early by partner
         const hint = document.getElementById('dc-hint');
         if (hint) {
-          hint.textContent = 'Your partner ended the chat early. You can now submit your survey.';
+          if (!window.__userHasQuestion || !window.__userHasOptions) {
+            hint.textContent = 'Your partner ended the chat early. Waiting...';
+          } else {
+            hint.textContent = 'Your partner ended the chat early. You can now submit your answer.';
+          }
         }
 
         // Disable chat input and send button
@@ -1084,11 +1064,118 @@
           earlyTerminateDiv.style.display = 'none';
         }
 
-        // Automatically proceed to survey
-        console.log('[DyadicChat] Chat ended early by partner, proceeding to survey');
+        // If user has no question (helper agent), automatically submit
+        if (!window.__userHasQuestion || !window.__userHasOptions) {
+          console.log('[DyadicChat] Chat ended early and user has no question, auto-submitting');
+          setTimeout(() => {
+            submitAnswer(); // Auto-submit for helper agents
+          }, 500);
+        } else {
+          // User has a question - they can manually submit
+          console.log('[DyadicChat] Chat ended early by partner, user can submit answer');
+        }
+      });
+
+      // Handle transition to next question
+      socket.on('next_question', function(p){
+        console.log('[DyadicChat] Received next question event:', p);
+
+        // Show transition screen briefly before loading next question
+        display_element.innerHTML = `
+          <div style="padding:40px; font-size:20px; text-align:center; color:#fff;">
+            <div style="margin-bottom:20px;">
+              <div class="dc-spinner" style="margin:0 auto;"></div>
+            </div>
+            <div style="margin-top:20px;">
+              Loading next question...
+            </div>
+            <div style="margin-top:10px; font-size:16px; color:#8bd5ff;">
+              Question ${p.questionNumber} of ${p.totalQuestions}
+            </div>
+          </div>
+        `;
+
+        // Brief delay before showing the new question for smoother transition
         setTimeout(() => {
-          submitAnswer(); // This will handle moving to survey
-        }, 1000); // Small delay to ensure UI updates
+          // Reset state for new question
+          msgCount = 0;
+          chatClosed = false;
+          myTurn = false;
+
+          // Update user's question status
+          window.__userHasQuestion = p.item.has_question;
+          window.__userHasOptions = p.item.has_options;
+
+          if (p.item.has_question && p.item.has_options) {
+            // Store the correct answer index, text, and options for this user
+            correctAnswerIndex = p.item.correct_answer;
+            answerOptions = p.item.options;
+            correctAnswerText = answerOptions[correctAnswerIndex];
+          }
+
+          // Reset timing for new question
+          t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+          chatBeginTime = t0;
+          firstMessageTime = null;
+          chatEndTime = null;
+          answerSubmitTime = null;
+
+          // Update display with new question
+          display_element.innerHTML = htmlChat(p);
+
+        // Setup UI for new question
+        setTimeout(() => {
+          if (p.item.has_question && p.item.has_options) {
+            const earlyTerminateDiv = document.getElementById('dc-early-terminate');
+            if (earlyTerminateDiv) {
+              earlyTerminateDiv.style.display = 'block';
+            }
+          } else {
+            const earlyTerminateDiv = document.getElementById('dc-early-terminate');
+            if (earlyTerminateDiv) {
+              earlyTerminateDiv.style.display = 'none';
+            }
+          }
+
+          // Set up event listeners
+          const sendBtn = document.getElementById('dc-send');
+          if (sendBtn) sendBtn.addEventListener('click', sendMsg);
+          const submitBtn = document.getElementById('dc-submit');
+          if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
+          const endChatEarlyBtn = document.getElementById('dc-end-chat-early');
+          if (endChatEarlyBtn) endChatEarlyBtn.addEventListener('click', endChatEarly);
+
+          // Add instructions toggle
+          const toggleButton = document.getElementById('toggle-instructions');
+          const instructionsContent = document.getElementById('dc-instructions-content');
+          if (toggleButton && instructionsContent) {
+            let isMinimized = true;
+            instructionsContent.style.display = 'none';
+            toggleButton.textContent = 'Expand';
+            toggleButton.onclick = function() {
+              if (isMinimized) {
+                instructionsContent.style.display = 'block';
+                toggleButton.textContent = 'Minimize';
+                isMinimized = false;
+              } else {
+                instructionsContent.style.display = 'none';
+                toggleButton.textContent = 'Expand';
+                isMinimized = true;
+              }
+            };
+          }
+
+          setupTextarea();
+          setupZoom();
+          updateMessages();
+        }, 0);
+        }, 800); // 0.8 second delay for client-side transition (server already has 1.5s delay)
+      });
+
+      // Handle all questions complete - proceed to survey
+      socket.on('all_questions_complete', function(){
+        console.log('[DyadicChat] All questions completed, proceeding to survey');
+        showCombinedFeedbackAndSurvey(window.__lastAnswer || null);
       });
       // Heartbeat mechanism
       function startHeartbeat() {

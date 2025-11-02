@@ -16,6 +16,28 @@ const BLOCK_REPEAT_PID = String(process.env.BLOCK_REPEAT_PID || 'false').toLower
 const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'false').toLowerCase() !== 'false';
 const QUESTION_TYPE = process.env.QUESTION_TYPE || 'all_types';
 
+// ---------- Questions per category configuration ----------
+// Dictionary specifying number of questions per category
+// Can be overridden via environment variable QUESTIONS_PER_CATEGORY (JSON string)
+const QUESTIONS_PER_CATEGORY_DEFAULT = {
+  'counting': 2,
+  'spatial': 2,
+  'anchor': 2,
+  'relative_distance': 2,
+  'perspective_taking': 2
+};
+let QUESTIONS_PER_CATEGORY = QUESTIONS_PER_CATEGORY_DEFAULT;
+try {
+  if (process.env.QUESTIONS_PER_CATEGORY) {
+    QUESTIONS_PER_CATEGORY = JSON.parse(process.env.QUESTIONS_PER_CATEGORY);
+    console.log('[DyadicChat] Loaded questions per category from environment:', QUESTIONS_PER_CATEGORY);
+  } else {
+    console.log('[DyadicChat] Using default questions per category:', QUESTIONS_PER_CATEGORY);
+  }
+} catch (e) {
+  console.warn('[DyadicChat] Failed to parse QUESTIONS_PER_CATEGORY, using defaults:', e.message);
+}
+
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
 app.get('/', (_req, res) => {
   res.set('Cache-Control','no-store');
@@ -89,6 +111,59 @@ function nextItem(){
   const id = deck[deckIdx++]; saveDeck();
   return items.find(x => x.id === id) || items[0];
 }
+
+// ---------- Multi-question support: sample questions by category ----------
+// For a given category, sample N questions from available items of that type
+function sampleQuestionsByCategory(category, count, excludeIds = new Set()) {
+  const categoryItems = items.filter(item => {
+    const itemType = item.question_type || 'unknown';
+    const itemId = item.id || item.sample_id || String(item);
+    return itemType === category && !excludeIds.has(itemId);
+  });
+
+  if (categoryItems.length === 0) {
+    console.warn(`[DyadicChat] No items found for category: ${category}`);
+    return [];
+  }
+
+  // Shuffle and take first N
+  const shuffled = [...categoryItems].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+// Generate question sequence for a room based on QUESTIONS_PER_CATEGORY
+function generateQuestionSequence() {
+  const sequence = [];
+  const usedItemIds = new Set();
+
+  // If QUESTION_TYPE is a specific type (not 'all_types'), only use that type
+  if (QUESTION_TYPE !== 'all_types' && QUESTIONS_PER_CATEGORY[QUESTION_TYPE]) {
+    const count = QUESTIONS_PER_CATEGORY[QUESTION_TYPE];
+    const categoryQuestions = sampleQuestionsByCategory(QUESTION_TYPE, count, usedItemIds);
+    categoryQuestions.forEach(item => {
+      const itemId = item.id || item.sample_id || String(item);
+      usedItemIds.add(itemId);
+      sequence.push({ item, category: QUESTION_TYPE });
+    });
+  } else if (QUESTION_TYPE === 'all_types') {
+    // Sample questions from multiple categories
+    for (const [category, count] of Object.entries(QUESTIONS_PER_CATEGORY)) {
+      const categoryQuestions = sampleQuestionsByCategory(category, count, usedItemIds);
+      categoryQuestions.forEach(item => {
+        const itemId = item.id || item.sample_id || String(item);
+        usedItemIds.add(itemId);
+        sequence.push({ item, category });
+      });
+    }
+
+    // Shuffle the sequence to randomize order across categories
+    sequence.sort(() => Math.random() - 0.5);
+  }
+
+  console.log(`[DyadicChat] Generated question sequence with ${sequence.length} questions`);
+  return sequence;
+}
+
 loadDeck();
 if (deck.length !== items.length) reshuffleDeck();
 
@@ -374,6 +449,147 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Helper function to transition to next question or survey
+  function moveToNextQuestionOrSurvey(room) {
+    const [a, b] = room.users;
+
+    // Check if both users have finished this question
+    if (!room.finished[a.id] || !room.finished[b.id]) {
+      return; // Wait for both users
+    }
+
+    // Store current question's answers
+    room.questionAnswers.push({
+      questionIndex: room.currentQuestionIndex,
+      item: room.item,
+      answers: { ...room.answers },
+      messages: [...room.messages]
+    });
+
+    // Mark current item as completed
+    try {
+      const itemId = room.item.id || room.item.sample_id || room.item.image_url || String(room.item);
+      markItemCompleted(itemId);
+    } catch {}
+
+    // Check if there are more questions
+    const nextIndex = room.currentQuestionIndex + 1;
+    if (nextIndex < room.questionSequence.length) {
+      // Move to next question
+      console.log(`[DyadicChat] Moving to next question ${nextIndex + 1}/${room.questionSequence.length} in room ${room.id}`);
+
+      const nextQuestion = room.questionSequence[nextIndex];
+      room.item = nextQuestion.item;
+      room.currentQuestionIndex = nextIndex;
+
+      // Reset question-specific state
+      room.messages = [];
+      room.answers = {};
+      room.finished = {};
+      room.msgCount = 0;
+      room.chatClosed = false;
+
+      // Determine who should start for this question
+      // Use the physicalUserToItemUser mapping to correctly assign roles
+      const item = room.item;
+      const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
+      const user2HasQuestion = !!(item.user_2_question && item.user_2_question.trim() !== '');
+
+      // Find which physical user corresponds to item user_1 and user_2
+      const originalUsers = room.originalUsers || room.users;
+      const [origUser1, origUser2] = originalUsers;
+
+      let userWithQuestion, userWithoutQuestion;
+      if (user1HasQuestion) {
+        // Item user_1 has the question - find the physical user who is item user_1
+        if (room.physicalUserToItemUser[origUser1.id] === 'user_1') {
+          userWithQuestion = origUser1;
+          userWithoutQuestion = origUser2;
+        } else {
+          userWithQuestion = origUser2;
+          userWithoutQuestion = origUser1;
+        }
+      } else if (user2HasQuestion) {
+        // Item user_2 has the question - find the physical user who is item user_2
+        if (room.physicalUserToItemUser[origUser1.id] === 'user_2') {
+          userWithQuestion = origUser1;
+          userWithoutQuestion = origUser2;
+        } else {
+          userWithQuestion = origUser2;
+          userWithoutQuestion = origUser1;
+        }
+      } else {
+        // Neither has question - default to first user
+        userWithQuestion = origUser1;
+        userWithoutQuestion = origUser2;
+      }
+
+      console.log(`[DyadicChat] Question ${nextIndex + 1}: user_1_has_q=${user1HasQuestion}, user_2_has_q=${user2HasQuestion}`);
+      console.log(`[DyadicChat] Physical user ${userWithQuestion.id} is answerer, ${userWithoutQuestion.id} is helper`);
+
+      // Send next question data to both users
+      // Determine which item user (user_1 or user_2) corresponds to each physical user
+      const questionUserItemRole = room.physicalUserToItemUser[userWithQuestion.id];
+      const helperUserItemRole = room.physicalUserToItemUser[userWithoutQuestion.id];
+
+      const itemForQuestionUser = {
+        ...item,
+        image_url: questionUserItemRole === 'user_1' ? item.user_1_image : item.user_2_image,
+        goal_question: questionUserItemRole === 'user_1' ? item.user_1_question : item.user_2_question,
+        correct_answer: questionUserItemRole === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+        options: questionUserItemRole === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        has_question: true,
+        has_options: !!(questionUserItemRole === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
+      };
+
+      const itemForHelperUser = {
+        ...item,
+        image_url: helperUserItemRole === 'user_1' ? item.user_1_image : item.user_2_image,
+        goal_question: helperUserItemRole === 'user_1' ? item.user_1_question : item.user_2_question,
+        correct_answer: helperUserItemRole === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+        options: helperUserItemRole === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        has_question: false,
+        has_options: false
+      };
+
+      // Update user roles if needed (they may switch roles between questions)
+      room.userRoles[userWithQuestion.id] = 'user_1';
+      room.userRoles[userWithoutQuestion.id] = 'user_2';
+
+      // Update room.users to match new question assignment
+      room.users = [userWithQuestion, userWithoutQuestion];
+
+      // Add a brief delay before sending next question to avoid jarring transition
+      setTimeout(() => {
+        // Send next question event
+        io.to(userWithQuestion.id).emit('next_question', {
+          item: itemForQuestionUser,
+          min_turns: MAX_TURNS,
+          server_question_type: QUESTION_TYPE,
+          questionNumber: nextIndex + 1,
+          totalQuestions: room.questionSequence.length
+        });
+        io.to(userWithoutQuestion.id).emit('next_question', {
+          item: itemForHelperUser,
+          min_turns: MAX_TURNS,
+          server_question_type: QUESTION_TYPE,
+          questionNumber: nextIndex + 1,
+          totalQuestions: room.questionSequence.length
+        });
+
+        // Set who starts
+        room.nextSenderId = userWithQuestion.id;
+        io.to(userWithQuestion.id).emit('turn:you');
+        io.to(userWithoutQuestion.id).emit('turn:wait');
+      }, 1500); // 1.5 second delay for smoother transition
+
+    } else {
+      // All questions completed - proceed to survey
+      console.log(`[DyadicChat] All questions completed in room ${room.id}, users should proceed to survey`);
+      io.to(room.id).emit('all_questions_complete');
+    }
+  }
+
   socket.on('answer:submit', (payload={}) => {
     const roomId = socket.currentRoom;
     if (!roomId || !rooms.has(roomId)) {
@@ -392,26 +608,28 @@ io.on('connection', (socket) => {
       t_formatted: formatTimestamp(now)
     };
     room.finished[socket.id] = true;
-    // Don't send end:self here - user should continue to survey page
+
+    // Handle backward compatibility: if no question sequence, use old behavior
+    if (!room.questionSequence || room.questionSequence.length === 0) {
+      console.log(`[DyadicChat] Room ${roomId} has no question sequence, using single-question mode`);
+      const [a,b] = room.users;
+      if (room.finished[a.id] && room.finished[b.id]){
+        // Both finished - proceed to survey (old behavior)
+        io.to(roomId).emit('all_questions_complete');
+      }
+      return;
+    }
+
+    console.log(`[DyadicChat] User ${socket.id} submitted answer for question ${room.currentQuestionIndex + 1}/${room.questionSequence.length}`);
 
     const [a,b] = room.users;
 
-    // Only clean up the room when both users have completed the study
+    // Check if both users have finished this question
     if (room.finished[a.id] && room.finished[b.id]){
-      try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
-
-      // Check if both users have also submitted surveys
-      if (room.surveys[a.id] && room.surveys[b.id]) {
-        // Both users completed study and submitted surveys
-        persistRoom(room);
-        rooms.delete(room.id);
-        console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
-      } else {
-        // Both users completed study but not all surveys submitted yet
-        console.log(`[DyadicChat] Both users completed study, waiting for surveys before cleaning up room ${roomId}`);
-      }
+      // Check if there are more questions
+      moveToNextQuestionOrSurvey(room);
     } else {
-      console.log(`[DyadicChat] User ${socket.id} completed study, partner can still continue`);
+      console.log(`[DyadicChat] User ${socket.id} completed question, waiting for partner`);
     }
   });
 
@@ -493,8 +711,23 @@ io.on('connection', (socket) => {
     const [a,b] = room.users;
     if (room.finished[a.id] && room.finished[b.id] &&
         room.surveys[a.id] && room.surveys[b.id]) {
-      // Both users completed study and submitted surveys
-      try { markItemCompleted(room.item.id || room.item.image_url || String(room.item)); } catch {}
+      // Both users completed all questions and submitted surveys
+      // Mark all items in sequence as completed (if sequence exists)
+      if (room.questionSequence && Array.isArray(room.questionSequence)) {
+        room.questionSequence.forEach((q, idx) => {
+          try {
+            const itemId = q.item.id || q.item.sample_id || q.item.image_url || String(q.item);
+            markItemCompleted(itemId);
+          } catch {}
+        });
+      } else {
+        // Fallback: mark current item
+        try {
+          const itemId = room.item.id || room.item.sample_id || room.item.image_url || String(room.item);
+          markItemCompleted(itemId);
+        } catch {}
+      }
+
       persistRoom(room);
       rooms.delete(room.id);
       console.log(`[DyadicChat] Both users completed study and surveys, cleaned up room ${roomId}`);
@@ -530,8 +763,34 @@ io.on('connection', (socket) => {
       const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
       console.log(`[DyadicChat] Creating room ${roomId} for users ${user1.id} and ${user2.id}`);
 
-      // Select item first to determine who should start
-      const item = nextItem();
+      // Generate question sequence for this room
+      const questionSequence = generateQuestionSequence();
+
+      if (questionSequence.length === 0) {
+        console.error(`[DyadicChat] No questions generated for room ${roomId}, using fallback`);
+        // Fallback to old behavior
+        const item = nextItem();
+        const room = {
+          id: roomId, users:[user1, user2], item,
+          messages:[], answers:{}, finished:{}, surveys:{},
+          msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
+          nextSenderId:null,
+          questionSequence: [], currentQuestionIndex: 0,
+          pairedAt: Date.now(),
+          pairedAt_formatted: formatTimestamp(Date.now()),
+          userRoles: { [user1.id]: 'user_1', [user2.id]: 'user_2' },
+          userPids: { [user1.id]: user1.prolific.PID || 'unknown', [user2.id]: user2.prolific.PID || 'unknown' }
+        };
+        rooms.set(roomId, room);
+        io.to(user1.id).emit('blocked:deck_complete');
+        io.to(user2.id).emit('blocked:deck_complete');
+        setTimeout(() => { user1.disconnect(true); user2.disconnect(true); }, 100);
+        return;
+      }
+
+      // Start with first question
+      const firstQuestion = questionSequence[0];
+      const item = firstQuestion.item;
       try { markPidSeen(user1.prolific.PID); markPidSeen(user2.prolific.PID); } catch {}
 
       // Find which user should have the question and start
@@ -560,11 +819,31 @@ io.on('connection', (socket) => {
       userWithQuestion.join(roomId); userWithoutQuestion.join(roomId);
       userWithQuestion.currentRoom = roomId; userWithoutQuestion.currentRoom = roomId;
 
+      // Track which physical user (from queue) corresponds to item user_1 and user_2
+      // This is important for role assignment across multiple questions
+      const physicalUserToItemUser = {};
+      if (user1HasQuestion) {
+        physicalUserToItemUser[user1.id] = 'user_1';
+        physicalUserToItemUser[user2.id] = 'user_2';
+      } else if (user2HasQuestion) {
+        physicalUserToItemUser[user2.id] = 'user_1';
+        physicalUserToItemUser[user1.id] = 'user_2';
+      } else {
+        // Fallback: assign based on queue order
+        physicalUserToItemUser[user1.id] = 'user_1';
+        physicalUserToItemUser[user2.id] = 'user_2';
+      }
+
       const room = {
         id: roomId, users:[userWithQuestion, userWithoutQuestion], item,
         messages:[], answers:{}, finished:{}, surveys:{},
         msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
         nextSenderId:null,
+        questionSequence: questionSequence, // Store full question sequence
+        currentQuestionIndex: 0, // Track which question we're on
+        questionAnswers: [], // Store answers for each question
+        physicalUserToItemUser: physicalUserToItemUser, // Map physical users to item users
+        originalUsers: [user1, user2], // Keep reference to original queue order
         pairedAt: Date.now(),
         pairedAt_formatted: formatTimestamp(Date.now()),
         userRoles: {
@@ -601,8 +880,22 @@ io.on('connection', (socket) => {
         has_options: false
       };
 
-      io.to(userWithQuestion.id).emit('paired', { roomId, item: itemForQuestionUser, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
-      io.to(userWithoutQuestion.id).emit('paired', { roomId, item: itemForHelperUser, min_turns: MAX_TURNS, server_question_type: QUESTION_TYPE });
+      io.to(userWithQuestion.id).emit('paired', {
+        roomId,
+        item: itemForQuestionUser,
+        min_turns: MAX_TURNS,
+        server_question_type: QUESTION_TYPE,
+        questionNumber: 1,
+        totalQuestions: questionSequence.length
+      });
+      io.to(userWithoutQuestion.id).emit('paired', {
+        roomId,
+        item: itemForHelperUser,
+        min_turns: MAX_TURNS,
+        server_question_type: QUESTION_TYPE,
+        questionNumber: 1,
+        totalQuestions: questionSequence.length
+      });
 
       // The user with the question gets the first turn
       room.nextSenderId = userWithQuestion.id;
@@ -620,11 +913,25 @@ function persistRoom(room){
     const dir = path.join(__dirname, 'data');
     if (!fs.existsSync(dir)) fs.mkdirSync(dir);
 
-    // Transform room data to match the new structure
-    const transformedData = transformRoomData(room);
-    const line = JSON.stringify(transformedData) + "\n";
-    fs.appendFileSync(path.join(dir, 'transcripts.ndjson'), line);
-    console.log('[DyadicChat] Saved transcript', room.id);
+    // Check if we have multiple questions to save
+    if (room.questionSequence && room.questionSequence.length > 0 &&
+        room.questionAnswers && room.questionAnswers.length > 0) {
+      // Multi-question session: save each question separately
+      console.log(`[DyadicChat] Saving ${room.questionAnswers.length} questions for room ${room.id}`);
+
+      room.questionAnswers.forEach((questionData, idx) => {
+        const transformedData = transformRoomDataForQuestion(room, questionData, idx);
+        const line = JSON.stringify(transformedData) + "\n";
+        fs.appendFileSync(path.join(dir, 'transcripts.ndjson'), line);
+        console.log(`[DyadicChat] Saved transcript for question ${idx + 1} (${questionData.item.sample_id || 'unknown'})`);
+      });
+    } else {
+      // Single-question session: use original behavior
+      const transformedData = transformRoomData(room);
+      const line = JSON.stringify(transformedData) + "\n";
+      fs.appendFileSync(path.join(dir, 'transcripts.ndjson'), line);
+      console.log('[DyadicChat] Saved transcript', room.id);
+    }
   } catch(e){
     console.error('[DyadicChat] Error saving transcript:', e);
   }
@@ -806,6 +1113,189 @@ function transformRoomData(room) {
     pairedAt: room.pairedAt,
     closed: true,
     userRoles: room.userRoles,
+    userPids: room.userPids,
+    pidToUserRole: pidToUserRole
+  };
+}
+
+function transformRoomDataForQuestion(room, questionData, questionIndex) {
+  const item = questionData.item;
+  const questionAnswers = questionData.answers;
+  const questionMessages = questionData.messages;
+
+  // Get original users to map socket IDs to roles
+  const originalUsers = room.originalUsers || room.users;
+  const [origUser1, origUser2] = originalUsers;
+
+  // Determine user roles for this specific question based on physicalUserToItemUser mapping
+  // This mapping was established at room creation and remains consistent
+  const physicalUserToItemUser = room.physicalUserToItemUser || {};
+  const user1Role = physicalUserToItemUser[origUser1.id] || 'user_1';
+  const user2Role = physicalUserToItemUser[origUser2.id] || 'user_2';
+
+  // Create a mapping from socket ID to role for this question
+  const socketIdToRole = {
+    [origUser1.id]: user1Role,
+    [origUser2.id]: user2Role
+  };
+
+  // Transform messages for this question
+  const transformedMessages = questionMessages.map(msg => ({
+    id: socketIdToRole[msg.who] || 'unknown',
+    who: msg.who,
+    pid: msg.pid,
+    text: msg.text,
+    t: msg.t,
+    t_formatted: msg.t_formatted
+  }));
+
+  // Transform answers for this question
+  const transformedAnswers = {};
+  if (questionAnswers[origUser1.id]) {
+    const answer1 = questionAnswers[origUser1.id];
+    const user1Options = item.options_user_1 || item.options || [];
+    transformedAnswers[user1Role] = {
+      id: user1Role,
+      who: origUser1.id,
+      pid: answer1.pid,
+      choice_idx: parseInt(answer1.choice),
+      choice_text: user1Options[parseInt(answer1.choice)] || '',
+      rt: answer1.rt,
+      rt_formatted: answer1.rt_formatted,
+      t: answer1.t,
+      t_formatted: answer1.t_formatted
+    };
+  }
+  if (questionAnswers[origUser2.id]) {
+    const answer2 = questionAnswers[origUser2.id];
+    const user2Options = item.options_user_2 || item.options || [];
+    transformedAnswers[user2Role] = {
+      id: user2Role,
+      who: origUser2.id,
+      pid: answer2.pid,
+      choice_idx: parseInt(answer2.choice),
+      choice_text: user2Options[parseInt(answer2.choice)] || '',
+      rt: answer2.rt,
+      rt_formatted: answer2.rt_formatted,
+      t: answer2.t,
+      t_formatted: answer2.t_formatted
+    };
+  }
+
+  // Transform surveys (surveys are collected at the end and apply to whole session)
+  const transformedSurveys = {};
+  Object.keys(room.surveys).forEach(socketId => {
+    const survey = room.surveys[socketId];
+    const userRole = socketIdToRole[socketId] || 'unknown';
+    // Use user-specific options for the question's item
+    const userOptions = userRole === 'user_1' ? (item.options_user_1 || item.options || []) : (item.options_user_2 || item.options || []);
+    transformedSurveys[userRole] = {
+      id: userRole,
+      who: socketId,
+      pid: survey.pid,
+      survey: survey.survey,
+      answerData: {
+        msgs: survey.answerData.messages,
+        choice_idx: parseInt(survey.answerData.choice),
+        choice_text: userOptions[parseInt(survey.answerData.choice)] || '',
+        rt: survey.answerData.rt,
+        pid: survey.answerData.pid,
+        rt_formatted: survey.answerData.rt_formatted
+      },
+      timingData: survey.timingData,
+      submittedAt: survey.submittedAt,
+      submittedAt_formatted: survey.submittedAt_formatted
+    };
+  });
+
+  // Calculate reaction times breakdown (use question-specific answer timing if available)
+  const rts = {};
+  Object.keys(transformedAnswers).forEach(userRole => {
+    const answer = transformedAnswers[userRole];
+    const survey = transformedSurveys[userRole];
+
+    const timingData = survey?.timingData || {};
+
+    const calculateRT = (startTime, endTime) => {
+      if (!startTime || !endTime) return null;
+      const rt = Math.round(endTime - startTime);
+      return formatReactionTime(rt);
+    };
+
+    rts[userRole] = {
+      consent_page_rt: calculateRT(timingData.consentPageStartTime, timingData.instructionsPageStartTime) || answer.rt_formatted,
+      instructions_page_rt: calculateRT(timingData.instructionsPageStartTime, timingData.waitingPageStartTime) || answer.rt_formatted,
+      waiting_page_time: calculateRT(timingData.waitingPageStartTime, timingData.chatBeginTime) || answer.rt_formatted,
+      chat_begin_to_first_msg_rt: calculateRT(timingData.chatBeginTime, timingData.firstMessageTime) || answer.rt_formatted,
+      chat_end_to_answer_rt: calculateRT(timingData.chatEndTime, timingData.answerSubmitTime) || answer.rt_formatted,
+      survey_rt: calculateRT(timingData.answerSubmitTime, timingData.surveySubmitTime) || answer.rt_formatted,
+      total_experiment_time: calculateRT(timingData.consentPageStartTime, timingData.surveySubmitTime) || answer.rt_formatted
+    };
+  });
+
+  // Create reverse mapping from PID to user role
+  const pidToUserRole = {};
+  Object.keys(socketIdToRole).forEach(socketId => {
+    const userRole = socketIdToRole[socketId];
+    const pid = room.userPids[socketId];
+    if (pid && userRole) {
+      pidToUserRole[pid] = userRole;
+    }
+  });
+
+  // Get options for ground truth answers
+  const user1Options = item.options_user_1 || item.options || [];
+  const user2Options = item.options_user_2 || item.options || [];
+
+  return {
+    // Original JSON fields first
+    sample_id: item.sample_id || item.id || 'unknown',
+    question_type: item.question_type || 'unknown',
+    room_part: item.room_part || null,
+    scene_id: item.scene_id || null,
+    global_map_image: item.global_map_image || null,
+    user_1_image: item.user_1_image || '',
+    user_2_image: item.user_2_image || '',
+    user_1_goal: item.user_1_goal || null,
+    user_2_goal: item.user_2_goal || null,
+    user_1_question: item.user_1_question || '',
+    user_2_question: item.user_2_question || '',
+    options_user_1: item.options_user_1 || null,
+    options_user_2: item.options_user_2 || null,
+    user_1_gt_answer_idx: item.user_1_gt_answer_idx || 0,
+    user_2_gt_answer_idx: item.user_2_gt_answer_idx || 0,
+    user_1_gt_answer_text: item.user_1_gt_answer_text || user1Options[item.user_1_gt_answer_idx] || '',
+    user_2_gt_answer_text: item.user_2_gt_answer_text || user2Options[item.user_2_gt_answer_idx] || '',
+    difficulty_uni: item.difficulty_uni || null,
+    difficulty_int: item.difficulty_int || null,
+    difficulty: item.difficulty || null,
+
+    // Include any other fields that might exist in the original item
+    ...Object.fromEntries(
+      Object.entries(item).filter(([key, value]) =>
+        !['id', 'sample_id', 'question_type', 'user_1_image', 'user_2_image', 'global_map_image',
+          'user_1_question', 'user_2_question', 'options', 'user_1_gt_answer_idx',
+          'user_2_gt_answer_idx', 'difficulty_uni', 'difficulty_int', 'difficulty',
+          'room_part', 'scene_id', 'user_1_goal', 'user_2_goal', 'options_user_1',
+          'options_user_2', 'user_1_gt_answer_text', 'user_2_gt_answer_text'].includes(key)
+      )
+    ),
+
+    // Study data fields
+    room_id: room.id,
+    question_index: questionIndex, // Add index to track question order
+    minTurns: room.minTurns || 4,
+    messages: transformedMessages,
+    user_1_answer_idx: transformedAnswers.user_1 ? transformedAnswers.user_1.choice_idx : null,
+    user_1_answer_text: transformedAnswers.user_1 ? transformedAnswers.user_1.choice_text : '',
+    user_2_answer_idx: transformedAnswers.user_2 ? transformedAnswers.user_2.choice_idx : null,
+    user_2_answer_text: transformedAnswers.user_2 ? transformedAnswers.user_2.choice_text : '',
+    answers: transformedAnswers,
+    surveys: transformedSurveys,
+    rts: rts,
+    pairedAt: room.pairedAt,
+    closed: true,
+    userRoles: socketIdToRole, // Use question-specific role mapping
     userPids: room.userPids,
     pidToUserRole: pidToUserRole
   };
