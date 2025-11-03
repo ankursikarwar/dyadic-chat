@@ -92,24 +92,73 @@ try {
 }
 
 // ---------- Persistent deck (no repeats until cycle completes) ----------
-const statePath = path.join(__dirname, 'data', 'deck_state.json');
+// Use separate deck state file for each question type to avoid conflicts
+function getDeckStatePath() {
+  // For 'all_types', use default file. Otherwise, use type-specific file
+  if (QUESTION_TYPE === 'all_types' || !QUESTION_TYPE) {
+    return path.join(__dirname, 'data', 'deck_state.json');
+  }
+  return path.join(__dirname, 'data', `deck_state_${QUESTION_TYPE}.json`);
+}
+const statePath = getDeckStatePath();
+console.log(`[DyadicChat] Using deck state file: ${statePath}`);
 let deck = []; let deckIdx = 0;
+let markedItems = new Set(); // Track items that have been marked in the current deck cycle
 
-function saveDeck(){ try { fs.writeFileSync(statePath, JSON.stringify({ order: deck, idx: deckIdx })); } catch(e){} }
+function saveDeck(){
+  try {
+    fs.writeFileSync(statePath, JSON.stringify({
+      order: deck,
+      idx: deckIdx,
+      marked: Array.from(markedItems)
+    }));
+  } catch(e){}
+}
 function loadDeck(){
   try {
     const s = JSON.parse(fs.readFileSync(statePath, 'utf-8'));
-    const valid = new Set(items.map(x => x.id));
+    const valid = new Set(items.map(x => x.id || x.sample_id || String(x)));
     deck = (s.order || []).filter(id => valid.has(id));
     deckIdx = Math.min(Math.max(0, s.idx|0), deck.length);
-  } catch { deck = []; deckIdx = 0; }
+    markedItems = new Set((s.marked || []).filter(id => valid.has(id)));
+  } catch {
+    deck = [];
+    deckIdx = 0;
+    markedItems = new Set();
+  }
 }
-function reshuffleDeck(){ deck = items.map(x => x.id).sort(()=>Math.random()-0.5); deckIdx = 0; saveDeck(); }
+function reshuffleDeck(){
+  // Only include items that haven't been marked
+  const unmarkedItems = items.filter(x => {
+    const itemId = x.id || x.sample_id || String(x);
+    return !markedItems.has(itemId);
+  });
+
+  if (unmarkedItems.length === 0) {
+    // All items have been marked, reset and start fresh
+    markedItems.clear();
+    deck = items.map(x => x.id || x.sample_id || String(x)).sort(()=>Math.random()-0.5);
+  } else {
+    deck = unmarkedItems.map(x => x.id || x.sample_id || String(x)).sort(()=>Math.random()-0.5);
+  }
+  deckIdx = 0;
+  saveDeck();
+}
+
+function markItemInDeck(itemId) {
+  if (!itemId) return;
+  // Ensure itemId is a string
+  const idStr = String(itemId);
+  markedItems.add(idStr);
+  saveDeck();
+}
+
 function nextItem(){
   if (!deck.length) reshuffleDeck();
   if (deckIdx >= deck.length) reshuffleDeck();
-  const id = deck[deckIdx++]; saveDeck();
-  return items.find(x => x.id === id) || items[0];
+  const id = deck[deckIdx++];
+  saveDeck();
+  return items.find(x => (x.id || x.sample_id || String(x)) === id) || items[0];
 }
 
 // ---------- Multi-question support: sample questions by category ----------
@@ -118,17 +167,28 @@ function sampleQuestionsByCategory(category, count, excludeIds = new Set()) {
   const categoryItems = items.filter(item => {
     const itemType = item.question_type || 'unknown';
     const itemId = item.id || item.sample_id || String(item);
-    return itemType === category && !excludeIds.has(itemId);
+    // Exclude items that are already marked in deck state OR in excludeIds
+    return itemType === category &&
+           !excludeIds.has(itemId) &&
+           !markedItems.has(itemId);
   });
 
   if (categoryItems.length === 0) {
-    console.warn(`[DyadicChat] No items found for category: ${category}`);
+    console.warn(`[DyadicChat] No unmarked items found for category: ${category}`);
     return [];
   }
 
   // Shuffle and take first N
   const shuffled = [...categoryItems].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
+  const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+
+  // Mark selected items in deck state
+  selected.forEach(item => {
+    const itemId = item.id || item.sample_id || String(item);
+    markItemInDeck(itemId);
+  });
+
+  return selected;
 }
 
 // Generate question sequence for a room based on QUESTIONS_PER_CATEGORY
@@ -180,7 +240,32 @@ let seenPidsMap = loadJson(seenPath, {}); // { PID: true }
 let completedItems = new Set(loadJson(completedPath, { completed: [] }).completed || []);
 
 function markPidSeen(pid){ if (!pid) return; if (!seenPidsMap[pid]){ seenPidsMap[pid]=true; saveJsonAtomic(seenPath, seenPidsMap); } }
-function markItemCompleted(id){ if (!id) return; if (!completedItems.has(id)){ completedItems.add(id); saveJsonAtomic(completedPath, { completed: Array.from(completedItems) }); } }
+// Helper function to extract a valid string ID from an item
+function extractItemId(item) {
+  if (!item) return null;
+  // If it's already a string, return it
+  if (typeof item === 'string') return item;
+  // If it's an object, try to get id, sample_id, or convert to string safely
+  if (typeof item === 'object') {
+    return item.id || item.sample_id || null;
+  }
+  return null;
+}
+
+function markItemCompleted(id){
+  if (!id) return;
+  // Ensure we always store a string, not an object
+  const itemId = extractItemId(id);
+  if (!itemId) {
+    console.warn(`[DyadicChat] Could not extract valid ID from: ${id}`);
+    return;
+  }
+  const idStr = String(itemId); // Ensure it's a string
+  if (!completedItems.has(idStr)){
+    completedItems.add(idStr);
+    saveJsonAtomic(completedPath, { completed: Array.from(completedItems).sort() });
+  }
+}
 
 // Utility functions for human-readable time formatting
 function formatTimestamp(timestamp) {
@@ -451,10 +536,13 @@ io.on('connection', (socket) => {
 
   // Helper function to transition to next question or survey
   function moveToNextQuestionOrSurvey(room) {
-    const [a, b] = room.users;
+    // Get current users BEFORE any updates
+    const currentUsers = [...room.users];
+    const [a, b] = currentUsers;
 
     // Check if both users have finished this question
     if (!room.finished[a.id] || !room.finished[b.id]) {
+      console.log(`[DyadicChat] Not all users finished: a=${a.id} finished=${!!room.finished[a.id]}, b=${b.id} finished=${!!room.finished[b.id]}`);
       return; // Wait for both users
     }
 
@@ -466,11 +554,15 @@ io.on('connection', (socket) => {
       messages: [...room.messages]
     });
 
-    // Mark current item as completed
+    // Mark current item as completed (extract ID properly)
     try {
-      const itemId = room.item.id || room.item.sample_id || room.item.image_url || String(room.item);
-      markItemCompleted(itemId);
-    } catch {}
+      const itemId = extractItemId(room.item) || room.item.image_url;
+      if (itemId) {
+        markItemCompleted(itemId);
+      }
+    } catch (e) {
+      console.warn(`[DyadicChat] Failed to mark item completed:`, e);
+    }
 
     // Check if there are more questions
     const nextIndex = room.currentQuestionIndex + 1;
@@ -622,14 +714,15 @@ io.on('connection', (socket) => {
 
     console.log(`[DyadicChat] User ${socket.id} submitted answer for question ${room.currentQuestionIndex + 1}/${room.questionSequence.length}`);
 
-    const [a,b] = room.users;
-
     // Check if both users have finished this question
-    if (room.finished[a.id] && room.finished[b.id]){
+    // Use the current room.users to check both users' finished state
+    const [currentA, currentB] = room.users;
+    if (room.finished[currentA.id] && room.finished[currentB.id]){
+      console.log(`[DyadicChat] Both users finished question ${room.currentQuestionIndex + 1}, moving to next`);
       // Check if there are more questions
       moveToNextQuestionOrSurvey(room);
     } else {
-      console.log(`[DyadicChat] User ${socket.id} completed question, waiting for partner`);
+      console.log(`[DyadicChat] User ${socket.id} completed question, waiting for partner (a=${currentA.id} finished=${!!room.finished[currentA.id]}, b=${currentB.id} finished=${!!room.finished[currentB.id]})`);
     }
   });
 
@@ -716,16 +809,24 @@ io.on('connection', (socket) => {
       if (room.questionSequence && Array.isArray(room.questionSequence)) {
         room.questionSequence.forEach((q, idx) => {
           try {
-            const itemId = q.item.id || q.item.sample_id || q.item.image_url || String(q.item);
-            markItemCompleted(itemId);
-          } catch {}
+            const itemId = extractItemId(q.item) || q.item.image_url;
+            if (itemId) {
+              markItemCompleted(itemId);
+            }
+          } catch (e) {
+            console.warn(`[DyadicChat] Failed to mark question ${idx} completed:`, e);
+          }
         });
       } else {
         // Fallback: mark current item
         try {
-          const itemId = room.item.id || room.item.sample_id || room.item.image_url || String(room.item);
-          markItemCompleted(itemId);
-        } catch {}
+          const itemId = extractItemId(room.item) || room.item.image_url;
+          if (itemId) {
+            markItemCompleted(itemId);
+          }
+        } catch (e) {
+          console.warn(`[DyadicChat] Failed to mark current item completed:`, e);
+        }
       }
 
       persistRoom(room);
