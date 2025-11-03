@@ -117,11 +117,21 @@ function saveDeck(){
 function loadDeck(){
   try {
     const s = JSON.parse(fs.readFileSync(statePath, 'utf-8'));
-    const valid = new Set(items.map(x => x.id || x.sample_id || String(x)));
-    deck = (s.order || []).filter(id => valid.has(id));
+    const valid = new Set(items.map(x => {
+      const id = x.id || x.sample_id || String(x);
+      return id && String(id); // Ensure valid ID
+    }).filter(id => id)); // Remove nulls
+
+    // Filter out null/undefined values from saved deck
+    deck = (s.order || []).filter(id => id && valid.has(id));
     deckIdx = Math.min(Math.max(0, s.idx|0), deck.length);
-    markedItems = new Set((s.marked || []).filter(id => valid.has(id)));
-  } catch {
+
+    // Filter out null/undefined values from marked items
+    markedItems = new Set((s.marked || []).filter(id => id && valid.has(id)));
+
+    console.log(`[DyadicChat] Loaded deck: ${deck.length} items in deck, ${markedItems.size} marked`);
+  } catch (e) {
+    console.log(`[DyadicChat] No existing deck state (or error loading): ${e.message}`);
     deck = [];
     deckIdx = 0;
     markedItems = new Set();
@@ -131,26 +141,41 @@ function reshuffleDeck(){
   // Only include items that haven't been marked
   const unmarkedItems = items.filter(x => {
     const itemId = x.id || x.sample_id || String(x);
-    return !markedItems.has(itemId);
+    // Only include items with valid IDs (not null/undefined)
+    return itemId && !markedItems.has(itemId);
   });
 
   if (unmarkedItems.length === 0) {
     // All items have been marked, reset and start fresh
     markedItems.clear();
-    deck = items.map(x => x.id || x.sample_id || String(x)).sort(()=>Math.random()-0.5);
+    deck = items
+      .map(x => x.id || x.sample_id || String(x))
+      .filter(id => id) // Filter out null/undefined
+      .sort(()=>Math.random()-0.5);
   } else {
-    deck = unmarkedItems.map(x => x.id || x.sample_id || String(x)).sort(()=>Math.random()-0.5);
+    deck = unmarkedItems
+      .map(x => x.id || x.sample_id || String(x))
+      .filter(id => id) // Filter out null/undefined
+      .sort(()=>Math.random()-0.5);
   }
   deckIdx = 0;
   saveDeck();
 }
 
 function markItemInDeck(itemId) {
-  if (!itemId) return;
-  // Ensure itemId is a string
+  if (!itemId) {
+    console.warn(`[DyadicChat] Attempted to mark null/undefined item ID`);
+    return;
+  }
+  // Ensure itemId is a string and not null
   const idStr = String(itemId);
+  if (idStr === 'null' || idStr === 'undefined' || !idStr || idStr.trim() === '') {
+    console.warn(`[DyadicChat] Attempted to mark invalid item ID: ${itemId}`);
+    return;
+  }
   markedItems.add(idStr);
   saveDeck();
+  console.log(`[DyadicChat] Marked item ${idStr} in deck state (${markedItems.size} total marked)`);
 }
 
 function nextItem(){
@@ -178,15 +203,9 @@ function sampleQuestionsByCategory(category, count, excludeIds = new Set()) {
     return [];
   }
 
-  // Shuffle and take first N
+  // Shuffle and take first N (do NOT mark yet; marking happens after surveys)
   const shuffled = [...categoryItems].sort(() => Math.random() - 0.5);
   const selected = shuffled.slice(0, Math.min(count, shuffled.length));
-
-  // Mark selected items in deck state
-  selected.forEach(item => {
-    const itemId = item.id || item.sample_id || String(item);
-    markItemInDeck(itemId);
-  });
 
   return selected;
 }
@@ -196,10 +215,13 @@ function generateQuestionSequence() {
   const sequence = [];
   const usedItemIds = new Set();
 
+  console.log(`[DyadicChat] Generating question sequence for QUESTION_TYPE=${QUESTION_TYPE}, markedItems.size=${markedItems.size}`);
+
   // If QUESTION_TYPE is a specific type (not 'all_types'), only use that type
   if (QUESTION_TYPE !== 'all_types' && QUESTIONS_PER_CATEGORY[QUESTION_TYPE]) {
     const count = QUESTIONS_PER_CATEGORY[QUESTION_TYPE];
     const categoryQuestions = sampleQuestionsByCategory(QUESTION_TYPE, count, usedItemIds);
+    console.log(`[DyadicChat] Selected ${categoryQuestions.length} questions for category ${QUESTION_TYPE}`);
     categoryQuestions.forEach(item => {
       const itemId = item.id || item.sample_id || String(item);
       usedItemIds.add(itemId);
@@ -209,6 +231,7 @@ function generateQuestionSequence() {
     // Sample questions from multiple categories
     for (const [category, count] of Object.entries(QUESTIONS_PER_CATEGORY)) {
       const categoryQuestions = sampleQuestionsByCategory(category, count, usedItemIds);
+      console.log(`[DyadicChat] Selected ${categoryQuestions.length} questions for category ${category}`);
       categoryQuestions.forEach(item => {
         const itemId = item.id || item.sample_id || String(item);
         usedItemIds.add(itemId);
@@ -220,12 +243,13 @@ function generateQuestionSequence() {
     sequence.sort(() => Math.random() - 0.5);
   }
 
-  console.log(`[DyadicChat] Generated question sequence with ${sequence.length} questions`);
+  console.log(`[DyadicChat] Generated question sequence with ${sequence.length} questions. NO items marked yet - marking happens after surveys`);
   return sequence;
 }
 
 loadDeck();
-if (deck.length !== items.length) reshuffleDeck();
+// Only reshuffle if deck is empty; preserve existing deck state otherwise
+if (deck.length === 0) reshuffleDeck();
 
 // ---------- Persistent seen PIDs & completed items ----------
 const seenPath = path.join(__dirname, 'data', 'seen_pids.json');
@@ -540,10 +564,13 @@ io.on('connection', (socket) => {
     const currentUsers = [...room.users];
     const [a, b] = currentUsers;
 
-    // Check if both users have finished this question
-    if (!room.finished[a.id] || !room.finished[b.id]) {
-      console.log(`[DyadicChat] Not all users finished: a=${a.id} finished=${!!room.finished[a.id]}, b=${b.id} finished=${!!room.finished[b.id]}`);
-      return; // Wait for both users
+    // Check if both users have finished this question AND have submitted answers
+    const hasAnswerA = !!room.answers[a.id];
+    const hasAnswerB = !!room.answers[b.id];
+
+    if (!room.finished[a.id] || !room.finished[b.id] || !hasAnswerA || !hasAnswerB) {
+      console.log(`[DyadicChat] Not all users finished with answers: a=${a.id} finished=${!!room.finished[a.id]} hasAnswer=${hasAnswerA}, b=${b.id} finished=${!!room.finished[b.id]} hasAnswer=${hasAnswerB}`);
+      return; // Wait for both users to submit answers
     }
 
     // Store current question's answers
@@ -554,15 +581,8 @@ io.on('connection', (socket) => {
       messages: [...room.messages]
     });
 
-    // Mark current item as completed (extract ID properly)
-    try {
-      const itemId = extractItemId(room.item) || room.item.image_url;
-      if (itemId) {
-        markItemCompleted(itemId);
-      }
-    } catch (e) {
-      console.warn(`[DyadicChat] Failed to mark item completed:`, e);
-    }
+    // DO NOT mark items here - marking happens only after both surveys are submitted
+    // (This was causing premature marking when moving between questions)
 
     // Check if there are more questions
     const nextIndex = room.currentQuestionIndex + 1;
@@ -582,64 +602,93 @@ io.on('connection', (socket) => {
       room.chatClosed = false;
 
       // Determine who should start for this question
-      // Use the physicalUserToItemUser mapping to correctly assign roles
+      // IMPORTANT: Keep the same answerer as the first question for consistency across questions
+      // The answerer is determined once in the first question and stays the same for all questions
+      const originalUsers = room.originalUsers || room.users;
+      const [origUser1, origUser2] = originalUsers;
+
+      // Find who was the answerer in the first question (stored in originalUsers order and physicalUserToItemUser)
+      // The answerer is the one who had the question in the first question, which we can determine
+      // by looking at room.users[0] which should be the answerer from the first question
+      // Actually, we need to track this more explicitly. Let's use the first question's item to determine
+      // which physical user should always be the answerer.
+
+      // For now, we'll use a simple approach: find which item field has the question and map accordingly
+      // But we want the SAME physical person to always be the answerer
       const item = room.item;
       const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
       const user2HasQuestion = !!(item.user_2_question && item.user_2_question.trim() !== '');
 
-      // Find which physical user corresponds to item user_1 and user_2
-      const originalUsers = room.originalUsers || room.users;
-      const [origUser1, origUser2] = originalUsers;
+      // Get the answerer from the first question - this is room.users[0] from when the room was created
+      // But room.users might have been updated. Let's use the originalUsers and determine who was answerer
+      // by checking the first question's item
+      const firstQuestionItem = room.questionSequence[0].item;
+      const firstUser1HasQuestion = !!(firstQuestionItem.user_1_question && firstQuestionItem.user_1_question.trim() !== '');
+      const firstUser2HasQuestion = !!(firstQuestionItem.user_2_question && firstQuestionItem.user_2_question.trim() !== '');
 
-      let userWithQuestion, userWithoutQuestion;
-      if (user1HasQuestion) {
-        // Item user_1 has the question - find the physical user who is item user_1
-        if (room.physicalUserToItemUser[origUser1.id] === 'user_1') {
-          userWithQuestion = origUser1;
-          userWithoutQuestion = origUser2;
-        } else {
-          userWithQuestion = origUser2;
-          userWithoutQuestion = origUser1;
-        }
-      } else if (user2HasQuestion) {
-        // Item user_2 has the question - find the physical user who is item user_2
-        if (room.physicalUserToItemUser[origUser1.id] === 'user_2') {
-          userWithQuestion = origUser1;
-          userWithoutQuestion = origUser2;
-        } else {
-          userWithQuestion = origUser2;
-          userWithoutQuestion = origUser1;
-        }
+      // Determine who was the answerer in the first question
+      let originalAnswerer, originalHelper;
+      if (firstUser1HasQuestion) {
+        // First question had user_1_question, so origUser1 (mapped to item user_1) was answerer
+        originalAnswerer = origUser1;
+        originalHelper = origUser2;
+      } else if (firstUser2HasQuestion) {
+        // First question had user_2_question, so origUser2 (mapped to item user_2) was answerer
+        originalAnswerer = origUser2;
+        originalHelper = origUser1;
       } else {
-        // Neither has question - default to first user
-        userWithQuestion = origUser1;
-        userWithoutQuestion = origUser2;
+        // Fallback: first user in queue
+        originalAnswerer = origUser1;
+        originalHelper = origUser2;
       }
 
+      // Keep the same answerer for all questions
+      const userWithQuestion = originalAnswerer;
+      const userWithoutQuestion = originalHelper;
+
       console.log(`[DyadicChat] Question ${nextIndex + 1}: user_1_has_q=${user1HasQuestion}, user_2_has_q=${user2HasQuestion}`);
-      console.log(`[DyadicChat] Physical user ${userWithQuestion.id} is answerer, ${userWithoutQuestion.id} is helper`);
+      console.log(`[DyadicChat] Keeping same answerer: ${userWithQuestion.id} (was answerer in first question), helper: ${userWithoutQuestion.id}`);
 
       // Send next question data to both users
-      // Determine which item user (user_1 or user_2) corresponds to each physical user
-      const questionUserItemRole = room.physicalUserToItemUser[userWithQuestion.id];
-      const helperUserItemRole = room.physicalUserToItemUser[userWithoutQuestion.id];
+      // IMPORTANT: Use the CURRENT question's fields, not the answerer's mapped role
+      // The answerer always gets the question from whichever field has it in the current item
+      // The helper always gets the other field's data (image, goal, etc.)
+
+      // Determine which field has the question in the current item
+      let questionField, helperField;
+      if (user1HasQuestion) {
+        questionField = 'user_1';
+        helperField = 'user_2';
+      } else if (user2HasQuestion) {
+        questionField = 'user_2';
+        helperField = 'user_1';
+      } else {
+        // Neither has question - use default
+        questionField = 'user_1';
+        helperField = 'user_2';
+      }
+
+      // Determine which physical user's item role corresponds to the question field
+      // This is just for getting the right image/goal - the question itself comes from the current item
+      const answererItemRole = room.physicalUserToItemUser[userWithQuestion.id];
+      const helperItemRole = room.physicalUserToItemUser[userWithoutQuestion.id];
 
       const itemForQuestionUser = {
         ...item,
-        image_url: questionUserItemRole === 'user_1' ? item.user_1_image : item.user_2_image,
-        goal_question: questionUserItemRole === 'user_1' ? item.user_1_question : item.user_2_question,
-        correct_answer: questionUserItemRole === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
-        options: questionUserItemRole === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        image_url: answererItemRole === 'user_1' ? item.user_1_image : item.user_2_image,
+        goal_question: questionField === 'user_1' ? item.user_1_question : item.user_2_question,
+        correct_answer: questionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+        options: questionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
         has_question: true,
-        has_options: !!(questionUserItemRole === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
+        has_options: !!(questionField === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
       };
 
       const itemForHelperUser = {
         ...item,
-        image_url: helperUserItemRole === 'user_1' ? item.user_1_image : item.user_2_image,
-        goal_question: helperUserItemRole === 'user_1' ? item.user_1_question : item.user_2_question,
-        correct_answer: helperUserItemRole === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
-        options: helperUserItemRole === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        image_url: helperItemRole === 'user_1' ? item.user_1_image : item.user_2_image,
+        goal_question: helperField === 'user_1' ? item.user_1_question : item.user_2_question,
+        correct_answer: helperField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+        options: helperField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
         has_question: false,
         has_options: false
       };
@@ -677,8 +726,35 @@ io.on('connection', (socket) => {
 
     } else {
       // All questions completed - proceed to survey
+      // IMPORTANT: For the final question, ensure both users have actually submitted their answers
+      // before moving to survey. Add a delay to ensure answerer has time to submit.
       console.log(`[DyadicChat] All questions completed in room ${room.id}, users should proceed to survey`);
-      io.to(room.id).emit('all_questions_complete');
+
+      // Double-check that both users have actually submitted answers for the final question
+      const [finalA, finalB] = room.users;
+      const hasAnswerA = !!room.answers[finalA.id];
+      const hasAnswerB = !!room.answers[finalB.id];
+
+      if (!hasAnswerA || !hasAnswerB) {
+        console.log(`[DyadicChat] Warning: Final question but answers missing - A: ${hasAnswerA}, B: ${hasAnswerB}. Waiting...`);
+        // Wait a bit more for the answerer to submit
+        // This shouldn't happen normally, but protects against race conditions
+        setTimeout(() => {
+          const [checkA, checkB] = room.users;
+          const checkAnswerA = !!room.answers[checkA.id];
+          const checkAnswerB = !!room.answers[checkB.id];
+          if (checkAnswerA && checkAnswerB) {
+            console.log(`[DyadicChat] Both answers now present, proceeding to survey`);
+            io.to(room.id).emit('all_questions_complete');
+          } else {
+            console.warn(`[DyadicChat] Still missing answers after delay - A: ${checkAnswerA}, B: ${checkAnswerB}. Proceeding anyway.`);
+            io.to(room.id).emit('all_questions_complete');
+          }
+        }, 2000); // 2 second grace period for answerer to submit
+      } else {
+        // Both have submitted - proceed immediately
+        io.to(room.id).emit('all_questions_complete');
+      }
     }
   }
 
@@ -714,15 +790,18 @@ io.on('connection', (socket) => {
 
     console.log(`[DyadicChat] User ${socket.id} submitted answer for question ${room.currentQuestionIndex + 1}/${room.questionSequence.length}`);
 
-    // Check if both users have finished this question
+    // Check if both users have finished this question AND have submitted answers
     // Use the current room.users to check both users' finished state
     const [currentA, currentB] = room.users;
-    if (room.finished[currentA.id] && room.finished[currentB.id]){
-      console.log(`[DyadicChat] Both users finished question ${room.currentQuestionIndex + 1}, moving to next`);
+    const hasAnswerA = !!room.answers[currentA.id];
+    const hasAnswerB = !!room.answers[currentB.id];
+
+    if (room.finished[currentA.id] && room.finished[currentB.id] && hasAnswerA && hasAnswerB){
+      console.log(`[DyadicChat] Both users finished question ${room.currentQuestionIndex + 1} with answers, moving to next`);
       // Check if there are more questions
       moveToNextQuestionOrSurvey(room);
     } else {
-      console.log(`[DyadicChat] User ${socket.id} completed question, waiting for partner (a=${currentA.id} finished=${!!room.finished[currentA.id]}, b=${currentB.id} finished=${!!room.finished[currentB.id]})`);
+      console.log(`[DyadicChat] User ${socket.id} completed question, waiting for partner (a=${currentA.id} finished=${!!room.finished[currentA.id]} hasAnswer=${hasAnswerA}, b=${currentB.id} finished=${!!room.finished[currentB.id]} hasAnswer=${hasAnswerB})`);
     }
   });
 
@@ -805,13 +884,18 @@ io.on('connection', (socket) => {
     if (room.finished[a.id] && room.finished[b.id] &&
         room.surveys[a.id] && room.surveys[b.id]) {
       // Both users completed all questions and submitted surveys
-      // Mark all items in sequence as completed (if sequence exists)
+      // NOW mark all items in sequence as completed AND mark them in deck state
+      console.log(`[DyadicChat] Both users completed surveys - marking ${room.questionSequence?.length || 0} items in deck state`);
       if (room.questionSequence && Array.isArray(room.questionSequence)) {
         room.questionSequence.forEach((q, idx) => {
           try {
             const itemId = extractItemId(q.item) || q.item.image_url;
             if (itemId) {
+              console.log(`[DyadicChat] Marking item ${itemId} from question ${idx + 1} as completed and in deck`);
               markItemCompleted(itemId);
+              markItemInDeck(itemId);
+            } else {
+              console.warn(`[DyadicChat] Could not extract ID for question ${idx + 1}`, q.item);
             }
           } catch (e) {
             console.warn(`[DyadicChat] Failed to mark question ${idx} completed:`, e);
@@ -823,6 +907,7 @@ io.on('connection', (socket) => {
           const itemId = extractItemId(room.item) || room.item.image_url;
           if (itemId) {
             markItemCompleted(itemId);
+            markItemInDeck(itemId);
           }
         } catch (e) {
           console.warn(`[DyadicChat] Failed to mark current item completed:`, e);
@@ -921,19 +1006,14 @@ io.on('connection', (socket) => {
       userWithQuestion.currentRoom = roomId; userWithoutQuestion.currentRoom = roomId;
 
       // Track which physical user (from queue) corresponds to item user_1 and user_2
-      // This is important for role assignment across multiple questions
-      const physicalUserToItemUser = {};
-      if (user1HasQuestion) {
-        physicalUserToItemUser[user1.id] = 'user_1';
-        physicalUserToItemUser[user2.id] = 'user_2';
-      } else if (user2HasQuestion) {
-        physicalUserToItemUser[user2.id] = 'user_1';
-        physicalUserToItemUser[user1.id] = 'user_2';
-      } else {
-        // Fallback: assign based on queue order
-        physicalUserToItemUser[user1.id] = 'user_1';
-        physicalUserToItemUser[user2.id] = 'user_2';
-      }
+      // IMPORTANT: This mapping should be based on queue order, NOT which user has the question
+      // The mapping stays consistent: user1 from queue = item user_1, user2 from queue = item user_2
+      // This ensures that when subsequent questions have different item fields with questions,
+      // we can correctly determine which physical user should answer based on which item field has the question
+      const physicalUserToItemUser = {
+        [user1.id]: 'user_1',  // First in queue is always item user_1
+        [user2.id]: 'user_2'   // Second in queue is always item user_2
+      };
 
       const room = {
         id: roomId, users:[userWithQuestion, userWithoutQuestion], item,
