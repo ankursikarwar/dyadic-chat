@@ -702,6 +702,20 @@ io.on('connection', (socket) => {
 
       // Add a brief delay before sending next question to avoid jarring transition
       setTimeout(() => {
+        console.log(`[DyadicChat] Sending next_question events to room ${room.id} for question ${nextIndex + 1}`);
+        console.log(`[DyadicChat] User with question: ${userWithQuestion.id}, User without question: ${userWithoutQuestion.id}`);
+
+        // Verify sockets are still connected
+        const socketWithQ = io.sockets.sockets.get(userWithQuestion.id);
+        const socketWithoutQ = io.sockets.sockets.get(userWithoutQuestion.id);
+
+        if (!socketWithQ) {
+          console.error(`[DyadicChat] ERROR: Socket ${userWithQuestion.id} not found! Cannot send next_question.`);
+        }
+        if (!socketWithoutQ) {
+          console.error(`[DyadicChat] ERROR: Socket ${userWithoutQuestion.id} not found! Cannot send next_question.`);
+        }
+
         // Send next question event
         io.to(userWithQuestion.id).emit('next_question', {
           item: itemForQuestionUser,
@@ -720,8 +734,15 @@ io.on('connection', (socket) => {
 
         // Set who starts
         room.nextSenderId = userWithQuestion.id;
-        io.to(userWithQuestion.id).emit('turn:you');
-        io.to(userWithoutQuestion.id).emit('turn:wait');
+
+        // Send turn events immediately after next_question (client will handle timing)
+        // Use a small delay to ensure next_question is processed first
+        setTimeout(() => {
+          console.log(`[DyadicChat] Sending turn events - ${userWithQuestion.id} gets turn:you, ${userWithoutQuestion.id} gets turn:wait`);
+          io.to(userWithQuestion.id).emit('turn:you');
+          io.to(userWithoutQuestion.id).emit('turn:wait');
+          console.log(`[DyadicChat] Turn events sent for question ${nextIndex + 1}`);
+        }, 100); // Small delay to ensure next_question is processed first
       }, 1500); // 1.5 second delay for smoother transition
 
     } else {

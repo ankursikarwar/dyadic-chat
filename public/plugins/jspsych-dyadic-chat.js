@@ -351,6 +351,7 @@
       let correctAnswerText = null; // Store the correct answer text for this user
       let answerOptions = null; // Store the answer options array
       let t0 = null; // Will be set when users get paired
+      let pendingTurnEvent = null; // Store turn event if it arrives before UI is ready
 
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
@@ -372,7 +373,13 @@
         var sendBtn = document.getElementById('dc-send');
         var msg = document.getElementById('dc-msg');
         var allow = myTurn && !chatClosed;
-        if (sendBtn) sendBtn.disabled = !allow;
+        console.log('[DyadicChat] updateMessages - myTurn:', myTurn, 'chatClosed:', chatClosed, 'allow:', allow, 'sendBtn found:', !!sendBtn);
+        if (sendBtn) {
+          sendBtn.disabled = !allow;
+          console.log('[DyadicChat] updateMessages - sendBtn disabled set to:', !allow);
+        } else {
+          console.warn('[DyadicChat] updateMessages - sendBtn not found in DOM');
+        }
         // Allow typing even when it's not their turn, but disable sending
         if (msg) msg.disabled = chatClosed;
         var ansInputs = Array.prototype.slice.call(document.querySelectorAll('input[name="dc-answer"]'));
@@ -409,7 +416,11 @@
       function sendMsg(){
         const el = document.getElementById('dc-msg');
         const text = (el && el.value || '').trim(); if (!text) return;
-        if (!myTurn || chatClosed) return;
+        if (!myTurn || chatClosed) {
+          console.log('[DyadicChat] sendMsg blocked - myTurn:', myTurn, 'chatClosed:', chatClosed);
+          return;
+        }
+        console.log('[DyadicChat] sendMsg - sending message, myTurn:', myTurn, 'chatClosed:', chatClosed);
         addLine('Me', text);
         msgCount += 1; updateMessages();
 
@@ -1013,8 +1024,41 @@
       });
 
       socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateMessages(); });
-      socket.on('turn:you', function(){ myTurn = true; updateMessages(); });
-      socket.on('turn:wait', function(){ myTurn = false; updateMessages(); });
+      socket.on('turn:you', function(){
+        console.log('[DyadicChat] Received turn:you event - enabling send button');
+        myTurn = true;
+        chatClosed = false; // Ensure chat is not closed
+        pendingTurnEvent = 'you'; // Store for later processing if needed
+        console.log('[DyadicChat] turn:you - state updated: myTurn=true, chatClosed=false');
+        // Use multiple setTimeout calls to ensure DOM is ready and state is updated
+        setTimeout(() => {
+          console.log('[DyadicChat] turn:you - calling updateMessages, myTurn:', myTurn, 'chatClosed:', chatClosed);
+          updateMessages();
+        }, 0);
+        // Also update after a short delay to catch any timing issues
+        setTimeout(() => {
+          console.log('[DyadicChat] turn:you - delayed updateMessages call');
+          updateMessages();
+        }, 100);
+        setTimeout(() => {
+          console.log('[DyadicChat] turn:you - final updateMessages call');
+          updateMessages();
+        }, 500);
+      });
+      socket.on('turn:wait', function(){
+        console.log('[DyadicChat] Received turn:wait event - disabling send button');
+        myTurn = false;
+        pendingTurnEvent = 'wait'; // Store for later processing if needed
+        // Use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+          console.log('[DyadicChat] turn:wait - updating messages, myTurn:', myTurn);
+          updateMessages();
+        }, 0);
+        setTimeout(() => {
+          console.log('[DyadicChat] turn:wait - delayed updateMessages call');
+          updateMessages();
+        }, 100);
+      });
       socket.on('chat:closed', function(){
         chatClosed = true;
         updateMessages();
@@ -1100,7 +1144,10 @@
           // Reset state for new question
           msgCount = 0;
           chatClosed = false;
-          myTurn = false;
+          myTurn = false; // Will be set by turn:you or turn:wait from server
+
+          // Update pairedPayload with new question data (used by updateMessages)
+          pairedPayload = p;
 
           // Update user's question status
           window.__userHasQuestion = p.item.has_question;
@@ -1137,13 +1184,27 @@
             }
           }
 
-          // Set up event listeners
+          // Remove old event listeners before adding new ones to prevent duplicates
           const sendBtn = document.getElementById('dc-send');
-          if (sendBtn) sendBtn.addEventListener('click', sendMsg);
           const submitBtn = document.getElementById('dc-submit');
-          if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
           const endChatEarlyBtn = document.getElementById('dc-end-chat-early');
-          if (endChatEarlyBtn) endChatEarlyBtn.addEventListener('click', endChatEarly);
+
+          // Clone elements to remove all event listeners, then re-add
+          if (sendBtn) {
+            const newSendBtn = sendBtn.cloneNode(true);
+            sendBtn.parentNode.replaceChild(newSendBtn, sendBtn);
+            newSendBtn.addEventListener('click', sendMsg);
+          }
+          if (submitBtn) {
+            const newSubmitBtn = submitBtn.cloneNode(true);
+            submitBtn.parentNode.replaceChild(newSubmitBtn, submitBtn);
+            newSubmitBtn.addEventListener('click', submitAnswer);
+          }
+          if (endChatEarlyBtn) {
+            const newEndChatBtn = endChatEarlyBtn.cloneNode(true);
+            endChatEarlyBtn.parentNode.replaceChild(newEndChatBtn, endChatEarlyBtn);
+            newEndChatBtn.addEventListener('click', endChatEarly);
+          }
 
           // Add instructions toggle
           const toggleButton = document.getElementById('toggle-instructions');
@@ -1152,6 +1213,7 @@
             let isMinimized = true;
             instructionsContent.style.display = 'none';
             toggleButton.textContent = 'Expand';
+            // Remove old onclick and add new one
             toggleButton.onclick = function() {
               if (isMinimized) {
                 instructionsContent.style.display = 'block';
@@ -1167,7 +1229,52 @@
 
           setupTextarea();
           setupZoom();
+
+          // Check if we have a pending turn event that arrived before UI was ready
+          if (pendingTurnEvent === 'you') {
+            console.log('[DyadicChat] Processing pending turn:you event that arrived before UI was ready');
+            myTurn = true;
+            chatClosed = false;
+          } else if (pendingTurnEvent === 'wait') {
+            console.log('[DyadicChat] Processing pending turn:wait event that arrived before UI was ready');
+            myTurn = false;
+          }
+          pendingTurnEvent = null; // Clear pending event
+
+          // Initial update - button state will reflect current myTurn state
           updateMessages();
+
+          // Set up a polling mechanism to check for turn state updates
+          // This ensures the button state is correct even if turn events are delayed
+          let turnCheckInterval = null;
+          let turnCheckCount = 0;
+          const maxTurnChecks = 15; // Check for 7.5 seconds (15 * 500ms) to catch delayed events
+
+          turnCheckInterval = setInterval(() => {
+            turnCheckCount++;
+            console.log('[DyadicChat] Turn check #' + turnCheckCount + ' - myTurn:', myTurn, 'chatClosed:', chatClosed);
+            updateMessages();
+
+            if (turnCheckCount >= maxTurnChecks) {
+              clearInterval(turnCheckInterval);
+              console.log('[DyadicChat] Stopped turn checking after', maxTurnChecks, 'checks');
+              // Final check - if still false, log warning
+              if (!myTurn && !chatClosed) {
+                console.warn('[DyadicChat] WARNING: myTurn is still false after', maxTurnChecks, 'checks. Turn event may not have been received.');
+              }
+            }
+          }, 500); // Check every 500ms
+
+          // Also schedule a final delayed update to catch turn events that arrive after UI setup
+          setTimeout(() => {
+            console.log('[DyadicChat] Final delayed updateMessages after next_question UI setup');
+            if (turnCheckInterval) {
+              clearInterval(turnCheckInterval);
+            }
+            updateMessages();
+            // Final state check
+            console.log('[DyadicChat] Final state check - myTurn:', myTurn, 'chatClosed:', chatClosed);
+          }, 4000); // 4 seconds should be enough for server's 1.5s delay + 100ms + network latency
         }, 0);
         }, 800); // 0.8 second delay for client-side transition (server already has 1.5s delay)
       });
