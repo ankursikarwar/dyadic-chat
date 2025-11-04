@@ -204,8 +204,29 @@ function sampleQuestionsByCategory(category, count, excludeIds = new Set()) {
   }
 
   // Shuffle and take first N (do NOT mark yet; marking happens after surveys)
-  const shuffled = [...categoryItems].sort(() => Math.random() - 0.5);
-  const selected = shuffled.slice(0, Math.min(count, shuffled.length));
+  // Use Fisher-Yates shuffle for better randomness
+  const shuffled = [...categoryItems];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+
+  // Take first N items, ensuring no duplicates by ID
+  const selected = [];
+  const selectedIds = new Set();
+  for (const item of shuffled) {
+    if (selected.length >= count) break;
+    const itemId = item.id || item.sample_id || String(item);
+    // Double-check: ensure this item isn't already selected (shouldn't happen, but safety check)
+    if (!selectedIds.has(itemId) && !excludeIds.has(itemId)) {
+      selectedIds.add(itemId);
+      selected.push(item);
+    }
+  }
+
+  if (selected.length < count) {
+    console.warn(`[DyadicChat] Only found ${selected.length} unique items for category ${category}, requested ${count}`);
+  }
 
   return selected;
 }
@@ -224,6 +245,11 @@ function generateQuestionSequence() {
     console.log(`[DyadicChat] Selected ${categoryQuestions.length} questions for category ${QUESTION_TYPE}`);
     categoryQuestions.forEach(item => {
       const itemId = item.id || item.sample_id || String(item);
+      // Explicit check: ensure no duplicates within the sequence
+      if (usedItemIds.has(itemId)) {
+        console.error(`[DyadicChat] ERROR: Duplicate item ID ${itemId} detected in sequence! Skipping.`);
+        return; // Skip this item
+      }
       usedItemIds.add(itemId);
       sequence.push({ item, category: QUESTION_TYPE });
     });
@@ -234,16 +260,57 @@ function generateQuestionSequence() {
       console.log(`[DyadicChat] Selected ${categoryQuestions.length} questions for category ${category}`);
       categoryQuestions.forEach(item => {
         const itemId = item.id || item.sample_id || String(item);
+        // Explicit check: ensure no duplicates within the sequence
+        if (usedItemIds.has(itemId)) {
+          console.error(`[DyadicChat] ERROR: Duplicate item ID ${itemId} detected in sequence! Skipping.`);
+          return; // Skip this item
+        }
         usedItemIds.add(itemId);
         sequence.push({ item, category });
       });
     }
 
     // Shuffle the sequence to randomize order across categories
-    sequence.sort(() => Math.random() - 0.5);
+    // Use Fisher-Yates shuffle for better randomness
+    for (let i = sequence.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [sequence[i], sequence[j]] = [sequence[j], sequence[i]];
+    }
   }
 
-  console.log(`[DyadicChat] Generated question sequence with ${sequence.length} questions. NO items marked yet - marking happens after surveys`);
+  // Final validation: check for duplicates in the final sequence
+  const finalIds = new Set();
+  const duplicates = [];
+  sequence.forEach((q, idx) => {
+    const itemId = q.item.id || q.item.sample_id || String(q.item);
+    if (finalIds.has(itemId)) {
+      duplicates.push({ index: idx, id: itemId });
+    } else {
+      finalIds.add(itemId);
+    }
+  });
+
+  if (duplicates.length > 0) {
+    console.error(`[DyadicChat] ERROR: Found ${duplicates.length} duplicate items in final sequence:`, duplicates);
+    // Remove duplicates, keeping only the first occurrence
+    const seen = new Set();
+    const uniqueSequence = [];
+    sequence.forEach(q => {
+      const itemId = q.item.id || q.item.sample_id || String(q.item);
+      if (!seen.has(itemId)) {
+        seen.add(itemId);
+        uniqueSequence.push(q);
+      }
+    });
+    console.warn(`[DyadicChat] Removed duplicates, sequence length changed from ${sequence.length} to ${uniqueSequence.length}`);
+    sequence.length = 0;
+    sequence.push(...uniqueSequence);
+  }
+
+  console.log(`[DyadicChat] Generated question sequence with ${sequence.length} unique questions. NO items marked yet - marking happens after surveys`);
+  // Log all item IDs in sequence for debugging
+  const sequenceIds = sequence.map(q => q.item.id || q.item.sample_id || String(q.item));
+  console.log(`[DyadicChat] Sequence item IDs: ${sequenceIds.join(', ')}`);
   return sequence;
 }
 
