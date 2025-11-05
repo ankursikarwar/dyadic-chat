@@ -63,7 +63,7 @@ try {
       jsonFile = 'sampled_counting.json';
       break;
     case 'anchor':
-      jsonFile = 'sampled_anchor.json';
+      jsonFile = 'sampled_anchor_v2.json';
       break;
     case 'relative_distance':
       jsonFile = 'sampled_relative_distance.json';
