@@ -132,6 +132,7 @@
     .consent-box h2 { margin: 0 0 12px 0; }
   </style>
   <ol class="nice">
+    <li>NOTE: This is an initial pilot and timing is not finalized yet. The payment will be adjusted accordingly.</li>
     <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
     <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
     <li>Task Details (Read Carefully):
@@ -151,9 +152,9 @@
         <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
       </ol>
     </li>
-    <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button.</li>
+    <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
     <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
-    <li style="color: #ff6666;"><strong style="color: #ff6666;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, you might NOT BE GIVEN PAYMENT.</strong></li>
+    <li style="color: #ff6666;"><strong style="color: #ff6666;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
     <li>You will attempt 3 total questions in the entire session. For different questions, the Answerer or the Helper role can be assigned to either you or your partner.</li>
     <li>You may zoom in on the image to inspect details.</li>
     <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
@@ -503,7 +504,7 @@
       function showTypingIndicator(){
         const chatbox = document.getElementById('dc-chat');
         if (!chatbox) return;
-        
+
         // Check if typing indicator already exists
         let indicator = document.getElementById('dc-typing-indicator');
         if (!indicator) {
@@ -520,7 +521,7 @@
           indicator.appendChild(bubble);
           chatbox.appendChild(indicator);
         }
-        
+
         indicator.classList.add('show');
         chatbox.scrollTop = chatbox.scrollHeight;
       }
@@ -542,10 +543,10 @@
           return;
         }
         console.log('[DyadicChat] sendMsg - sending message, myTurn:', myTurn, 'chatClosed:', chatClosed);
-        
+
         // Stop typing indicator when sending message
         stopTyping();
-        
+
         addLine('Me', text);
         msgCount += 1; updateMessages();
 
@@ -1199,26 +1200,26 @@
         startHeartbeat(); // Start heartbeat monitoring
       });
 
-      socket.on('chat:message', function(msg){ 
+      socket.on('chat:message', function(msg){
         // Hide typing indicator when message is received
         hideTypingIndicator();
         if (partnerTypingTimeout) {
           clearTimeout(partnerTypingTimeout);
           partnerTypingTimeout = null;
         }
-        addLine('Partner', msg.text); 
-        msgCount += 1; 
-        updateMessages(); 
+        addLine('Partner', msg.text);
+        msgCount += 1;
+        updateMessages();
       });
       socket.on('typing:start', function(){
         // Show typing indicator
         showTypingIndicator();
-        
+
         // Clear existing timeout
         if (partnerTypingTimeout) {
           clearTimeout(partnerTypingTimeout);
         }
-        
+
         // Auto-hide after 5 seconds if no message is received
         partnerTypingTimeout = setTimeout(() => {
           hideTypingIndicator();
@@ -1269,7 +1270,7 @@
       });
       socket.on('chat:closed', function(){
         chatClosed = true;
-        
+
         // Stop typing indicator and hide partner's typing indicator
         stopTyping();
         hideTypingIndicator();
@@ -1277,7 +1278,7 @@
           clearTimeout(partnerTypingTimeout);
           partnerTypingTimeout = null;
         }
-        
+
         updateMessages();
 
         // Track chat end time
@@ -1298,7 +1299,7 @@
       socket.on('chat:early_termination', function(){
         console.log('[DyadicChat] Other user ended chat early');
         chatClosed = true;
-        
+
         // Stop typing indicator and hide partner's typing indicator
         stopTyping();
         hideTypingIndicator();
@@ -1306,7 +1307,7 @@
           clearTimeout(partnerTypingTimeout);
           partnerTypingTimeout = null;
         }
-        
+
         updateMessages();
 
         // Track chat end time
@@ -1371,7 +1372,7 @@
           msgCount = 0;
           chatClosed = false;
           myTurn = false; // Will be set by turn:you or turn:wait from server
-          
+
           // Reset typing indicator state
           stopTyping();
           hideTypingIndicator();
