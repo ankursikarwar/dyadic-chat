@@ -140,16 +140,16 @@
     <li>You and your partner will have a maximum of ${minMessages} messages each that you can send to each other.</li>
     <li>Note (taking turns in the conversation):
       <ol type="a">
-        <li>The answerer sends the first message.</li>
+        <li>The Answerer sends the first message.</li>
         <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
       </ol>
     </li>
     <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button.</li>
     <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
-    <li>You will attempt 3 total questions in your trial. For different questions, the Answerer or the Helper role can be assigned to either you or your partner.</li>
+    <li style="color: #ff6666;"><strong style="color: #ff6666;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, you might NOT BE GIVEN PAYMENT.</strong></li>
+    <li>You will attempt 3 total questions in the entire session. For different questions, the Answerer or the Helper role can be assigned to either you or your partner.</li>
     <li>You may zoom in on the image to inspect details.</li>
     <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
-    <li>IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate hastily or do not engage properly, you might NOT BE GIVEN PAYMENT.</li>
     <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded. </li>
   </ol>
   </div>
