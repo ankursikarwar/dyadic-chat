@@ -180,7 +180,7 @@
               `;
       case 'anchor':
         return `<li style="color: #8bd5ff;"><strong>The task is to find the object that is common in both your and your partner’s views.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Only one of the objects in the options will be common to both the views, while the other objects in the options will be present in only one of the views of the room - either of the answerer or the helper.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Only one of the objects in the options will be common to both the views. Other objects in the options will be present in only one of the views of the room - either of the Answerer or the Helper.</strong></li>
               `;
       case 'relative_distance':
         return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
