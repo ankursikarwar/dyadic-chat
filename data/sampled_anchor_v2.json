@@ -90,5 +90,51 @@
         ],
         "asking_to": "agent_1",
         "correct_answer": "window near a white shelf"
+    },
+    {
+        "sample_id": "anchor_00001",
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "5fc75bc2",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "wall art located next to a white toilet",
+            "window near a white shelf",
+            "window with the purple curtains",
+            "green shelf"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 1,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "window near a white shelf",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.10748674762730026,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Window 12"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "window near a white shelf"
     }
 ]
