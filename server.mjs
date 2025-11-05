@@ -66,7 +66,7 @@ try {
       jsonFile = 'sampled_spatial.json';
       break;
     case 'perspective_taking':
-      jsonFile = 'perspective_taking.json';
+      jsonFile = 'sampled_perspective.json';
       break;
     default:
       jsonFile = 'items.json'; // Default for 'all_types' or unknown
