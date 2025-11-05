@@ -60,19 +60,19 @@ try {
   let jsonFile = 'items.json'; // Default
   switch (QUESTION_TYPE) {
     case 'counting':
-      jsonFile = 'sampled_counting.json';
+      jsonFile = 'sampled_counting_v4.json';
       break;
     case 'anchor':
-      jsonFile = 'sampled_anchor.json';
+      jsonFile = 'sampled_anchor_v4.json';
       break;
     case 'relative_distance':
-      jsonFile = 'sampled_relative_distance.json';
+      jsonFile = 'sampled_relative_distance_v4.json';
       break;
     case 'spatial':
-      jsonFile = 'sampled_spatial.json';
+      jsonFile = 'sampled_spatial_v4.json';
       break;
     case 'perspective_taking':
-      jsonFile = 'sampled_perspective.json';
+      jsonFile = 'sampled_perspective_v4.json';
       break;
     default:
       jsonFile = 'items.json'; // Default for 'all_types' or unknown

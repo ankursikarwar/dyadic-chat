@@ -1,0 +1,107 @@
+[
+    {
+        "sample_id": "perspective_taking_00000",
+        "question_type": "perspective_taking",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "47b762b1",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/47b762b1/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/47b762b1/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "From your partner's perspective, in which direction is the window with the purple curtains?",
+        "user_2_question": null,
+        "options_user_1": [
+            "front-left",
+            "front-right",
+            "behind-right",
+            "behind-left"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "front-left",
+        "user_2_gt_answer_text": null,
+        "difficulty": 2,
+        "description_difficulty": [
+            0
+        ],
+        "angle": 304.94059708302194,
+        "distance": 6.340578188867063,
+        "asking_to": "agent_1",
+        "question_object": "Window",
+        "correct_answer": "front-left"
+    },
+    {
+        "sample_id": "perspective_taking_00001",
+        "question_type": "perspective_taking",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "5ffad35e",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/5ffad35e/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/5ffad35e/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/5ffad35e/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/5ffad35e/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "From your partner's perspective, in which direction is the yellow shelf?",
+        "options_user_1": null,
+        "options_user_2": [
+            "front",
+            "behind",
+            "left",
+            "right"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 3,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "right",
+        "difficulty": 1,
+        "description_difficulty": [
+            0
+        ],
+        "angle": 75.98008017909223,
+        "distance": 4.2253787031604695,
+        "asking_to": "agent_2",
+        "question_object": "Shelf",
+        "correct_answer": "right"
+    },
+    {
+        "sample_id": "perspective_taking_00002",
+        "question_type": "perspective_taking",
+        "room_part": "Bedroom_v3001_Final_Part3",
+        "scene_id": "7c80f1d2",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/7c80f1d2/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/7c80f1d2/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part3/7c80f1d2/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part3/7c80f1d2/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "From your partner's perspective, in which direction is the cabinet that is near a computer monitor?",
+        "options_user_1": null,
+        "options_user_2": [
+            "front-left",
+            "behind-right",
+            "behind-left",
+            "front-right"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 3,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "front-right",
+        "difficulty": 2,
+        "description_difficulty": [
+            2
+        ],
+        "angle": 66.3819595220557,
+        "distance": 4.709901683507221,
+        "asking_to": "agent_2",
+        "question_object": "Cabinet",
+        "correct_answer": "front-right"
+    }
+]

@@ -1,0 +1,104 @@
+[
+    {
+        "sample_id": "spatial_00000",
+        "question_type": "spatial_orientation",
+        "room_part": "LivingRoom_v3001_Final_Part4_1",
+        "scene_id": "3158573",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/3158573/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/3158573/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/LivingRoom_v3001_Final_Part4_1/3158573/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image": "/img/LivingRoom_v3001_Final_Part4_1/3158573/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "From your perspective, in which direction is the door that is next to a red cabinet?",
+        "user_2_question": null,
+        "options_user_1": [
+            "right",
+            "front",
+            "left",
+            "behind"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "right",
+        "user_2_gt_answer_text": null,
+        "difficulty": 1,
+        "description_difficulty": [
+            2
+        ],
+        "angle": 82.5138014615784,
+        "distance": 3.6752167891263974,
+        "question_object": "Door",
+        "correct_answer": "right"
+    },
+    {
+        "sample_id": "spatial_00001",
+        "question_type": "spatial_orientation",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "186695",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/186695/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/186695/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/186695/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/186695/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "From your perspective, in which direction is the door that is next to a piece of wall art?",
+        "options_user_1": null,
+        "options_user_2": [
+            "front",
+            "left",
+            "right",
+            "behind"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 1,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "left",
+        "difficulty": 1,
+        "description_difficulty": [
+            2
+        ],
+        "angle": 261.5296958458915,
+        "distance": 1.616772866459606,
+        "question_object": "Door",
+        "correct_answer": "left"
+    }, 
+    {
+        "sample_id": "spatial_00002",
+        "question_type": "spatial_orientation",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "2a4c0c59",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/2a4c0c59/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/2a4c0c59/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/2a4c0c59/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/2a4c0c59/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "From your perspective, in which direction is the blue cabinet?",
+        "user_2_question": null,
+        "options_user_1": [
+            "front-right",
+            "behind-left",
+            "behind-right",
+            "front-left"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 3,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "front-left",
+        "user_2_gt_answer_text": null,
+        "difficulty": 2,
+        "description_difficulty": [
+            0
+        ],
+        "angle": 298.2288922092425,
+        "distance": 3.9650075766475665,
+        "question_object": "Cabinet",
+        "correct_answer": "front-left"
+    }
+]

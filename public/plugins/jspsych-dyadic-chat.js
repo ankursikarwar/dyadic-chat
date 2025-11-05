@@ -443,7 +443,7 @@
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
         setTimeout(() => {
-          window.location.href = 'https://app.prolific.com/submissions/complete?cc=CSI75HQB';
+          window.location.href = 'https://app.prolific.com/submissions/complete?cc=CSCCU793';
         }, 2000); // 2 second delay to show completion message
       }
 

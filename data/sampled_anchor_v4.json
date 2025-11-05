@@ -1,0 +1,145 @@
+[
+    {
+        "sample_id": "anchor_00000",
+        "question_type": "anchor",
+        "room_part": "Bedroom_v3001_Final_Part3",
+        "scene_id": "63246990",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/63246990/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/63246990/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part3/63246990/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part3/63246990/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "options_user_1": null,
+        "options_user_2": [
+            "dark brown shelf",
+            "red shelf",
+            "lamp next to a dark brown shelf",
+            "bed with white bedframe"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 2,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "lamp next to a dark brown shelf",
+        "difficulty": 0.008941852850305132,
+        "description_difficulty": [
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Large Shelf 1",
+            "Simple Bookcase 1"
+        ],
+        "asking_to": "agent_2",
+        "correct_answer": "lamp next to a dark brown shelf"
+    },
+    {
+        "sample_id": "anchor_00001",
+        "question_type": "anchor",
+        "room_part": "Bedroom_v3001_Final_Part3_1",
+        "scene_id": "ec4665d",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3_1/ec4665d/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3_1/ec4665d/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part3_1/ec4665d/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part3_1/ec4665d/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "bed near a beige lamp",
+            "lamp near a window with shutter",
+            "window with shutter",
+            "computer monitor near a window with shutter"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "bed near a beige lamp",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.18633411891942137,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ],
+            [
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Desk Lamp 1",
+            "Window 14",
+            "Monitor 1"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "bed near a beige lamp"
+    },
+    {
+        "sample_id": "anchor_00002",
+        "question_type": "anchor",
+        "room_part": "Bedroom_v3001_Final_Part3_1",
+        "scene_id": "12e3872c",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3_1/12e3872c/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3_1/12e3872c/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part3_1/12e3872c/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part3_1/12e3872c/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "beige floor lamp next to a white plant container",
+            "lamp near a white cabinet",
+            "cabinet near a brown plant container",
+            "green cabinet"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 3,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "green cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.03664660572459032,
+        "description_difficulty": [
+            [
+                0,
+                1,
+                2
+            ],
+            [
+                2
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Floor Lamp 2"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "green cabinet"
+    }
+]
