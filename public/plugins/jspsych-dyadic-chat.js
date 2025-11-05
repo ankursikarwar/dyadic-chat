@@ -51,6 +51,13 @@
       '.dc-bubble { display:inline-block; padding:6px 12px; border-radius:12px; border:1px solid var(--border-soft); max-width:85%; word-wrap:break-word; box-shadow: 0 1px 0 rgba(255,255,255,0.02), 0 2px 8px rgba(0,0,0,0.25); }',
       '.dc-bubble-me { background:rgba(125, 211, 252, 0.08); color:#8bd5ff; }',
       '.dc-bubble-partner { background:rgba(255, 77, 79, 0.08); color:#ff6b6e; }',
+      '.dc-typing-indicator { display:none; margin-bottom:10px; }',
+      '.dc-typing-indicator.show { display:block; }',
+      '.dc-typing-dots { display:inline-block; }',
+      '.dc-typing-dots span { animation:dcTyping 1.4s infinite; }',
+      '.dc-typing-dots span:nth-child(2) { animation-delay:0.2s; }',
+      '.dc-typing-dots span:nth-child(3) { animation-delay:0.4s; }',
+      '@keyframes dcTyping { 0%, 60%, 100% { opacity:0.3; } 30% { opacity:1; } }',
       '.dc-controls { margin-top:4px; background:transparent; border:none; border-radius:0; padding:0; display:grid; grid-template-columns: 1fr auto; column-gap:8px; box-shadow:none; align-items:end; }',
       '.dc-input { flex:1; width:100%; min-width:0; box-sizing:border-box; padding:12px 14px; font-size:14px; border-radius:10px; border:1px solid var(--border); background:#0c0c0d; color:#fff; outline:none; }',
       '.dc-textarea{ resize:none; height:auto; min-height:40px; max-height:120px; overflow-y:auto; line-height:1.35; padding:12px 14px; }',
@@ -429,6 +436,9 @@
       let answerOptions = null; // Store the answer options array
       let t0 = null; // Will be set when users get paired
       let pendingTurnEvent = null; // Store turn event if it arrives before UI is ready
+      let typingTimeout = null; // Timeout for stopping typing indicator
+      let isTyping = false; // Track if user is currently typing
+      let partnerTypingTimeout = null; // Timeout for hiding partner's typing indicator
 
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
@@ -490,6 +500,40 @@
         box.scrollTop = box.scrollHeight;
       }
 
+      function showTypingIndicator(){
+        const chatbox = document.getElementById('dc-chat');
+        if (!chatbox) return;
+        
+        // Check if typing indicator already exists
+        let indicator = document.getElementById('dc-typing-indicator');
+        if (!indicator) {
+          // Create typing indicator if it doesn't exist
+          indicator = document.createElement('div');
+          indicator.id = 'dc-typing-indicator';
+          indicator.className = 'dc-typing-indicator dc-row dc-partner';
+          const bubble = document.createElement('span');
+          bubble.className = 'dc-bubble dc-bubble-partner';
+          const typingDots = document.createElement('span');
+          typingDots.className = 'dc-typing-dots';
+          typingDots.innerHTML = 'Partner is typing<span>.</span><span>.</span><span>.</span>';
+          bubble.appendChild(typingDots);
+          indicator.appendChild(bubble);
+          chatbox.appendChild(indicator);
+        }
+        
+        indicator.classList.add('show');
+        chatbox.scrollTop = chatbox.scrollHeight;
+      }
+
+      function hideTypingIndicator(){
+        const indicator = document.getElementById('dc-typing-indicator');
+        if (indicator) {
+          indicator.classList.remove('show');
+          // Optionally remove the element after a delay to clean up
+          // But keeping it is fine for performance
+        }
+      }
+
       function sendMsg(){
         const el = document.getElementById('dc-msg');
         const text = (el && el.value || '').trim(); if (!text) return;
@@ -498,6 +542,10 @@
           return;
         }
         console.log('[DyadicChat] sendMsg - sending message, myTurn:', myTurn, 'chatClosed:', chatClosed);
+        
+        // Stop typing indicator when sending message
+        stopTyping();
+        
         addLine('Me', text);
         msgCount += 1; updateMessages();
 
@@ -513,6 +561,14 @@
 
       function endChatEarly(){
         console.log('[DyadicChat] User clicked End Chat Early button');
+
+        // Stop typing indicator
+        stopTyping();
+        hideTypingIndicator();
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+          partnerTypingTimeout = null;
+        }
 
         // Emit event to server that this user is ending the chat early
         socket.emit('chat:early_termination');
@@ -910,8 +966,51 @@
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               sendMsg();
+              // Stop typing indicator when message is sent
+              stopTyping();
             }
           });
+
+          // Typing indicator functionality
+          msgEl.addEventListener('input', () => {
+            if (!chatClosed) {
+              handleTyping();
+            }
+          });
+
+          msgEl.addEventListener('blur', () => {
+            // Stop typing indicator when user leaves the input field
+            stopTyping();
+          });
+        }
+      }
+
+      function handleTyping(){
+        // Clear existing timeout
+        if (typingTimeout) {
+          clearTimeout(typingTimeout);
+        }
+
+        // If not already typing, emit typing start event
+        if (!isTyping) {
+          isTyping = true;
+          socket.emit('typing:start');
+        }
+
+        // Set timeout to stop typing after 3 seconds of inactivity
+        typingTimeout = setTimeout(() => {
+          stopTyping();
+        }, 3000);
+      }
+
+      function stopTyping(){
+        if (isTyping) {
+          isTyping = false;
+          socket.emit('typing:stop');
+        }
+        if (typingTimeout) {
+          clearTimeout(typingTimeout);
+          typingTimeout = null;
         }
       }
 
@@ -1100,7 +1199,39 @@
         startHeartbeat(); // Start heartbeat monitoring
       });
 
-      socket.on('chat:message', function(msg){ addLine('Partner', msg.text); msgCount += 1; updateMessages(); });
+      socket.on('chat:message', function(msg){ 
+        // Hide typing indicator when message is received
+        hideTypingIndicator();
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+          partnerTypingTimeout = null;
+        }
+        addLine('Partner', msg.text); 
+        msgCount += 1; 
+        updateMessages(); 
+      });
+      socket.on('typing:start', function(){
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Clear existing timeout
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+        }
+        
+        // Auto-hide after 5 seconds if no message is received
+        partnerTypingTimeout = setTimeout(() => {
+          hideTypingIndicator();
+        }, 5000);
+      });
+      socket.on('typing:stop', function(){
+        // Hide typing indicator
+        hideTypingIndicator();
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+          partnerTypingTimeout = null;
+        }
+      });
       socket.on('turn:you', function(){
         console.log('[DyadicChat] Received turn:you event - enabling send button');
         myTurn = true;
@@ -1138,6 +1269,15 @@
       });
       socket.on('chat:closed', function(){
         chatClosed = true;
+        
+        // Stop typing indicator and hide partner's typing indicator
+        stopTyping();
+        hideTypingIndicator();
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+          partnerTypingTimeout = null;
+        }
+        
         updateMessages();
 
         // Track chat end time
@@ -1158,6 +1298,15 @@
       socket.on('chat:early_termination', function(){
         console.log('[DyadicChat] Other user ended chat early');
         chatClosed = true;
+        
+        // Stop typing indicator and hide partner's typing indicator
+        stopTyping();
+        hideTypingIndicator();
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+          partnerTypingTimeout = null;
+        }
+        
         updateMessages();
 
         // Track chat end time
@@ -1222,6 +1371,15 @@
           msgCount = 0;
           chatClosed = false;
           myTurn = false; // Will be set by turn:you or turn:wait from server
+          
+          // Reset typing indicator state
+          stopTyping();
+          hideTypingIndicator();
+          if (partnerTypingTimeout) {
+            clearTimeout(partnerTypingTimeout);
+            partnerTypingTimeout = null;
+          }
+          isTyping = false;
 
           // Update pairedPayload with new question data (used by updateMessages)
           pairedPayload = p;

@@ -631,6 +631,35 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Typing indicator handlers
+  socket.on('typing:start', () => {
+    const roomId = socket.currentRoom;
+    if (!roomId || !rooms.has(roomId)) {
+      return;
+    }
+    const room = rooms.get(roomId);
+    if (room.chatClosed) return;
+
+    const other = room.users.find(u => u.id !== socket.id);
+    if (other) {
+      io.to(other.id).emit('typing:start');
+    }
+  });
+
+  socket.on('typing:stop', () => {
+    const roomId = socket.currentRoom;
+    if (!roomId || !rooms.has(roomId)) {
+      return;
+    }
+    const room = rooms.get(roomId);
+    if (room.chatClosed) return;
+
+    const other = room.users.find(u => u.id !== socket.id);
+    if (other) {
+      io.to(other.id).emit('typing:stop');
+    }
+  });
+
   // Helper function to transition to next question or survey
   function moveToNextQuestionOrSurvey(room) {
     // Get current users BEFORE any updates
