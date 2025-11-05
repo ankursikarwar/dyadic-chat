@@ -1,7 +1,7 @@
 [
     {
         "sample_id": "spatial_00000",
-        "question_type": "spatial_orientation",
+        "question_type": "spatial",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "3158573",
         "global_map_image": null,
@@ -35,7 +35,7 @@
     },
     {
         "sample_id": "spatial_00001",
-        "question_type": "spatial_orientation",
+        "question_type": "spatial",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "186695",
         "global_map_image": null,
@@ -69,7 +69,7 @@
     }, 
     {
         "sample_id": "spatial_00002",
-        "question_type": "spatial_orientation",
+        "question_type": "spatial",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "2a4c0c59",
         "global_map_image": null,
