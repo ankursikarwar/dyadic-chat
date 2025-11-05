@@ -20,11 +20,11 @@ const QUESTION_TYPE = process.env.QUESTION_TYPE || 'all_types';
 // Dictionary specifying number of questions per category
 // Can be overridden via environment variable QUESTIONS_PER_CATEGORY (JSON string)
 const QUESTIONS_PER_CATEGORY_DEFAULT = {
-  'counting': 2,
-  'spatial': 2,
-  'anchor': 2,
-  'relative_distance': 2,
-  'perspective_taking': 2
+  'counting': 3,
+  'spatial': 3,
+  'anchor': 3,
+  'relative_distance': 3,
+  'perspective_taking': 3
 };
 let QUESTIONS_PER_CATEGORY = QUESTIONS_PER_CATEGORY_DEFAULT;
 try {
