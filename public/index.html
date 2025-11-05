@@ -119,18 +119,18 @@
 
                 <div style="margin-top: 30px; text-align: center;">
                   <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Counting)</h2>
-                  
-                  
+
+
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                       <div style="flex: 1;">
-                        <p><strong>Question for the Answerer:</strong> What is the total number of lamps in the room?</p>
+                        <p><strong>Question for the Answerer:</strong> What is the total number of doors in the room?</p>
                         <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
-                          <li>4</li>
                           <li>3</li>
-                          <li>5</li>
-                          <li>6</li>
+                          <li>2</li>
+                          <li>4</li>
+                          <li>1</li>
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
@@ -138,8 +138,8 @@
                       </div>
                     </div>
                   </div>
-                  
-                  
+
+
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
@@ -175,7 +175,7 @@
                     </div>
                   </div> -->
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
-                    
+
                   </div>
                 </div>
 
@@ -186,7 +186,7 @@
                    <li style="color: #8bd5ff;"><strong>3</strong></li>
                    <li style="color: #8bd5ff;"><strong>1</strong></li>
                    <li style="color: #8bd5ff;"><strong>2</strong></li>
-                 </ol> 
+                 </ol>
                 <li style="color: #8bd5ff;"><strong>You have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
                 <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li> -->
@@ -204,16 +204,14 @@
 
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
-                    <!-- <p><strong>Question for you:</strong> From your perspective, where is the light green cushioned sofa with a rounded back, fabric upholstery, and a cylindrical armrest on the right side located?</p> -->
-                    <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
                       <div style="flex: 1;">
-                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Question for the Answerer:</strong>From your perspective, in which direction is the window that is near a brown plant container?</p>
                         <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
                           <li>left</li>
-                          <li>behind-right</li>
-                          <li>front-right</li>
                           <li>behind</li>
+                          <li>right</li>
+                          <li>front</li>
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
@@ -272,16 +270,16 @@
 
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
-                    <!-- <p><strong>Question for you:</strong> From your perspective, where is the light green cushioned sofa with a rounded back, fabric upholstery, and a cylindrical armrest on the right side located?</p> -->
+                    <!-- <p><strong>Question for you:</strong> Which of the following objects is present in both your and your partner's views of the room?</p> -->
                     <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
                       <div style="flex: 1;">
-                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Question for the Answerer:</strong> Which of the following objects is present in both your and your partner's views of the room?</p>
                         <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
-                          <li>left</li>
-                          <li>behind-right</li>
-                          <li>front-right</li>
-                          <li>behind</li>
+                          <li>lamp near a window with red curtains</li>
+                          <li>door near a beige lamp</li>
+                          <li>computer monitor near a bed with beige bedframe</li>
+                          <li>computer monitor near a dark brown cabinet</li>
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
@@ -339,6 +337,7 @@
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
                 -->
               </li>`;
+
           case 'relative_distance':
             return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
                 <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
@@ -350,13 +349,13 @@
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                       <div style="flex: 1;">
-                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Question for the Answerer:</strong>Which of the following objects is farthest from the plant container near a brown window?</p>
                         <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
-                          <li>left</li>
-                          <li>behind-right</li>
-                          <li>front-right</li>
-                          <li>behind</li>
+                          <li>dark brown cabinet</li>
+                          <li>lamp next to a brown window</li>
+                          <li>computer monitor on a white desk</li>
+                          <li>desk near a window with purple curtains</li>
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
@@ -420,7 +419,8 @@
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
                 -->
               </li>`;
-        case 'perspective_taking':
+
+          case 'perspective_taking':
           return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
                 <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
                 <li style="color: #8bd5ff;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
@@ -431,16 +431,14 @@
 
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
-                    <!-- <p><strong>Question for you:</strong> From your perspective, where is the light green cushioned sofa with a rounded back, fabric upholstery, and a cylindrical armrest on the right side located?</p> -->
-                    <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
                       <div style="flex: 1;">
-                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Question for the Answerer:</strong>From your partner's perspective, in which direction is the blue cabinet?</p>
                         <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
-                          <li>left</li>
+                          <li>front-left</li>
                           <li>behind-right</li>
                           <li>front-right</li>
-                          <li>behind</li>
+                          <li>behind-left</li>
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">

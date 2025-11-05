@@ -38,9 +38,13 @@ try {
   console.warn('[DyadicChat] Failed to parse QUESTIONS_PER_CATEGORY, using defaults:', e.message);
 }
 
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0 }));
+app.use(express.static(path.join(__dirname, 'public'), { maxAge: 0, etag: false, lastModified: false }));
 app.get('/', (_req, res) => {
-  res.set('Cache-Control','no-store');
+  res.set('Cache-Control','no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.set('Pragma','no-cache');
+  res.set('Expires','0');
+  res.set('ETag', Date.now().toString()); // Force unique ETag on every request
+  res.set('Last-Modified', new Date().toUTCString()); // Force new timestamp
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 app.get('/api/config', (_req, res) => {
