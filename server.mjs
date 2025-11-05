@@ -197,6 +197,7 @@ function nextItem(){
 function sampleQuestionsByCategory(category, count, excludeIds = new Set()) {
   const categoryItems = items.filter(item => {
     const itemType = item.question_type || 'unknown';
+    console.warn(`[DyadicChat] Item type: ${itemType}, category: ${category}`);
     const itemId = item.id || item.sample_id || String(item);
     // Exclude items that are already marked in deck state OR in excludeIds
     return itemType === category &&
