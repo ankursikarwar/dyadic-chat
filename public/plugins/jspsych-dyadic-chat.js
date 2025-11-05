@@ -162,28 +162,28 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find the count of a given object category.</strong></li>
-                <li style="color: #ff6666;"><strong>You and your partner must make sure that you are counting the total number of unique objects of that category in the room while preventing overcounting or undercounting.</strong></li>
+        return `<li style="color: #8bd5ff;"><strong>The task is to find the count of a given object category.</strong></li>
+                <li style="color: #8bd5ff;"><strong>You and your partner must make sure that you are counting the total number of unique objects of that category in the room while preventing overcounting or undercounting.</strong></li>
               `;
       case 'spatial':
-        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
-                <li style="color: #ff6666;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information exchanged to infer its direction relative to themselves.</strong></li>
-                <li style="color: #ff6666;"><strong>The options will be different possible directions such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
-                <li style="color: #ff6666;"><strong>Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
+        return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information exchanged to infer its direction relative to themselves.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The options will be different possible directions such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
               `;
       case 'anchor':
-        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find the object that is common in both your and your partner’s views.</strong></li>
-                <li style="color: #ff6666;"><strong>Only one of the objects in the options will be common to both the views, while the other objects in the options will be present in only one of the views of the room - either of the answerer or the helper.</strong></li>
+        return `<li style="color: #8bd5ff;"><strong>The task is to find the object that is common in both your and your partner’s views.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Only one of the objects in the options will be common to both the views, while the other objects in the options will be present in only one of the views of the room - either of the answerer or the helper.</strong></li>
               `;
       case 'relative_distance':
-        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
-                <li style="color: #ff6666;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
+        return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
               `;
       case 'perspective_taking':
-        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
-                <li style="color: #ff6666;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
-                <li style="color: #ff6666;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
-                <li style="color: #ff6666;"><strong>Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
+        return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
               `;
       default:
         return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
