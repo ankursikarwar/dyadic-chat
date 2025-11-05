@@ -1,0 +1,375 @@
+[
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "7b07c83",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/7b07c83/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/7b07c83/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/7b07c83/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/7b07c83/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is farthest from a window located next to a dark brown cabinet?",
+        "user_2_question": null,
+        "options_user_1": [
+            "cabinet located next to a brown plant container",
+            "white cabinet",
+            "white desk located next to a black window",
+            "window with the purple curtains"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 1,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "white cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 4.078,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Window",
+        "correct_answer": "white cabinet"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "42b65c46",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is farthest from a plant container near a window with brown curtains?",
+        "options_user_1": null,
+        "options_user_2": [
+            "plant container next to a window with pink curtains",
+            "desk near a window with purple curtains",
+            "dark brown cabinet",
+            "yellow cabinet"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 2,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "dark brown cabinet",
+        "difficulty": 3.443,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Plant Container",
+        "correct_answer": "dark brown cabinet"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "42b65c46",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is nearest to a cabinet located next to a brown plant container?",
+        "user_2_question": null,
+        "options_user_1": [
+            "window near a computer monitor",
+            "window with purple curtains near a dark brown cabinet",
+            "yellow cabinet",
+            "computer monitor kept on a white desk"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 2,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "yellow cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 1.919,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Cabinet",
+        "correct_answer": "yellow cabinet"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "42b65c46",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is farthest from a cabinet located next to a brown plant container?",
+        "user_2_question": null,
+        "options_user_1": [
+            "floor lamp near a dark brown cabinet",
+            "computer monitor on a white desk",
+            "white cabinet",
+            "window with purple curtains near a dark brown cabinet"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 3,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "window with purple curtains near a dark brown cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 1.666,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Cabinet",
+        "correct_answer": "window with purple curtains near a dark brown cabinet"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "42b65c46",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/42b65c46/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/42b65c46/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is farthest from a window located next to a green cabinet?",
+        "user_2_question": null,
+        "options_user_1": [
+            "window with purple curtains near a dark brown cabinet",
+            "plant container next to a pink window",
+            "lamp near a white plant container",
+            "floor lamp near a dark brown cabinet"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "window with purple curtains near a dark brown cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 1.647,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Window",
+        "correct_answer": "window with purple curtains near a dark brown cabinet"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "4e5ccf43",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/4e5ccf43/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/4e5ccf43/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/4e5ccf43/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/4e5ccf43/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following object is nearest to a lamp near a window with the red curtains?",
+        "user_2_question": null,
+        "options_user_1": [
+            "green lamp",
+            "brown door next to a yellow cabinet",
+            "white plant container",
+            "window next to a white plant container"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "green lamp",
+        "user_2_gt_answer_text": null,
+        "difficulty": 1.996,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Lamp",
+        "correct_answer": "green lamp"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "5c8eb624",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/5c8eb624/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/5c8eb624/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/5c8eb624/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/5c8eb624/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is farthest from the bed located next to a wall art?",
+        "options_user_1": null,
+        "options_user_2": [
+            "small wall art",
+            "lamp near a green shelf",
+            "big wall art",
+            "white desk located next to a light brown shelf"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 0,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "small wall art",
+        "difficulty": 1.612,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Bed",
+        "correct_answer": "small wall art"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "47b762b1",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/47b762b1/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/47b762b1/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is nearest to a shelf located next to a bed with beige bedframe?",
+        "options_user_1": null,
+        "options_user_2": [
+            "window located next to a beige lamp",
+            "beige lamp located next to a beige window",
+            "plant container near a computer monitor",
+            "window with the purple curtains"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 3,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "window with the purple curtains",
+        "difficulty": 1.842,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Shelf",
+        "correct_answer": "window with the purple curtains"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "47b762b1",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/47b762b1/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/47b762b1/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is farthest from a door located next to a beige lamp?",
+        "user_2_question": null,
+        "options_user_1": [
+            "small shelf near a window with purple curtains",
+            "big shelf",
+            "window with purple curtains",
+            "window located next to a beige lamp"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "small shelf near a window with purple curtains",
+        "user_2_gt_answer_text": null,
+        "difficulty": 3.237,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Door",
+        "correct_answer": "small shelf near a window with purple curtains"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "45d0358d",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/45d0358d/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/45d0358d/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/45d0358d/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/45d0358d/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is nearest to a cabinet near a window with green curtains?",
+        "user_2_question": null,
+        "options_user_1": [
+            "lamp near a window with red curtains",
+            "blue cabinet",
+            "beige floor lamp next to a dark brown cabinet",
+            "lamp near a brown door"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 2,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "beige floor lamp next to a dark brown cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 2.837,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Cabinet",
+        "correct_answer": "beige floor lamp next to a dark brown cabinet"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "45d0358d",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/45d0358d/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/45d0358d/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/45d0358d/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/45d0358d/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is farthest from a cabinet near a window with green curtains?",
+        "user_2_question": null,
+        "options_user_1": [
+            "window near a bed with beige bedframe",
+            "door near a window with red curtains",
+            "door near a beige lamp",
+            "window next to a white cabinet"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "window near a bed with beige bedframe",
+        "user_2_gt_answer_text": null,
+        "difficulty": 1.894,
+        "description_difficulty": [
+            2
+        ],
+        "question_object": "Cabinet",
+        "correct_answer": "window near a bed with beige bedframe"
+    },
+    {
+        "question_type": "relative_distance",
+        "room_part": "Bedroom_v3001_Final_Part2",
+        "scene_id": "45d0358d",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/45d0358d/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/45d0358d/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part2/45d0358d/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part2/45d0358d/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is nearest to the black desk located next to a beige lamp?",
+        "options_user_1": null,
+        "options_user_2": [
+            "door near a beige lamp",
+            "blue cabinet",
+            "lamp near a red window",
+            "dark brown cabinet"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 3,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "dark brown cabinet",
+        "difficulty": 2.016,
+        "description_difficulty": [
+            0,
+            2
+        ],
+        "question_object": "Desk",
+        "correct_answer": "dark brown cabinet"
+    }
+]

@@ -54,13 +54,13 @@ try {
   let jsonFile = 'items.json'; // Default
   switch (QUESTION_TYPE) {
     case 'counting':
-      jsonFile = 'counting.json';
+      jsonFile = 'sampled_counting.json';
       break;
     case 'anchor':
-      jsonFile = 'anchor.json';
+      jsonFile = 'sampled_anchor.json';
       break;
     case 'relative_distance':
-      jsonFile = 'relative_distance.json';
+      jsonFile = 'sampled_relative_distance.json';
       break;
     case 'spatial':
       jsonFile = 'spatial_v1.json';
