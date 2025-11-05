@@ -65,146 +65,223 @@
     ].join('');
   }
 
+//   function generateSidebarInstructions(questionType, minMessages = 10) {
+//     console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType);
+//     const baseInstructions = `
+// <div class="instr instr-aesthetic">
+//   <style>
+//     .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
+//     .instr-aesthetic li { margin: 6px 0; }
+//     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
+//     .instr-aesthetic h2 { margin-bottom: 10px; }
+//     .consent-box h2 { margin: 0 0 12px 0; }
+// </style>
+//   <!-- <h2>Instructions</h2> -->
+//   <ol class="nice">
+//     <!-- <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
+//     <li>You and your partner will each see different views of the same room.</li>
+//     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+//     <li style="color: #ff6666;"><strong style="color: #ff6666;">For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
+//     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
+//     <li>You can send a maximum of ${minMessages} messages to your partner.</li>
+//     <li>You can submit an answer only after you have sent ${minMessages} messages to your partner.</li>
+//     <li>Strict turn-taking:
+//       <ol type="a">
+//         <li>You cannot send two consecutive messages to your partner.</li>
+//         <li>You must wait for your partner to reply before sending your next message.</li>
+//       </ol>
+//     </li>
+//     <li>You may zoom in on the image to inspect details.</li>
+//     <li>After the chat is completed, select the best option you think is correct and click "Submit Answer".</li>
+//     <li>Do not share personal information.</li> -->
+//     <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
+//     <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
+//     ${getQuestionTypeSpecificSidebarInstructions(questionType)}
+//     <li>You can submit an answer only after you have sent ${minMessages} total messages to your partner.</li>
+//     <li>Taking turns:
+//       <ol type="a">
+//         <li>Send a message only after your partner replies.</li>
+//         <li>No two consecutive messages from the same person.</li>
+//       </ol>
+//     </li>
+//     <li>You may zoom in on the image to inspect details.</li>
+//     <li>After the messages are completed, select the best option you think is correct and click "Submit Answer".</li>
+//     <li>Do not share personal information.</li>
+//   </ol>
+// </div>
+// `;
+//     return baseInstructions;
+//   }
+
   function generateSidebarInstructions(questionType, minMessages = 10) {
     console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType);
     const baseInstructions = `
-<div class="instr instr-aesthetic">
+  <div class="instr instr-aesthetic">
   <style>
     .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
     .instr-aesthetic li { margin: 6px 0; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
     .instr-aesthetic h2 { margin-bottom: 10px; }
     .consent-box h2 { margin: 0 0 12px 0; }
-</style>
-  <!-- <h2>Instructions</h2> -->
+  </style>
   <ol class="nice">
-    <!-- <li>This is a collaborative task. You will be paired with another participant to solve a question.</li>
-    <li>You and your partner will each see different views of the same room.</li>
-    <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
-    <li style="color: #ff6666;"><strong style="color: #ff6666;">For correctly answering the question, you will be rewarded with a bonus payment.</strong></li>
-    ${getQuestionTypeSpecificSidebarInstructions(questionType)}
-    <li>You can send a maximum of ${minMessages} messages to your partner.</li>
-    <li>You can submit an answer only after you have sent ${minMessages} messages to your partner.</li>
-    <li>Strict turn-taking:
-      <ol type="a">
-        <li>You cannot send two consecutive messages to your partner.</li>
-        <li>You must wait for your partner to reply before sending your next message.</li>
-      </ol>
-    </li>
-    <li>You may zoom in on the image to inspect details.</li>
-    <li>After the chat is completed, select the best option you think is correct and click "Submit Answer".</li>
-    <li>Do not share personal information.</li> -->
     <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
-    <li>You have to chat and collaborate with your partner in order to solve the question correctly.</li>
-    ${getQuestionTypeSpecificSidebarInstructions(questionType)}
-    <li>You can submit an answer only after you have sent ${minMessages} total messages to your partner.</li>
-    <li>Taking turns:
+    <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
+    <li>Task Details (Read Carefully):
       <ol type="a">
-        <li>Send a message only after your partner replies.</li>
-        <li>No two consecutive messages from the same person.</li>
+        <li>You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</li>
+        <li>One of you will be the Answerer and the other one will be the Helper.</li>
+        <li>If you are the Answerer, you will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</li>
+        <li>If you are the Helper, you won’t receive any question. Your task will be to help your partner (Answerer) to answer the question correctly.</li>
+        <li>Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</li>
+        ${getQuestionTypeSpecificSidebarInstructions(questionType)}
       </ol>
     </li>
+    <li>You and your partner will have a maximum of ${minMessages} messages each that you can send to each other.</li>
+    <li>Note (taking turns in the conversation):
+      <ol type="a">
+        <li>The answerer sends the first message.</li>
+        <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
+      </ol>
+    </li>
+    <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button.</li>
+    <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
+    <li>You will attempt 3 total questions in your trial. For different questions, the Answerer or the Helper role can be assigned to either you or your partner.</li>
     <li>You may zoom in on the image to inspect details.</li>
-    <li>After the messages are completed, select the best option you think is correct and click "Submit Answer".</li>
-    <li>Do not share personal information.</li>
+    <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
+    <li>IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate hastily or do not engage properly, you might NOT BE GIVEN PAYMENT.</li>
+    <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded. </li>
   </ol>
-</div>
-`;
+  </div>
+  `;
     return baseInstructions;
   }
+
+
 
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
-              <ol type="i">
-                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
-                 <li style="color: #8bd5ff;"><strong>Example Question: "What is the total number of lamps in the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
-                 <ol type="a" style="margin-left: 20px;">
-                   <li style="color: #8bd5ff;"><strong>4</strong></li>
-                   <li style="color: #8bd5ff;"><strong>3</strong></li>
-                   <li style="color: #8bd5ff;"><strong>5</strong></li>
-                   <li style="color: #8bd5ff;"><strong>6</strong></li>
-                 </ol>
-                <li style="color: #8bd5ff;"><strong>You might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
-              </ol>
-              </li>`;
+        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find the count of a given object category.</strong></li>
+                <li style="color: #ff6666;"><strong>You and your partner must make sure that you are counting the total number of unique objects of that category in the room while preventing overcounting or undercounting.</strong></li>
+              `;
       case 'spatial':
-        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
-          <ol type="i">
-          <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-          <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
-          <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to help their partner answer the question correctly.</strong></li>
-          <li style="color: #8bd5ff;"><strong>You can either be the person who has been given the question or the person who is helping the partner.</strong></li>
-          <li style="color: #8bd5ff;"><strong>Example Question: "From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
-          <ol type="a" style="margin-left: 20px;">
-            <li style="color: #8bd5ff;"><strong>left</strong></li>
-            <li style="color: #8bd5ff;"><strong>behind-right</strong></li>
-            <li style="color: #8bd5ff;"><strong>front-right</strong></li>
-            <li style="color: #8bd5ff;"><strong>behind</strong></li>
-          </ol>
-          <li style="color: #8bd5ff;"><strong>The object mentioned in the question will not be in the view of the person who has been given the question.</strong></li>
-          <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
-          <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
-        </ol>
-        </li>`;
+        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
+                <li style="color: #ff6666;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information exchanged to infer its direction relative to themselves.</strong></li>
+                <li style="color: #ff6666;"><strong>The options will be different possible directions such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #ff6666;"><strong>Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
+              `;
       case 'anchor':
-        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
-              <ol type="i">
-                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
-                 <li style="color: #8bd5ff;"><strong>Example Question: "Which object appears in both your view and your partner's view of the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
-                 <ol type="a" style="margin-left: 20px;">
-                   <li style="color: #8bd5ff;"><strong>tall white wooden cabinet with a single compartment</strong></li>
-                   <li style="color: #8bd5ff;"><strong>ceramic circular plant container</strong></li>
-                   <li style="color: #8bd5ff;"><strong>square canvas wall art with gray background</strong></li>
-                   <li style="color: #8bd5ff;"><strong>light pink fabric sofa with three cushions and rounded armrests</strong></li>
-                 </ol>
-                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
-              </ol>
-              </li>`;
+        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find the object that is common in both your and your partner’s views.</strong></li>
+                <li style="color: #ff6666;"><strong>Only one of the objects in the options will be common to both the views, while the other objects in the options will be present in only one of the views of the room - either of the answerer or the helper.</strong></li>
+              `;
       case 'relative_distance':
-        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
-              <ol type="i">
-                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Both of you will be given a two-choice question about the room with only one correct answer.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Example Question: "Which object among the options is closer to the sofa (long rectangular shape, rounded armrests, light beige patterned fabric)?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
-                <ol type="a" style="margin-left: 20px;">
-                  <li style="color: #8bd5ff;"><strong>rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks</strong></li>
-                  <li style="color: #8bd5ff;"><strong>tall light brown wooden shelf with two vertical columns containing books and small decorative items</strong></li>
-                </ol>
-                <li style="color: #8bd5ff;"><strong>The object mentioned in the question will be in both views. However, one of the objects in the options will only be in your view and the other object in the options will only be in your partner's view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
-              </ol>
-              </li>`;
+        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
+                <li style="color: #ff6666;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
+              `;
       case 'perspective_taking':
-        return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
-              <ol type="i">
-                <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to provide help to their partner.</strong></li>
-                <li style="color: #8bd5ff;"><strong>You can either be the person who has been given the question or the person who is helping the partner.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Example Question: "From your partner's perspective, where is the tall black wooden shelf with multiple square compartments filled with books and items located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
-                <ol type="a" style="margin-left: 20px;">
-                  <li style="color: #8bd5ff;"><strong>left</strong></li>
-                  <li style="color: #8bd5ff;"><strong>behind-right</strong></li>
-                  <li style="color: #8bd5ff;"><strong>front-right</strong></li>
-                  <li style="color: #8bd5ff;"><strong>behind</strong></li>
-                </ol>
-                <li style="color: #8bd5ff;"><strong>The object mentioned in the question will only be in the view of the person who has been given the question. And not in the view of the other person.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
-              </ol>
-              </li>`;
+        return `<li style="color: #ff6666;"><strong style="color: #ff6666;">In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
+                <li style="color: #ff6666;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
+                <li style="color: #ff6666;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #ff6666;"><strong>Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
+              `;
       default:
         return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
     }
   }
+
+  // function getQuestionTypeSpecificSidebarInstructions(questionType) {
+  //   switch(questionType) {
+  //     case 'counting':
+  //       return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+  //             <ol type="i">
+  //               <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+  //                <li style="color: #8bd5ff;"><strong>Example Question: "What is the total number of lamps in the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+  //                <ol type="a" style="margin-left: 20px;">
+  //                  <li style="color: #8bd5ff;"><strong>4</strong></li>
+  //                  <li style="color: #8bd5ff;"><strong>3</strong></li>
+  //                  <li style="color: #8bd5ff;"><strong>5</strong></li>
+  //                  <li style="color: #8bd5ff;"><strong>6</strong></li>
+  //                </ol>
+  //               <li style="color: #8bd5ff;"><strong>You might see 1 lamp in your view and your partner might see 2 lamps in their view. You both might also be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+  //               <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
+  //             </ol>
+  //             </li>`;
+  //     case 'spatial':
+  //       return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+  //         <ol type="i">
+  //         <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+  //         <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+  //         <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to help their partner answer the question correctly.</strong></li>
+  //         <li style="color: #8bd5ff;"><strong>You can either be the person who has been given the question or the person who is helping the partner.</strong></li>
+  //         <li style="color: #8bd5ff;"><strong>Example Question: "From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+  //         <ol type="a" style="margin-left: 20px;">
+  //           <li style="color: #8bd5ff;"><strong>left</strong></li>
+  //           <li style="color: #8bd5ff;"><strong>behind-right</strong></li>
+  //           <li style="color: #8bd5ff;"><strong>front-right</strong></li>
+  //           <li style="color: #8bd5ff;"><strong>behind</strong></li>
+  //         </ol>
+  //         <li style="color: #8bd5ff;"><strong>The object mentioned in the question will not be in the view of the person who has been given the question.</strong></li>
+  //         <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+  //         <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
+  //       </ol>
+  //       </li>`;
+  //     case 'anchor':
+  //       return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+  //             <ol type="i">
+  //               <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Both of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+  //                <li style="color: #8bd5ff;"><strong>Example Question: "Which object appears in both your view and your partner's view of the room?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+  //                <ol type="a" style="margin-left: 20px;">
+  //                  <li style="color: #8bd5ff;"><strong>tall white wooden cabinet with a single compartment</strong></li>
+  //                  <li style="color: #8bd5ff;"><strong>ceramic circular plant container</strong></li>
+  //                  <li style="color: #8bd5ff;"><strong>square canvas wall art with gray background</strong></li>
+  //                  <li style="color: #8bd5ff;"><strong>light pink fabric sofa with three cushions and rounded armrests</strong></li>
+  //                </ol>
+  //               <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+  //               <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
+  //             </ol>
+  //             </li>`;
+  //     case 'relative_distance':
+  //       return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+  //             <ol type="i">
+  //               <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Both of you will be given a two-choice question about the room with only one correct answer.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Example Question: "Which object among the options is closer to the sofa (long rectangular shape, rounded armrests, light beige patterned fabric)?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+  //               <ol type="a" style="margin-left: 20px;">
+  //                 <li style="color: #8bd5ff;"><strong>rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks</strong></li>
+  //                 <li style="color: #8bd5ff;"><strong>tall light brown wooden shelf with two vertical columns containing books and small decorative items</strong></li>
+  //               </ol>
+  //               <li style="color: #8bd5ff;"><strong>The object mentioned in the question will be in both views. However, one of the objects in the options will only be in your view and the other object in the options will only be in your partner's view.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+  //               <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
+  //             </ol>
+  //             </li>`;
+  //     case 'perspective_taking':
+  //       return `<li style="color: #8bd5ff;"><strong>Task Details (Read Carefully):</strong>
+  //             <ol type="i">
+  //               <li style="color: #8bd5ff;"><strong>In this task, you and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>One of you will be given a multiple choice question about the room with only one correct answer.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>The task of the person who is given the question is to seek help from their partner to answer the question correctly. And the task of the other person is to provide help to their partner.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>You can either be the person who has been given the question or the person who is helping the partner.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Example Question: "From your partner's perspective, where is the tall black wooden shelf with multiple square compartments filled with books and items located?"</strong><br><strong>&nbsp&nbspOptions:</strong></li>
+  //               <ol type="a" style="margin-left: 20px;">
+  //                 <li style="color: #8bd5ff;"><strong>left</strong></li>
+  //                 <li style="color: #8bd5ff;"><strong>behind-right</strong></li>
+  //                 <li style="color: #8bd5ff;"><strong>front-right</strong></li>
+  //                 <li style="color: #8bd5ff;"><strong>behind</strong></li>
+  //               </ol>
+  //               <li style="color: #8bd5ff;"><strong>The object mentioned in the question will only be in the view of the person who has been given the question. And not in the view of the other person.</strong></li>
+  //               <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
+  //               <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
+  //             </ol>
+  //             </li>`;
+  //     default:
+  //       return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
+  //   }
+  // }
 
   class DyadicChat {
     constructor(jsPsych){ this.jsPsych = jsPsych; }
