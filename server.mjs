@@ -11,10 +11,12 @@ const io = new Server(server, { cors: { origin: '*' } });
 
 const PORT = process.env.PORT || 3000;
 const MAX_TURNS = Number(process.env.MAX_TURNS || 10); // one turn = two messages (both users)
-const REQUIRE_DISTINCT_PID = process.env.REQUIRE_DISTINCT_PID !== '0';
-const BLOCK_REPEAT_PID = String(process.env.BLOCK_REPEAT_PID || 'false').toLowerCase() === 'true';
-const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'false').toLowerCase() !== 'false';
-const QUESTION_TYPE = process.env.QUESTION_TYPE || 'all_types';
+const REQUIRE_DISTINCT_PID = process.env.REQUIRE_DISTINCT_PID !== '1';
+// const BLOCK_REPEAT_PID = String(process.env.BLOCK_REPEAT_PID || 'false').toLowerCase() === 'true';
+// const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'false').toLowerCase() !== 'false';
+const BLOCK_REPEAT_PID = true;
+const STOP_WHEN_DECK_COMPLETE = true;
+const QUESTION_TYPE = process.env.QUESTION_TYPE || 'counting';
 
 // ---------- Questions per category configuration ----------
 // Dictionary specifying number of questions per category
