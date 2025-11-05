@@ -373,7 +373,7 @@
             '      You do not have a question to answer. Your role is to help your partner by discussing what you see in the image and providing information that will help them answer their question correctly.',
             '    </div>',
             '    <div class="dc-availability-note" style="color: #8bd5ff;">',
-            '      You will automatically proceed to the final page after ' + String(minMessages) + ' messages are exchanged.',
+            '      You will automatically proceed to the next page after either ' + String(minMessages) + ' messages are exchanged or the chat is terminated early by your partner.',
             '    </div>',
             '  </div>',
             '</section>'
