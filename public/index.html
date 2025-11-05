@@ -78,6 +78,8 @@
         ${getQuestionTypeSpecificInstructions(questionType)}
       </ol>
     </li>
+    <br>
+    <br>
     <li>You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</li>
     <li>Note (taking turns in the conversation):
       <ol type="a">
@@ -111,33 +113,43 @@
       function getQuestionTypeSpecificInstructions(questionType) {
         switch(questionType) {
           case 'counting':
-            return `<ol type="i">
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find the count of a given object category.</strong></li>
-                <li style="color: #ff6666;"><strong>You and your partner must make sure that you are counting the total number of unique objects of that category in the room while preventing overcounting or undercounting.</strong></li>
+            return `<li style="color: #8bd5ff;"><strong>The task is to find the count of a given object category.</strong></li>
+                <li style="color: #8bd5ff;"><strong>You and your partner must make sure that you are counting the total number of unique objects of that category in the room while preventing overcounting or undercounting.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
                   <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Counting)</h2>
+                  
+                  
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
-                    <p><strong>Question:</strong> What is the total number of lamps in the room?</p>
-                    <p><strong>Options:</strong></p>
-                      <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-                        <span>a. 4</span>
-                        <span>b. 3</span>
-                        <span>c. 5</span>
-                        <span>d. 6</span>
+                    <div style="display: flex; gap: 20px; justify-content: center;">
+                      <div style="flex: 1;">
+                        <p><strong>Question for the Answerer:</strong> What is the total number of lamps in the room?</p>
+                        <p><strong>Options for the Answerer:</strong></p>
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                          <li>4</li>
+                          <li>3</li>
+                          <li>5</li>
+                          <li>6</li>
+                        </ol>
                       </div>
+                      <div style="flex: 1; align-content: center;">
+                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                      </div>
+                    </div>
                   </div>
+                  
+                  
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -163,15 +175,7 @@
                     </div>
                   </div> -->
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
-                    <!-- <p><strong>Question:</strong> "What is the total number of lamps in the room?"</p>
-                    <p><strong>Options:</strong></p>
-                      <ol type="a" style="text-align: center; list-style-position: inside; color: #8bd5ff;">
-                        <li>4</li>
-                        <li>3</li>
-                        <li>5</li>
-                        <li>6</li>
-                      </ol> -->
-                    <p><strong>Answer:</strong> a. 4 <br> (not 5! - You need to communicate with your partner to avoid counting the same lamp twice.)</p>
+                    
                   </div>
                 </div>
 
@@ -182,19 +186,17 @@
                    <li style="color: #8bd5ff;"><strong>3</strong></li>
                    <li style="color: #8bd5ff;"><strong>1</strong></li>
                    <li style="color: #8bd5ff;"><strong>2</strong></li>
-                 </ol> -->
+                 </ol> 
                 <li style="color: #8bd5ff;"><strong>You have to prevent overcounting or undercounting the lamps by discussing with your partner.</strong></li>
                 <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
-              </ol>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li> -->
               </li>`;
             // return `<li><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
           case 'spatial':
-          return `<ol type="i">
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
-                <li style="color: #ff6666;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information exchanged to infer its direction relative to themselves.</strong></li>
-                <li style="color: #ff6666;"><strong>The options will be different possible directions such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
-                <li style="color: #ff6666;"><strong>Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
+          return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information exchanged to infer its direction relative to themselves.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The options will be different possible directions such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
@@ -205,8 +207,8 @@
                     <!-- <p><strong>Question for you:</strong> From your perspective, where is the light green cushioned sofa with a rounded back, fabric upholstery, and a cylindrical armrest on the right side located?</p> -->
                     <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
                       <div style="flex: 1;">
-                        <p><strong>Question for you:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
-                        <p><strong>Options for you:</strong></p>
+                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
                           <li>left</li>
                           <li>behind-right</li>
@@ -215,20 +217,20 @@
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Your partner's task is to help you answer the question correctly.</strong></p>
+                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -253,56 +255,51 @@
 
                 </div>
 
-
+                <!--
                 <li style="color: #8bd5ff;"><strong>The object mentioned in the question will not be in the view of the person who has been given the question.</strong></li>
                 <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
-
-              </ol>
+                -->
               </li>`;
 
           case 'anchor':
-            return `<ol type="i">
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find the object that is common in both your and your partner’s views.</strong></li>
-                <li style="color: #ff6666;"><strong>Only one of the objects in the options will be common to both the views, while the other objects in the options will be present in only one of the views of the room - either of the answerer or the helper.</strong></li>
+            return `<li style="color: #8bd5ff;"><strong>The task is to find the object that is common in both your and your partner’s views.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Only one of the objects in the options will be common to both the views, while the other objects in the options will be present in only one of the views of the room - either of the answerer or the helper.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
                   <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Anchor Object Recognition)</h2>
 
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
-                    <p><strong>Question:</strong> Which object appears in both your view and your partner's view of the room?</p>
                     <div style="display: flex; gap: 20px; justify-content: center;">
-                      <div>
-                        <p><strong>Options for you:</strong></p>
+                    <!-- <p><strong>Question for you:</strong> From your perspective, where is the light green cushioned sofa with a rounded back, fabric upholstery, and a cylindrical armrest on the right side located?</p> -->
+                    <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
+                      <div style="flex: 1;">
+                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
-                          <li>tall white wooden cabinet with a single compartment</li>
-                          <li>ceramic circular plant container</li>
-                          <li>square canvas wall art with gray background</li>
-                          <li>light pink fabric sofa with three cushions and rounded armrests</li>
+                          <li>left</li>
+                          <li>behind-right</li>
+                          <li>front-right</li>
+                          <li>behind</li>
                         </ol>
                       </div>
-                      <div>
-                        <p><strong style="color: #ff6b6e;">Options for your partner:</strong></p>
-                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
-                          <li>dark brown wooden cabinet with multiple small square compartments</li>
-                          <li>tall light brown wooden cabinet with two compartments</li>
-                          <li>white ceramic plant pot with some brown soil</li>
-                          <li>artwork with abstract patterns and colors</li>
-                        </ol>
+                      <div style="flex: 1; align-content: center;">
+                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
 
+
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -337,37 +334,46 @@
                    <li style="color: #8bd5ff;"><strong>tall beige floor lamp with cylindrical fabric shade and metal or wooden base</strong></li>
                    <li style="color: #8bd5ff;"><strong>bed with green textured mattress and wooden frame with four cylindrical legs</strong></li>
                  </ol> -->
+                 <!--
                 <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
-              </ol>
+                -->
               </li>`;
           case 'relative_distance':
-            return `<ol type="i">
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
-                <li style="color: #ff6666;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
+            return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
                   <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Relative Distance)</h2>
 
                   <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
-                    <p><strong>Question:</strong> Which object among the options is closer to the sofa (long rectangular shape, rounded armrests, light beige patterned fabric)?</p>
-                    <!-- <p><strong>Options:</strong></p> -->
-                      <ol type="a" style="text-align: center; list-style-position: inside; color: #8bd5ff;">
-                        <li>rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks</li>
-                        <li>tall light brown wooden shelf with two vertical columns containing books and small decorative items</li>
-                      </ol>
+                    <div style="display: flex; gap: 20px; justify-content: center;">
+                      <div style="flex: 1;">
+                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Options for the Answerer:</strong></p>
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                          <li>left</li>
+                          <li>behind-right</li>
+                          <li>front-right</li>
+                          <li>behind</li>
+                        </ol>
+                      </div>
+                      <div style="flex: 1; align-content: center;">
+                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                      </div>
+                    </div>
                   </div>
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -397,7 +403,7 @@
                         <li>rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks</li>
                         <li>tall light brown wooden shelf with two vertical columns containing books and small decorative items</li>
                       </ol> -->
-                    <p><strong>Answer:</strong> a. rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks.</p>
+                    <!-- <p><strong>Answer:</strong> a. rectangular light natural wood shelf with multiple square compartments holding small decor and paper stacks.</p> -->
                   </div>
                 </div>
 
@@ -408,18 +414,17 @@
                    <li style="color: #8bd5ff;"><strong>white floor lamp with a tall silver metal stand and conical fabric shade</strong></li>
                    <li style="color: #8bd5ff;"><strong>tall white wooden cabinet with two glass-paneled doors showing shelves inside</strong></li>
                  </ol> -->
+                 <!--
                 <li style="color: #8bd5ff;"><strong>The object mentioned in the question will be in both views. However, one of the objects in the options will only be in your view and the other object in the options will only be in your partner's view.</strong></li>
                 <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If you correctly answer the question, you will be rewarded with a bonus payment.</strong></li>
-              </ol>
+                -->
               </li>`;
         case 'perspective_taking':
-          return `<ol type="i">
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
-                <li style="color: #ff6666;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
-                <li style="color: #ff6666;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
-                <li style="color: #ff6666;"><strong>Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
-
+          return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #8bd5ff;"><strong>Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
 
                 <div style="margin-top: 30px; text-align: center;">
                   <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Perspective Taking)</h2>
@@ -428,12 +433,9 @@
                     <div style="display: flex; gap: 20px; justify-content: center;">
                     <!-- <p><strong>Question for you:</strong> From your perspective, where is the light green cushioned sofa with a rounded back, fabric upholstery, and a cylindrical armrest on the right side located?</p> -->
                     <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
-                      <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Your task is to help your partner answer the question correctly.</strong></p>
-                      </div>
                       <div style="flex: 1;">
-                        <p><strong>Question for your partner:</strong> From your partner's perspective, where is the tall black wooden shelf with multiple square compartments filled with books and items located?</p>
-                        <p><strong>Options for your partner:</strong></p>
+                        <p><strong>Question for the Answerer:</strong> From your perspective, in which direction is the light green cushioned sofa with a rounded back, and a cylindrical armrest located?</p>
+                        <p><strong>Options for the Answerer:</strong></p>
                         <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
                           <li>left</li>
                           <li>behind-right</li>
@@ -441,18 +443,22 @@
                           <li>behind</li>
                         </ol>
                       </div>
+                      <div style="flex: 1; align-content: center;">
+                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                      </div>
                     </div>
                   </div>
 
+
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -478,12 +484,11 @@
 
                 </div>
 
-
+                <!--
                 <li style="color: #8bd5ff;"><strong>The object mentioned in the question will only be in the view of the person who has been given the question. And not in the view of the other person.</strong></li>
                 <li style="color: #8bd5ff;"><strong>Overall, the goal is to discuss and collaborate with your partner to determine the correct answer.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">If the question is answered correctly, both you and your partner will be rewarded with a bonus payment.</strong></li>
-
-              </ol>
+                -->
               </li>`;
           case 'all_types':
             return `
