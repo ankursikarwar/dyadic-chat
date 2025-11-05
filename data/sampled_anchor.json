@@ -1,0 +1,557 @@
+[
+    {
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "5fc75bc2",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/5fc75bc2/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/5fc75bc2/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "wall art located next to a red shelf",
+            "green shelf",
+            "window with the purple curtains",
+            "wall art located next to a white toilet"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 0,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "wall art located next to a red shelf",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.024235622876077167,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Window 12"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "wall art located next to a red shelf"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "5fc75bc2",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/5fc75bc2/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/5fc75bc2/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/5fc75bc2/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "wall art located next to a white toilet",
+            "window near a white shelf",
+            "window with the purple curtains",
+            "green shelf"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 1,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "window near a white shelf",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.10748674762730026,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Window 12"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "window near a white shelf"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "LivingRoom_v3001_Final_Part2",
+        "scene_id": "145090f8",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2/145090f8/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2/145090f8/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/LivingRoom_v3001_Final_Part2/145090f8/Image_0_0_0048_0.png",
+        "user_2_image": "/img/LivingRoom_v3001_Final_Part2/145090f8/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "options_user_1": null,
+        "options_user_2": [
+            "light brown shelf",
+            "white shelf",
+            "black plant container",
+            "shelf near a beige lamp"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 1,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "white shelf",
+        "difficulty": 0.10785690362317624,
+        "description_difficulty": [
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Plant Container 1"
+        ],
+        "asking_to": "agent_2",
+        "correct_answer": "white shelf"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bedroom_v3001_Final_Part1",
+        "scene_id": "1b59c256",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part1/1b59c256/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part1/1b59c256/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part1/1b59c256/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part1/1b59c256/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "blue shelf",
+            "shelf near a computer monitor",
+            "computer monitor near a green lamp",
+            "computer monitor near a light brown shelf"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 2,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "computer monitor near a green lamp",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.004344829120617177,
+        "description_difficulty": [
+            [
+                0
+            ],
+            [
+                2
+            ],
+            [
+                2
+            ],
+            [
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Cell Shelf 1",
+            "Monitor 2"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "computer monitor near a green lamp"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bedroom_v3001_Final_Part1",
+        "scene_id": "1b59c256",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part1/1b59c256/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part1/1b59c256/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bedroom_v3001_Final_Part1/1b59c256/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bedroom_v3001_Final_Part1/1b59c256/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "options_user_1": null,
+        "options_user_2": [
+            "white desk located next to a green shelf",
+            "desk located next to a white bed",
+            "brown door next to a beige lamp",
+            "shelf located next to a white plant container"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 1,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "desk located next to a white bed",
+        "difficulty": 0.04285643760600988,
+        "description_difficulty": [
+            [
+                0,
+                2
+            ],
+            [
+                2
+            ],
+            [
+                0,
+                2
+            ],
+            [
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Lite Door 2"
+        ],
+        "asking_to": "agent_2",
+        "correct_answer": "desk located next to a white bed"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part3",
+        "scene_id": "28dd8f03",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part3/28dd8f03/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part3/28dd8f03/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part3/28dd8f03/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part3/28dd8f03/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "options_user_1": null,
+        "options_user_2": [
+            "door located next to a yellow shelf",
+            "window with green curtains near a blue shelf",
+            "wall art located next to a white toilet",
+            "red shelf"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 1,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "window with green curtains near a blue shelf",
+        "difficulty": 0.5263851398359473,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Wall Art 1",
+            "Simple Bookcase 1"
+        ],
+        "asking_to": "agent_2",
+        "correct_answer": "window with green curtains near a blue shelf"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "LivingRoom_v3001_Final_Part4_1",
+        "scene_id": "696685be",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/696685be/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/696685be/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/LivingRoom_v3001_Final_Part4_1/696685be/Image_0_0_0048_0.png",
+        "user_2_image": "/img/LivingRoom_v3001_Final_Part4_1/696685be/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "blue cabinet located next to a window with green curtains",
+            "wall art located next to a black door",
+            "yellow cabinet",
+            "dark brown cabinet located next to a white sofa"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 3,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "dark brown cabinet located next to a white sofa",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.023175592710275694,
+        "description_difficulty": [
+            [
+                0,
+                2
+            ],
+            [
+                2
+            ],
+            [
+                0
+            ],
+            [
+                0,
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Wall Art 1"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "dark brown cabinet located next to a white sofa"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "LivingRoom_v3001_Final_Part3_1",
+        "scene_id": "7e343cfd",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part3_1/7e343cfd/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part3_1/7e343cfd/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/LivingRoom_v3001_Final_Part3_1/7e343cfd/Image_0_0_0048_0.png",
+        "user_2_image": "/img/LivingRoom_v3001_Final_Part3_1/7e343cfd/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "door located next to a black desk",
+            "black door",
+            "light brown cabinet",
+            "yellow cabinet"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 2,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "light brown cabinet",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.018782405966721538,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Panel Door 3"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "light brown cabinet"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "LivingRoom_v3001_Final_Part2",
+        "scene_id": "6c2b4ffb",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2/6c2b4ffb/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2/6c2b4ffb/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/LivingRoom_v3001_Final_Part2/6c2b4ffb/Image_0_0_0048_0.png",
+        "user_2_image": "/img/LivingRoom_v3001_Final_Part2/6c2b4ffb/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "lamp kept on a white side table",
+            "small wall art",
+            "sofa near a green lamp",
+            "white side table on which a green lamp is kept"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 2,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "sofa near a green lamp",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.05223377605773827,
+        "description_difficulty": [
+            [
+                2
+            ],
+            [
+                1
+            ],
+            [
+                2
+            ],
+            [
+                0,
+                2
+            ]
+        ],
+        "distractor_difficulty": [],
+        "asking_to": "agent_1",
+        "correct_answer": "sofa near a green lamp"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "4d9e1c43",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/4d9e1c43/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/4d9e1c43/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/4d9e1c43/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/4d9e1c43/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "white plant container located next to a green shelf",
+            "red shelf",
+            "white shelf",
+            "green shelf"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 2,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "white shelf",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.18483251936334155,
+        "description_difficulty": [
+            [
+                2,
+                0
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Cell Shelf 3"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "white shelf"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "77a33ce6",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/77a33ce6/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/77a33ce6/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/77a33ce6/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/77a33ce6/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_1_question": null,
+        "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "options_user_1": null,
+        "options_user_2": [
+            "white plant container near a brown door",
+            "white toilet next to a brown door",
+            "brown door near a white plant container",
+            "white sink next to a yellow cabinet"
+        ],
+        "user_1_gt_answer_idx": null,
+        "user_2_gt_answer_idx": 3,
+        "user_1_gt_answer_text": null,
+        "user_2_gt_answer_text": "white sink next to a yellow cabinet",
+        "difficulty": 0.2978318338071049,
+        "description_difficulty": [
+            [
+                0,
+                2
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                0
+            ],
+            [
+                2,
+                0
+            ]
+        ],
+        "distractor_difficulty": [
+            "Large Plant Container 1",
+            "Toilet 1",
+            "Lite Door 1"
+        ],
+        "asking_to": "agent_2",
+        "correct_answer": "white sink next to a yellow cabinet"
+    },
+    {
+        "question_type": "anchor",
+        "room_part": "Bathroom_v3001_Final_Part1",
+        "scene_id": "4d9e1c43",
+        "global_map_image": null,
+        "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/4d9e1c43/frames/Image/camera_0/Image_0_0_0048_0.png",
+        "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part1/4d9e1c43/frames/Image/camera_0/Image_1_0_0048_0.png",
+        "user_1_image": "/img/Bathroom_v3001_Final_Part1/4d9e1c43/Image_0_0_0048_0.png",
+        "user_2_image": "/img/Bathroom_v3001_Final_Part1/4d9e1c43/Image_1_0_0048_0.png",
+        "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+        "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+        "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+        "user_2_question": null,
+        "options_user_1": [
+            "green shelf",
+            "blue shelf",
+            "red shelf",
+            "brown door next to a white shelf"
+        ],
+        "options_user_2": null,
+        "user_1_gt_answer_idx": 3,
+        "user_2_gt_answer_idx": null,
+        "user_1_gt_answer_text": "brown door next to a white shelf",
+        "user_2_gt_answer_text": null,
+        "difficulty": 0.28065027409532695,
+        "description_difficulty": [
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                0
+            ],
+            [
+                0,
+                2
+            ]
+        ],
+        "distractor_difficulty": [
+            "Large Shelf 1",
+            "Cell Shelf 3"
+        ],
+        "asking_to": "agent_1",
+        "correct_answer": "brown door next to a white shelf"
+    }
+]
