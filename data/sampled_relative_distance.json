@@ -1,5 +1,6 @@
 [
     {
+        "sample_id": "relative_distance_00000",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "7b07c83",
@@ -31,6 +32,7 @@
         "correct_answer": "white cabinet"
     },
     {
+        "sample_id": "relative_distance_00001",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "42b65c46",
@@ -62,6 +64,7 @@
         "correct_answer": "dark brown cabinet"
     },
     {
+        "sample_id": "relative_distance_00002",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "42b65c46",
@@ -93,7 +96,7 @@
         "correct_answer": "yellow cabinet"
     },
     {
-        "question_type": "relative_distance",
+        "sample_id": "relative_distance_00003",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "42b65c46",
         "global_map_image": null,
@@ -124,6 +127,7 @@
         "correct_answer": "window with purple curtains near a dark brown cabinet"
     },
     {
+        "sample_id": "relative_distance_00004",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "42b65c46",
@@ -155,6 +159,7 @@
         "correct_answer": "window with purple curtains near a dark brown cabinet"
     },
     {
+        "sample_id": "relative_distance_00005",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "4e5ccf43",
@@ -186,6 +191,7 @@
         "correct_answer": "green lamp"
     },
     {
+        "sample_id": "relative_distance_00006",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "5c8eb624",
@@ -217,6 +223,7 @@
         "correct_answer": "small wall art"
     },
     {
+        "sample_id": "relative_distance_00007",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "47b762b1",
@@ -248,6 +255,7 @@
         "correct_answer": "window with the purple curtains"
     },
     {
+        "sample_id": "relative_distance_00008",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "47b762b1",
@@ -279,6 +287,7 @@
         "correct_answer": "small shelf near a window with purple curtains"
     },
     {
+        "sample_id": "relative_distance_00009",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "45d0358d",
@@ -310,6 +319,7 @@
         "correct_answer": "beige floor lamp next to a dark brown cabinet"
     },
     {
+        "sample_id": "relative_distance_00010",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "45d0358d",
@@ -341,6 +351,7 @@
         "correct_answer": "window near a bed with beige bedframe"
     },
     {
+        "sample_id": "relative_distance_00011",
         "question_type": "relative_distance",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "45d0358d",

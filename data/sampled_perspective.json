@@ -1,5 +1,6 @@
 [
     {
+        "sample_id": "perspective_taking_00000",
         "question_type": "perspective_taking",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "6f765369",
@@ -34,6 +35,7 @@
         "correct_answer": "front-left"
     },
     {
+        "sample_id": "perspective_taking_00001",
         "question_type": "perspective_taking",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "77a33ce6",
@@ -69,6 +71,7 @@
         "correct_answer": "front-right"
     },
     {
+        "sample_id": "perspective_taking_00002",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "7bf2308e",
@@ -103,6 +106,7 @@
         "correct_answer": "front"
     },
     {
+        "sample_id": "perspective_taking_00003",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "7bf2308e",
@@ -137,6 +141,7 @@
         "correct_answer": "behind"
     },
     {
+        "sample_id": "perspective_taking_00004",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "67dd6f6c",
@@ -171,6 +176,7 @@
         "correct_answer": "behind-left"
     },
     {
+        "sample_id": "perspective_taking_00005",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "7bf2308e",
@@ -205,6 +211,7 @@
         "correct_answer": "left"
     },
     {
+        "sample_id": "perspective_taking_00006",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "7bf2308e",
@@ -239,6 +246,7 @@
         "correct_answer": "behind"
     },
     {
+        "sample_id": "perspective_taking_00007",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "2982903a",
@@ -273,6 +281,7 @@
         "correct_answer": "right"
     },
         {
+        "sample_id": "perspective_taking_00008",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "2982903a",
@@ -307,6 +316,7 @@
         "correct_answer": "right"
     },
     {
+        "sample_id": "perspective_taking_00009",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "2982903a",
@@ -341,6 +351,7 @@
         "correct_answer": "right"
     },
         {
+        "sample_id": "perspective_taking_00010",
         "question_type": "perspective_taking",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "78492cfb",

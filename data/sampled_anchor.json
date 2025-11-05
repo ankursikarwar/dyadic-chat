@@ -1,5 +1,6 @@
 [
     {
+        "sample_id": "anchor_00000",
         "question_type": "anchor",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "5fc75bc2",
@@ -45,6 +46,7 @@
         "correct_answer": "wall art located next to a red shelf"
     },
     {
+        "sample_id": "anchor_00001",
         "question_type": "anchor",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "5fc75bc2",
@@ -90,6 +92,7 @@
         "correct_answer": "window near a white shelf"
     },
     {
+        "sample_id": "anchor_00002",
         "question_type": "anchor",
         "room_part": "LivingRoom_v3001_Final_Part2",
         "scene_id": "145090f8",
@@ -135,6 +138,7 @@
         "correct_answer": "white shelf"
     },
     {
+        "sample_id": "anchor_00003",
         "question_type": "anchor",
         "room_part": "Bedroom_v3001_Final_Part1",
         "scene_id": "1b59c256",
@@ -181,6 +185,7 @@
         "correct_answer": "computer monitor near a green lamp"
     },
     {
+        "sample_id": "anchor_00004",
         "question_type": "anchor",
         "room_part": "Bedroom_v3001_Final_Part1",
         "scene_id": "1b59c256",
@@ -228,6 +233,7 @@
         "correct_answer": "desk located next to a white bed"
     },
     {
+        "sample_id": "anchor_00005",
         "question_type": "anchor",
         "room_part": "Bathroom_v3001_Final_Part3",
         "scene_id": "28dd8f03",
@@ -275,6 +281,7 @@
         "correct_answer": "window with green curtains near a blue shelf"
     },
     {
+        "sample_id": "anchor_00006",
         "question_type": "anchor",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "696685be",
@@ -322,6 +329,7 @@
         "correct_answer": "dark brown cabinet located next to a white sofa"
     },
     {
+        "sample_id": "anchor_00007",
         "question_type": "anchor",
         "room_part": "LivingRoom_v3001_Final_Part3_1",
         "scene_id": "7e343cfd",
@@ -367,6 +375,7 @@
         "correct_answer": "light brown cabinet"
     },
     {
+        "sample_id": "anchor_00008",
         "question_type": "anchor",
         "room_part": "LivingRoom_v3001_Final_Part2",
         "scene_id": "6c2b4ffb",
@@ -411,6 +420,7 @@
         "correct_answer": "sofa near a green lamp"
     },
     {
+        "sample_id": "anchor_00009",
         "question_type": "anchor",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "4d9e1c43",
@@ -457,6 +467,7 @@
         "correct_answer": "white shelf"
     },
     {
+        "sample_id": "anchor_00010",
         "question_type": "anchor",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "77a33ce6",
@@ -508,6 +519,7 @@
         "correct_answer": "white sink next to a yellow cabinet"
     },
     {
+        "sample_id": "anchor_00011",
         "question_type": "anchor",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "4d9e1c43",

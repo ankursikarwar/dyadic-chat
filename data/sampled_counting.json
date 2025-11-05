@@ -1,5 +1,6 @@
 [
     {
+        "sample_id": "counting_00000",
         "question_type": "counting",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "4ef789a4",
@@ -29,6 +30,7 @@
         "correct_answer": "2"
     },
     {
+        "sample_id": "counting_00001",
         "question_type": "counting",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "4d9e1c43",
@@ -58,6 +60,7 @@
         "correct_answer": "6"
     },
     {
+        "sample_id": "counting_00002",
         "question_type": "counting",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "5fc75bc2",
@@ -87,6 +90,7 @@
         "correct_answer": "4"
     },
     {
+        "sample_id": "counting_00003",
         "question_type": "counting",
         "room_part": "Bathroom_v3001_Final_Part1_1",
         "scene_id": "12b72ce0",
@@ -116,6 +120,7 @@
         "correct_answer": "2"
     },
     {
+        "sample_id": "counting_00004",
         "question_type": "counting",
         "room_part": "Bathroom_v3001_Final_Part2_1",
         "scene_id": "2b7cfa97",
@@ -145,6 +150,7 @@
         "correct_answer": "2"
     },
     {
+        "sample_id": "counting_00005",
         "question_type": "counting",
         "room_part": "Bedroom_v3001_Final_Part2",
         "scene_id": "7b07c83",
@@ -174,6 +180,7 @@
         "correct_answer": "2"
     },
     {
+        "sample_id": "counting_00006",
         "question_type": "counting",
         "room_part": "LivingRoom_v3001_Final_Part4_1",
         "scene_id": "27a5528b",
@@ -203,6 +210,7 @@
         "correct_answer": "3"
     },
     {
+        "sample_id": "counting_00007",
         "question_type": "counting",
         "room_part": "Bathroom_v3001_Final_Part1",
         "scene_id": "4d9e1c43",
@@ -232,6 +240,7 @@
         "correct_answer": "1"
     },
     {
+        "sample_id": "counting_00008",
         "question_type": "counting",
         "room_part": "DiningRoom_v3001_Final_Part1_1",
         "scene_id": "64056866",
@@ -261,6 +270,7 @@
         "correct_answer": "7"
     },
     {
+        "sample_id": "counting_00009",
         "question_type": "counting",
         "room_part": "Bedroom_v3001_Final_Part3",
         "scene_id": "745f7ff1",
@@ -290,6 +300,7 @@
         "correct_answer": "3"
     },
     {
+        "sample_id": "counting_00010",
         "question_type": "counting",
         "room_part": "Bedroom_v3001_Final_Part1",
         "scene_id": "d263f4e",
@@ -319,6 +330,7 @@
         "correct_answer": "2"
     },
     {
+        "sample_id": "counting_00011",
         "question_type": "counting",
         "room_part": "LivingRoom_v3001_Final_Part3_1",
         "scene_id": "83a766c",
