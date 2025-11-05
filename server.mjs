@@ -466,7 +466,8 @@ io.on('connection', (socket) => {
 
   if (STOP_WHEN_DECK_COMPLETE){
     const totalItems = items.length;
-    if (totalItems > 0 && completedItems.size >= totalItems){
+    // Check markedItems (type-specific deck state) instead of completedItems (global across all types)
+    if (totalItems > 0 && markedItems.size >= totalItems){
       io.to(socket.id).emit('blocked:deck_complete');
       setTimeout(()=>socket.disconnect(true), 0);
       return;
