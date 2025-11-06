@@ -155,8 +155,8 @@
     <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
     <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
     <li style="color: #ff6666;"><strong style="color: #ff6666;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
-    <li>You will attempt 3 total questions in the entire session. For different questions, the Answerer or the Helper role can be assigned to either you or your partner.</li>
-    <li>You may zoom in on the image to inspect details.</li>
+    <li>You will attempt 3 total questions in the entire session. Your assigned role (Answerer or Helper) might change across these 3 questions.</li>
+    <li>You can zoom into the image to inspect details.</li>
     <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
     <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded. </li>
   </ol>
@@ -170,13 +170,12 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li style="color: #8bd5ff;"><strong>The task is to find the count of a given object category.</strong></li>
-                <li style="color: #8bd5ff;"><strong>You and your partner must make sure that you are counting the total number of unique objects of that category in the room while preventing overcounting or undercounting.</strong></li>
+        return `<li style="color: #8bd5ff;"><strong>The task is to find the count of a given object.</strong></li>
+                <li style="color: #8bd5ff;"><strong>You and your partner must make sure that you are counting the total number of unique instances of that object in the room while preventing overcounting or undercounting.</strong></li>
               `;
       case 'spatial':
         return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information exchanged to infer its direction relative to themselves.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The options will be different possible directions such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
               `;
       case 'anchor':
@@ -185,12 +184,11 @@
               `;
       case 'relative_distance':
         return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, an object not in your view might be even closer / farther.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, even an object which is not at all in your view might be the correct answer.</strong></li>
               `;
       case 'perspective_taking':
         return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the exchanged information to infer the Helper’s orientation.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The possible answers include directions  such as Front-Right, Behind, Behind-Left, Right, etc.</strong></li>
+                <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper’s orientation.</strong></li>
                 <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
               `;
       default:
