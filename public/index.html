@@ -16,20 +16,31 @@
     <script src="/plugins/jspsych-dyadic-chat.js?v=vG6h-uipatch3d"></script>
 
     <style>
-      body { margin:0; background:#000; color:#fff; font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
-      .jspsych-content { color:#fff; }
-      .jspsych-btn { background:#1f1f22; color:#fff; border:1px solid #555; border-radius:10px; padding:10px 14px; }
-      a, p, li, h1, h2, h3 { color:#fff; }
-      .consent-box { margin-top:20px; max-height:55vh; overflow:auto; padding:12px; border:1px solid #444; border-radius:10px; background:#0b0b0b; text-align:left; max-width:1400px; margin-left:auto; margin-right:auto; font-family: 'Arial', 'Helvetica', sans-serif; font-size:16px; line-height:1.6; }
+      body { margin:0; background:#f5f5f5; color:#1a1a1a; font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+      .jspsych-content { color:#1a1a1a; }
+      .jspsych-btn { background:#f0f0f0; color:#1a1a1a; border:1px solid #d0d0d0; border-radius:10px; padding:10px 14px; }
+      a, p, li, h1, h2, h3 { color:#1a1a1a; }
+      .consent-box { margin-top:20px; max-height:55vh; overflow:auto; padding:28px; border:1px solid #d0d0d0; border-radius:10px; background:#ffffff; text-align:left; max-width:1400px; margin-left:auto; margin-right:auto; font-family: 'Arial', 'Helvetica', sans-serif; font-size:16px; line-height:1.6; box-shadow: 0 2px 8px rgba(0,0,0,0.1); color:#1a1a1a; }
+      .consent-box * { color:#1a1a1a; }
+      .consent-box h2 { margin: 0 0 12px 0; color:#1a1a1a; }
+      .consent-box p { color:#1a1a1a; }
+      .consent-box ul { color:#1a1a1a; }
+      .consent-box li { color:#1a1a1a; }
       .consent-actions { margin-top:12px; }
-      .consent-actions label { display:flex; align-items:center; gap:8px; }
+      .consent-actions label { display:flex; align-items:center; gap:8px; color:#1a1a1a; }
       .instr { text-align:justify; max-width:1400px; margin:0 auto; padding: 0 10px; }
       .instr ul { line-height:1.6; }
-      .instr h2 { margin-top:0; }
+      .instr h2 { margin-top:0; color:#1a1a1a; }
       .instr-page-top { margin-top: 24px; }
       .instr li { margin: 8px 0; }
-      .instr strong { color: #8bd5ff; }
-  .consent-box h2 { margin: 0 0 12px 0; }
+      .instr strong { color: #0066cc; }
+      /* Override any jsPsych default styles for consent page */
+      .jspsych-content .consent-box,
+      .jspsych-content .consent-box *,
+      .jspsych-survey-html-form .consent-box,
+      .jspsych-survey-html-form .consent-box * {
+        color: #1a1a1a !important;
+      }
 </style>
   </head>
   <body>
@@ -66,7 +77,6 @@
   </style>
   <h2>Instructions</h2>
   <ol class="nice">
-    <li>NOTE: This is an initial pilot and timing is not finalized yet. The payment will be adjusted accordingly.</li>
     <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
     <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
     <li>Task Details (Read Carefully):
@@ -90,7 +100,8 @@
     </li>
     <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
     <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
-    <li style="color: #ff6666;"><strong style="color: #ff6666;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
+    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
+    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you’ve fully completed the task.</strong></li>
     <li>You will attempt 3 total questions in the entire session. Your assigned role (Answerer or Helper) might change across these 3 questions.</li>
     <li>You can zoom into the image to inspect details.</li>
     <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
@@ -98,11 +109,11 @@
   </ol>
 
   <!-- Divider -->
-  <div style="margin: 60px auto; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #8bd5ff, transparent);"></div>
+  <div style="margin: 60px auto; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #0066cc, transparent);"></div>
 
   <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
-    <h2 style="margin-bottom: 20px; color: #fff;">Task Interface</h2>
-    <img src="/inst_img/interface.png" alt="Task Interface" max-width: 900px; height: auto;">
+    <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
+    <img src="/inst_img/interface.png" alt="Task Interface" style="max-width: 100%; height: auto;">
   </div>
 
   <p>Click "Begin Task" when you are ready.</p>
@@ -114,20 +125,20 @@
       function getQuestionTypeSpecificInstructions(questionType) {
         switch(questionType) {
           case 'counting':
-            return `<li style="color: #8bd5ff;"><strong>The task is to find the count of a given object.</strong></li>
-                <li style="color: #8bd5ff;"><strong>You and your partner must make sure that you are counting the total number of unique instances of that object in the room while preventing overcounting or undercounting.</strong></li>
+            return `<li style="color: #0066cc;"><strong>The task is to find the count of a given object.</strong></li>
+                <li style="color: #0066cc;"><strong>You and your partner must make sure that you are counting the total number of unique instances of that object in the room while preventing overcounting or undercounting.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Counting)</h2>
+                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Counting)</h2>
 
 
-                  <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                       <div style="flex: 1;">
                         <p><strong>Question for the Answerer:</strong> What is the total number of doors in the room?</p>
                         <p><strong>Options for the Answerer:</strong></p>
-                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #0066cc;">
                           <li>3</li>
                           <li>2</li>
                           <li>4</li>
@@ -135,7 +146,7 @@
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                        <p style="font-size: 24px;"><strong style="color: #cc0000;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
@@ -144,16 +155,16 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                   </div>
 
@@ -175,7 +186,7 @@
                       <p style="font-size: 16px; color: #ff6b6e; margin-top: 5px;">Partner sees 3 lamps</p>
                     </div>
                   </div> -->
-                  <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; font-size: 18px; color: #666666;">
 
                   </div>
                 </div>
@@ -194,20 +205,20 @@
               </li>`;
             // return `<li><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>`;
           case 'spatial':
-          return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
+          return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
+                <li style="color: #0066cc;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
+                <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, the directions are relative to the Answerer's own orientation, not the room layout. For example, "Behind" refers to the space directly opposite the direction the Answerer is facing.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Spatial Understanding)</h2>
+                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Spatial Understanding)</h2>
 
-                  <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                       <div style="flex: 1;">
                         <p><strong>Question for the Answerer:</strong>From your perspective, in which direction is the window that is near a brown plant container?</p>
                         <p><strong>Options for the Answerer:</strong></p>
-                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #0066cc;">
                           <li>left</li>
                           <li>behind</li>
                           <li>right</li>
@@ -215,23 +226,23 @@
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                        <p style="font-size: 24px;"><strong style="color: #cc0000;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                   </div>
 
@@ -261,21 +272,21 @@
               </li>`;
 
           case 'anchor':
-            return `<li style="color: #8bd5ff;"><strong>The task is to find the object that is common in both your and your partner’s views.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Only one of the objects in the options will be common to both the views. Other objects in the options will be present in only one of the views of the room - either of the Answerer or the Helper.</strong></li>
+            return `<li style="color: #0066cc;"><strong>The task is to find the object that is common in both your and your partner's views.</strong></li>
+                <li style="color: #0066cc;"><strong>Only one of the objects in the options will be common to both the views. Other objects in the options will be present in only one of the views of the room - either of the Answerer or the Helper.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Anchor Object Recognition)</h2>
+                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Anchor Object Recognition)</h2>
 
-                  <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                     <!-- <p><strong>Question for you:</strong> Which of the following objects is present in both your and your partner's views of the room?</p> -->
                     <!-- <div style="display: flex; gap: 80px; justify-content: center;"> -->
                       <div style="flex: 1;">
                         <p><strong>Question for the Answerer:</strong> Which of the following objects is present in both your and your partner's views of the room?</p>
                         <p><strong>Options for the Answerer:</strong></p>
-                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #0066cc;">
                           <li>lamp near a window with red curtains</li>
                           <li>door near a beige lamp</li>
                           <li>computer monitor near a bed with beige bedframe</li>
@@ -283,7 +294,7 @@
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                        <p style="font-size: 24px;"><strong style="color: #cc0000;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
@@ -291,16 +302,16 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                   </div>
 
@@ -339,19 +350,19 @@
               </li>`;
 
           case 'relative_distance':
-            return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, even an object which is not at all in your view might be the correct answer.</strong></li>
+            return `<li style="color: #0066cc;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
+                <li style="color: #0066cc;"><strong>The objects in the options are visible either in only your view or only in your partner's view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, even an object which is not at all in your view might be the correct answer.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Relative Distance)</h2>
+                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Relative Distance)</h2>
 
-                  <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                       <div style="flex: 1;">
                         <p><strong>Question for the Answerer:</strong>Which of the following objects is farthest from the plant container near a brown window?</p>
                         <p><strong>Options for the Answerer:</strong></p>
-                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #0066cc;">
                           <li>dark brown cabinet</li>
                           <li>lamp next to a brown window</li>
                           <li>computer monitor on a white desk</li>
@@ -359,23 +370,23 @@
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                        <p style="font-size: 24px;"><strong style="color: #cc0000;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                   </div>
 
@@ -395,7 +406,7 @@
                       <p style="font-size: 16px; color: #ff6b6e; margin-top: 5px;">Partner sees the sofa and the tall light brown wooden shelf with two vertical columns</p>
                     </div>
                   </div> -->
-                  <div style="margin-top: 15px; margin-bottom: 30px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; margin-bottom: 30px; font-size: 18px; color: #666666;">
                     <!-- <p><strong>Question:</strong> "Which item is closer to the sofa (long rectangular shape, rounded armrests, light beige patterned fabric)?"</p>
                     <p><strong>Options:</strong></p>
                       <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
@@ -421,19 +432,19 @@
               </li>`;
 
           case 'perspective_taking':
-          return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper’s orientation.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
+          return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of an object from the Helper's point of view.</strong></li>
+                <li style="color: #0066cc;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper's orientation.</strong></li>
+                <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, directions are defined from the Helper's perspective, not the Answerer's. For example, "Front" refers to the space directly ahead of the Helper's current line of sight.</strong></li>
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #fff;">Task Example (Perspective Taking)</h2>
+                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Perspective Taking)</h2>
 
-                  <div style="margin-top: 15px; font-size: 18px; color: #d0d4d9;">
+                  <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
                       <div style="flex: 1;">
                         <p><strong>Question for the Answerer:</strong>From your partner's perspective, in which direction is the blue cabinet?</p>
                         <p><strong>Options for the Answerer:</strong></p>
-                        <ol type="a" style="text-align: left; list-style-position: inside; color: #8bd5ff;">
+                        <ol type="a" style="text-align: left; list-style-position: inside; color: #0066cc;">
                           <li>front-left</li>
                           <li>behind-right</li>
                           <li>front-right</li>
@@ -441,7 +452,7 @@
                         </ol>
                       </div>
                       <div style="flex: 1; align-content: center;">
-                        <p style="font-size: 24px;"><strong style="color: #ff6b6e;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
+                        <p style="font-size: 24px;"><strong style="color: #cc0000;">Helper's task is to help the Answerer to answer the question correctly.</strong></p>
                       </div>
                     </div>
                   </div>
@@ -449,16 +460,16 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
-                          style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
+                          style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                   </div>
 
@@ -489,7 +500,7 @@
               </li>`;
           case 'all_types':
             return `
-            <li><strong>Counting Task:</strong> <span style="color: #8bd5ff;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>
+            <li><strong>Counting Task:</strong> <span style="color: #0066cc;">For instance, if the question is "How many lamps are there in the room?", you might see 1 lamp in your view and your partner might see 2 lamps in their view. Its also possible that you both might be seeing the same lamp, so you have to prevent overcounting or undercounting the lamps by discussing with your partner.</span></li>
             <!-- <li><strong>Spatial Task:</strong> <span style="color: #ff6666;">For instance, if the question is "Where is the red chair located?", you might see the chair on the left side of your view while your partner sees it on the right side of their view. You need to discuss the spatial relationships and positions to determine the correct answer.</span></li> -->
             <!-- <li><strong>Anchor Task:</strong> <span style="color: #ff6666;">For anchor questions, you might see objects in different positions. Discuss the anchor object and its location with your partner.</span></li> -->
             <!-- <li><strong>Relative Distance Task:</strong> <span style="color: #ff6666;">For relative distance questions, you might see objects in different distances. Discuss the relative distance between the objects with your partner.</span></li> -->

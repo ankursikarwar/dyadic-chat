@@ -17,7 +17,7 @@
   function styleTag(){
     return [
       '<style id="dyadic-styles">',
-      ':root { --bg:#000; --panel:#0b0b0b; --panel-alt:#0f0f10; --border:#3e3e42; --border-soft:#2c2c2e; --text:#fff; --muted:#d0d4d9; --radius:12px; --shadow:0 1px 0 rgba(255,255,255,0.02), 0 6px 16px rgba(0,0,0,0.35); }',
+      ':root { --bg:#f5f5f5; --panel:#ffffff; --panel-alt:#fafafa; --border:#d0d0d0; --border-soft:#e0e0e0; --text:#1a1a1a; --muted:#666666; --radius:12px; --shadow:0 1px 0 rgba(0,0,0,0.05), 0 6px 16px rgba(0,0,0,0.1); }',
       '.dc-root { position:fixed; inset:0; background:var(--bg); color:var(--text); height:100dvh; width:100vw; padding:20px; box-sizing:border-box; overflow:hidden; font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }',
       '.dc-grid { display:grid; height:100%; width:100%; grid-template-columns: 27fr 52fr 34fr; gap:16px; box-sizing:border-box; }',
       '.dc-panel { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:12px; min-height:0; min-width:0; box-sizing:border-box; box-shadow: var(--shadow); }',
@@ -26,17 +26,18 @@
       '.dc-title-row { margin-left:8px; margin-right:8px; margin-bottom:2px; display:flex; justify-content:space-between; align-items:center; gap:10px; }',
       '.dc-small { color:var(--muted); }',
       '#dc-turns, #dc-turns-total { color:#ff4d4f; font-weight:800; }',
-      '.dc-image { position:relative; width:100%; height:100%; min-height:0; background:#0e0e10; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); }',
+      '.dc-image { position:relative; width:100%; height:100%; min-height:0; background:#f0f0f0; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); }',
       '.dc-image-viewport{ width:100%; height:100%; display:flex; align-items:center; justify-content:center; touch-action:none; cursor:grab; }',
       '.dc-image-viewport.grabbing{ cursor:grabbing; }',
       '#dc-scene{ width:auto; height:auto; max-width:100%; max-height:100%; user-select:none; -webkit-user-drag:none; will-change:transform; transform-origin:center center; pointer-events:none; }',
       '.dc-zoom-controls{ position:absolute; top:8px; right:8px; display:flex; gap:6px; z-index:5; }',
-      '.dc-zoom-btn{ padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(0,0,0,0.65); color:#fff; cursor:pointer; pointer-events:auto; font-weight:bold; font-size:16px; }',
+      '.dc-zoom-btn{ padding:8px 12px; border-radius:8px; border:1px solid var(--border); background:rgba(255,255,255,0.9); color:#1a1a1a; cursor:pointer; pointer-events:auto; font-weight:bold; font-size:16px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }',
       '.dc-center { display:grid; grid-template-rows: minmax(0,55%) minmax(0,45%); height:100%; min-height:0; box-sizing:border-box; row-gap:16px; }',
       '.dc-center-bottom.single-box { background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:12px 12px 14px 12px; min-height:0; overflow:auto; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow: var(--shadow); }',
-      '.dc-goal-title { margin-top:5px; margin-bottom:15px; color:#fff; font-weight:700; font-size:25px; }',
-      '.dc-question { color:#fff; font-size:18px; font-weight:600; line-height:1.35; margin-top:0px; margin-bottom:0px; overflow:auto; height:auto; max-height:4.6em; max-width:720px; }',
+      '.dc-goal-title { margin-top:5px; margin-bottom:40px; color:#0066cc; font-weight:700; font-size:25px; }',
+      '.dc-question { color:var(--text); font-size:18px; font-weight:600; line-height:1.35; margin-top:0px; margin-bottom:0px; overflow:auto; height:auto; max-height:4.6em; max-width:720px; }',
       '.dc-qa-wrap { max-width:720px; width:100%; margin:0 auto; display:grid; grid-template-rows:auto auto 1fr auto; row-gap:8px; align-items:start; text-align:center; min-height:0; height:100%; }',
+      '.dc-center-bottom.single-box .dc-qa-wrap { display:flex; flex-direction:column; justify-content:center; align-items:center; }',
       '.dc-answers { display:block; width:100%; max-width:720px; margin:8px auto; text-align:left; min-height:0; max-height:100%; overflow:auto; }',
       '.dc-answer-option { display:flex; align-items:center; justify-content:flex-start; gap:8px; margin:8px !important; }',
       '.dc-answer-option span { font-size:17px !important; }',
@@ -48,9 +49,9 @@
       '.dc-row.dc-me, .dc-row.dc-partner { margin-bottom:10px; }',
       '.dc-me { text-align:left; }',
       '.dc-partner { text-align:right; }',
-      '.dc-bubble { display:inline-block; padding:6px 12px; border-radius:12px; border:1px solid var(--border-soft); max-width:85%; word-wrap:break-word; box-shadow: 0 1px 0 rgba(255,255,255,0.02), 0 2px 8px rgba(0,0,0,0.25); }',
-      '.dc-bubble-me { background:rgba(125, 211, 252, 0.08); color:#8bd5ff; }',
-      '.dc-bubble-partner { background:rgba(255, 77, 79, 0.08); color:#ff6b6e; }',
+      '.dc-bubble { display:inline-block; padding:6px 12px; border-radius:12px; border:1px solid var(--border-soft); max-width:85%; word-wrap:break-word; box-shadow: 0 1px 0 rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.1); }',
+      '.dc-bubble-me { background:rgba(125, 211, 252, 0.2); color:#0066cc; }',
+      '.dc-bubble-partner { background:rgba(255, 77, 79, 0.2); color:#cc0000; }',
       '.dc-typing-indicator { display:none; margin-bottom:10px; }',
       '.dc-typing-indicator.show { display:block; }',
       '.dc-typing-dots { display:inline-block; }',
@@ -59,14 +60,15 @@
       '.dc-typing-dots span:nth-child(3) { animation-delay:0.4s; }',
       '@keyframes dcTyping { 0%, 60%, 100% { opacity:0.3; } 30% { opacity:1; } }',
       '.dc-controls { margin-top:4px; background:transparent; border:none; border-radius:0; padding:0; display:grid; grid-template-columns: 1fr auto; column-gap:8px; box-shadow:none; align-items:end; }',
-      '.dc-input { flex:1; width:100%; min-width:0; box-sizing:border-box; padding:12px 14px; font-size:14px; border-radius:10px; border:1px solid var(--border); background:#0c0c0d; color:#fff; outline:none; }',
+      '.dc-input { flex:1; width:100%; min-width:0; box-sizing:border-box; padding:12px 14px; font-size:14px; border-radius:10px; border:1px solid var(--border); background:#ffffff; color:var(--text); outline:none; }',
       '.dc-textarea{ resize:none; height:auto; min-height:40px; max-height:120px; overflow-y:auto; line-height:1.35; padding:12px 14px; }',
-      '.dc-btn { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:linear-gradient(180deg, #1f1f22, #151518); color:#fff; cursor:pointer; white-space:nowrap; }',
+      '.dc-btn { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:linear-gradient(180deg, #f0f0f0, #e8e8e8); color:var(--text); cursor:pointer; white-space:nowrap; }',
+      '#dc-send { font-weight: bold; }',
       '.dc-btn:disabled { opacity:.5; cursor:not-allowed; }',
       '.dc-early-terminate { margin-top:8px; }',
       '#dc-end-chat-early { background: linear-gradient(135deg, #ff9800, #f57c00) !important; border-color: #ff9800 !important; font-weight: bold; }',
       '#dc-end-chat-early:hover { background: linear-gradient(135deg, #f57c00, #e65100) !important; }',
-      '.dc-hint { font-size:14px !important; font-weight:bold; color:#d0d4d9; margin-top:2px !important; padding:0 10px; }','.dc-wait{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;text-align:center;color:#d0d4d9; margin-top:24px; padding-top:24px; padding-top:28px;}','.dc-spinner{width:20px;height:20px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:dcspin 0.9s linear infinite;}','@keyframes dcspin{to{transform:rotate(360deg)}}',
+      '.dc-hint { font-size:14px !important; font-weight:bold; color:var(--muted); margin-top:2px !important; padding:0 10px; }','.dc-wait{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;text-align:center;color:var(--muted); margin-top:24px; padding-top:24px; padding-top:28px;}','.dc-spinner{width:20px;height:20px;border:3px solid rgba(0,0,0,.2);border-top-color:#333;border-radius:50%;animation:dcspin 0.9s linear infinite;}','@keyframes dcspin{to{transform:rotate(360deg)}}',
       '@media (max-height: 760px){ .dc-root{ padding:12px; } .dc-grid{ gap:10px; } .dc-center{ grid-template-rows: minmax(0,50%) minmax(0,50%); } .dc-center-bottom.single-box{ padding:10px; } .dc-goal-title{ margin-bottom:10px; font-size:22px; } .dc-question{ max-height:3.2em; } .dc-answer-option span{ font-size:16px !important; } .dc-controls{ margin-top:4px; } }',
       '</style>'
     ].join('');
@@ -123,16 +125,16 @@
   function generateSidebarInstructions(questionType, minMessages = 10) {
     console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType);
     const baseInstructions = `
-  <div class="instr instr-aesthetic">
+<div class="instr instr-aesthetic">
   <style>
-    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
-    .instr-aesthetic li { margin: 6px 0; }
+    .instr-aesthetic { color: #1a1a1a; }
+    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; color: #1a1a1a; }
+    .instr-aesthetic li { margin: 6px 0; color: #1a1a1a; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
-    .instr-aesthetic h2 { margin-bottom: 10px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; color: #1a1a1a; }
     .consent-box h2 { margin: 0 0 12px 0; }
-  </style>
+</style>
   <ol class="nice">
-    <li>NOTE: This is an initial pilot and timing is not finalized yet. The payment will be adjusted accordingly.</li>
     <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
     <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
     <li>Task Details (Read Carefully):
@@ -154,14 +156,15 @@
     </li>
     <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
     <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
-    <li style="color: #ff6666;"><strong style="color: #ff6666;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
+    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
+    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you’ve fully completed the task.</strong></li>
     <li>You will attempt 3 total questions in the entire session. Your assigned role (Answerer or Helper) might change across these 3 questions.</li>
     <li>You can zoom into the image to inspect details.</li>
     <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
     <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded. </li>
   </ol>
-  </div>
-  `;
+</div>
+`;
     return baseInstructions;
   }
 
@@ -170,26 +173,26 @@
   function getQuestionTypeSpecificSidebarInstructions(questionType) {
     switch(questionType) {
       case 'counting':
-        return `<li style="color: #8bd5ff;"><strong>The task is to find the count of a given object.</strong></li>
-                <li style="color: #8bd5ff;"><strong>You and your partner must make sure that you are counting the total number of unique instances of that object in the room while preventing overcounting or undercounting.</strong></li>
+        return `<li style="color: #0066cc;"><strong>The task is to find the count of a given object.</strong></li>
+                <li style="color: #0066cc;"><strong>You and your partner must make sure that you are counting the total number of unique instances of that object in the room while preventing overcounting or undercounting.</strong></li>
               `;
       case 'spatial':
-        return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, the directions are relative to the Answerer’s own orientation, not the room layout. For example, “Behind” refers to the space directly opposite the direction the Answerer is facing.</strong></li>
+        return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
+                <li style="color: #0066cc;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
+                <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, the directions are relative to the Answerer's own orientation, not the room layout. For example, "Behind" refers to the space directly opposite the direction the Answerer is facing.</strong></li>
               `;
       case 'anchor':
-        return `<li style="color: #8bd5ff;"><strong>The task is to find the object that is common in both your and your partner’s views.</strong></li>
-                <li style="color: #8bd5ff;"><strong>Only one of the objects in the options will be common to both the views. Other objects in the options will be present in only one of the views of the room - either of the Answerer or the Helper.</strong></li>
+        return `<li style="color: #0066cc;"><strong>The task is to find the object that is common in both your and your partner's views.</strong></li>
+                <li style="color: #0066cc;"><strong>Only one of the objects in the options will be common to both the views. Other objects in the options will be present in only one of the views of the room - either of the Answerer or the Helper.</strong></li>
               `;
       case 'relative_distance':
-        return `<li style="color: #8bd5ff;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The objects in the options are visible either in only your view or only in your partner’s view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, even an object which is not at all in your view might be the correct answer.</strong></li>
+        return `<li style="color: #0066cc;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
+                <li style="color: #0066cc;"><strong>The objects in the options are visible either in only your view or only in your partner's view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, even an object which is not at all in your view might be the correct answer.</strong></li>
               `;
       case 'perspective_taking':
-        return `<li style="color: #8bd5ff;"><strong>In this task, the Answerer must determine the direction of an object from the Helper’s point of view.</strong></li>
-                <li style="color: #8bd5ff;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper’s orientation.</strong></li>
-                <li style="color: #ff6666;"><strong style="color: #ff6666;">Note: Here, directions are defined from the Helper’s perspective, not the Answerer’s. For example, “Front” refers to the space directly ahead of the Helper’s current line of sight.</strong></li>
+        return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of an object from the Helper's point of view.</strong></li>
+                <li style="color: #0066cc;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper's orientation.</strong></li>
+                <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, directions are defined from the Helper's perspective, not the Answerer's. For example, "Front" refers to the space directly ahead of the Helper's current line of sight.</strong></li>
               `;
       default:
         return `<li>You and your partner will see different perspectives of the same scene and need to work together to solve the question correctly.</li>`;
@@ -296,7 +299,7 @@
       const self = this;
       let pairedPayload = null;
       const pidLabel = (trial.prolific && trial.prolific.PID) || 'DEBUG_LOCAL';
-
+      
       // Additional timing tracking - declare variables first
       let consentPageStartTime = null;
       let instructionsPageStartTime = null;
@@ -306,7 +309,7 @@
       let chatEndTime = null;
       let answerSubmitTime = null;
       let surveySubmitTime = null;
-
+      
       // Get timing from global scope
       consentPageStartTime = window.consentPageStartTime;
       instructionsPageStartTime = window.instructionsPageStartTime;
@@ -315,8 +318,8 @@
         return styleTag() + [
           '<div class="dc-wait">',
           '  <div class="dc-spinner"></div>',
-          '  <div style="font-size:18px; color:#d0d4d9;">Waiting for another participant to join. Please keep this tab open. We’ll begin as soon as you’re paired. If you are not paired within 5 minutes, study will timeout.</div>',
-          // '  <div style="font-size:13px; color:#9aa0a6;">Please keep this tab open. We’ll begin as soon as you’re paired.</div>',
+          '  <div style="font-size:18px; color:var(--muted);">Waiting for another participant to join. Please keep this tab open. We&apos;ll begin as soon as you&apos;re paired. If you are not paired within 5 minutes, study will timeout.</div>',
+          // '  <div style="font-size:13px; color:var(--muted);">Please keep this tab open. We'll begin as soon as you're paired.</div>',
           '</div>'
         ].join('');
       }
@@ -326,7 +329,7 @@
         const minMessages = (p && p.min_turns) || trial.min_messages;
         const hasQuestion = item && item.has_question;
         const hasOptions = item && item.has_options;
-
+        
         const imgHtml = (item && item.image_url)
           ? '<div class="dc-image-viewport"><img id="dc-scene" src="' + item.image_url + '" alt="scene"></div>'
             + '<div class="dc-zoom-controls">'
@@ -368,10 +371,10 @@
             '<section class="dc-center-bottom single-box">',
             '  <div class="dc-qa-wrap">',
             '    <h3 class="dc-goal-title">Goal: Help your partner answer their question correctly.</h3>',
-            '    <div class="dc-question" style="color: #8bd5ff; font-style: italic;">',
-            '      You do not have a question to answer. Your role is to help your partner by discussing what you see in the image and providing information that will help them answer their question correctly.',
+            '    <div class="dc-question" style="color: #1a1a1a; font-style: italic;">',
+            '      Your role is to help your partner by discussing what you see in the image and providing information that will help them answer their question correctly.',
             '    </div>',
-            '    <div class="dc-availability-note" style="color: #8bd5ff;">',
+            '    <div class="dc-availability-note" style="color: #1a1a1a;">',
             '      You will automatically proceed to the next page after either ' + String(minMessages) + ' messages are exchanged or the chat is terminated early by your partner.',
             '    </div>',
             '  </div>',
@@ -383,8 +386,8 @@
           '<div class="dc-root">',
           '  <div class="dc-grid">',
           '    <section class="dc-panel dc-left" style="overflow:auto; min-height:0;">',
-                    '      <div class="dc-instructions-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 10px; background: #2a2a2a; border-radius: 8px;">',
-                    '        <h3 style="margin: 0; color: #fff;">Instructions</h3>',
+                    '      <div class="dc-instructions-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 10px; background: #f0f0f0; border-radius: 8px;">',
+                    '        <h3 style="margin: 0; color: var(--text);">Instructions</h3>',
                     '        <button id="toggle-instructions" style="background: #8bd5ff; color: #000; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">Minimize</button>',
                     '      </div>',
                     '      <div id="dc-instructions-content" class="dc-instructions">', (function() {
@@ -402,12 +405,12 @@
           '      <div class="dc-title-row">',
           '        <div class="dc-title">ChatBox</div>',
           '        <div class="dc-small" style="font-size:15px; font-weight:bold;">',
-          '          <span>Number of Messages&nbsp;</span>',
-          '          <span id="dc-messages">0</span> / <span id="dc-messages-total">', String(minMessages), '</span>',
           (p && p.questionNumber && p.totalQuestions ?
-            '          <div style="margin-top:4px; font-size:13px; color:#8bd5ff;">Question ' + String(p.questionNumber) + ' of ' + String(p.totalQuestions) + '</div>' :
+            '          <div style="margin-bottom:4px; font-size:15px; color:#0066cc;">Question ' + String(p.questionNumber) + ' of ' + String(p.totalQuestions) + '</div>' :
             ''
           ),
+          '          <span>Number of Messages&nbsp;</span>',
+          '          <span id="dc-messages">0</span> / <span id="dc-messages-total">', String(minMessages), '</span>',
           '        </div>',
           '      </div>',
           '      <div id="dc-chat" class="dc-chatbox" aria-live="polite"></div>',
@@ -447,7 +450,7 @@
       }
 
       function showBlocked(msg){
-        display_element.innerHTML = styleTag() + '<div class="dc-wait"><div class="dc-spinner"></div><div style="font-size:18px;color:#d0d4d9;margin-top:8px;">' + msg + '</div></div>';
+        display_element.innerHTML = styleTag() + '<div class="dc-wait"><div class="dc-spinner"></div><div style="font-size:18px;color:var(--muted);margin-top:8px;">' + msg + '</div></div>';
         try { self.jsPsych.finishTrial({ blocked: msg }); } catch {}
       }
       socket.on('blocked:repeat_pid', function(){ showBlocked('You have already participated in this study (one session per Prolific account).'); });
@@ -485,17 +488,17 @@
         const box = document.getElementById('dc-chat'); if (!box) return;
         const line = document.createElement('div'); line.className = 'dc-row ' + (who==='Me'?'dc-me':'dc-partner');
         const bubble = document.createElement('span'); bubble.className = 'dc-bubble ' + (who==='Me'?'dc-bubble-me':'dc-bubble-partner');
-
+        
         // Create bold label and text content separately to prevent HTML injection
         const label = document.createElement('b');
         label.textContent = who + ': ';
         const messageText = document.createElement('span');
         messageText.textContent = text;
-
+        
         bubble.appendChild(label);
         bubble.appendChild(messageText);
-        line.appendChild(bubble);
-        box.appendChild(line);
+        line.appendChild(bubble); 
+        box.appendChild(line); 
         box.scrollTop = box.scrollHeight;
       }
 
@@ -547,12 +550,12 @@
 
         addLine('Me', text);
         msgCount += 1; updateMessages();
-
+        
         // Track first message time
         if (!firstMessageTime) {
           firstMessageTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         }
-
+        
         socket.emit('chat:message', { text: text });
         el.value = '';
         if (el && el.classList.contains('dc-textarea')) { el.style.height = 'auto'; el.style.overflowY = 'hidden'; }
@@ -616,62 +619,62 @@
         if (!window.__userHasQuestion || !window.__userHasOptions) {
           // User has no question - just notify server
           console.log('[DyadicChat] User has no question, notifying server');
-
+          
           // Safety check: ensure t0 is set (should be set when paired)
           if (t0 === null) {
             console.warn('[DyadicChat] t0 not set, using current time as fallback');
             t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           }
-
+          
           const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           const rt = Math.round(nowTs - t0);
-
+          
           // Track answer submit time
           answerSubmitTime = nowTs;
-
+          
           // Store empty answer data
           window.__answerData = { messages: Math.floor(msgCount/2), choice: null, rt: rt, pid: pidLabel };
-
+          
           // Store socket reference
           window.__socket = socket;
-
+          
           // Notify server (no answer to submit)
           socket.emit('answer:submit', { choice: null, rt: rt });
 
           // Show waiting message - will transition to next question or survey
-          display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Waiting for your partner to finish...</div>';
+          display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Waiting for your partner to finish...</div>';
           return;
         }
-
+        
         // User has a question - proceed with normal answer submission
         const el = document.querySelector('input[name="dc-answer"]:checked');
         if (!el) return;
-
+        
         // Safety check: ensure t0 is set (should be set when paired)
         if (t0 === null) {
           console.warn('[DyadicChat] t0 not set, using current time as fallback');
           t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         }
-
+        
         const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rt = Math.round(nowTs - t0);
-
+        
         // Track answer submit time
         answerSubmitTime = nowTs;
-
+        
         // Store the answer data
         window.__answerData = { messages: Math.floor(msgCount/2), choice: el.value, rt: rt, pid: pidLabel };
-
+        
         // Store socket reference
         window.__socket = socket;
-
+        
         socket.emit('answer:submit', { choice: el.value, rt: rt });
-
+        
         // Store last answer for survey feedback (if this is the last question)
         window.__lastAnswer = el.value;
 
         // Show waiting message - will transition to next question or survey
-        display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Answer submitted! Waiting for your partner to finish...</div>';
+        display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Answer submitted! Waiting for your partner to finish...</div>';
       }
 
       function showCombinedFeedbackAndSurvey(userAnswer) {
@@ -679,38 +682,38 @@
         // Only show a simple completion message before the survey
         let feedbackSection = `
           <!-- Completion Section -->
-          <div style="text-align:center; margin-bottom:40px;">
-            <h2 style="margin-bottom:30px; color:#fff;">All Questions Completed!</h2>
+            <div style="text-align:center; margin-bottom:40px;">
+            <h2 style="margin-bottom:30px; color:var(--text);">All Questions Completed!</h2>
 
-            <div style="background:#0b0b0b; padding:30px; border-radius:12px; border:1px solid #3e3e42; margin-bottom:30px;">
+            <div style="background:#ffffff; padding:30px; border-radius:12px; border:1px solid var(--border); margin-bottom:30px; box-shadow: var(--shadow);">
               <div style="font-size:24px; margin-bottom:20px; color:#4CAF50;">
                 ✓ Thank you for completing all the questions!
-              </div>
-
-              <div style="font-size:18px; margin-bottom:20px;">
+                </div>
+                
+              <div style="font-size:18px; margin-bottom:20px; color:var(--text);">
                 You and your partner have successfully completed all the collaborative tasks. Please proceed to fill out the survey below.
-              </div>
-
-              <div style="font-size:16px; color:#8bd5ff; margin-top:15px;">
+                </div>
+                
+              <div style="font-size:16px; color:#0066cc; margin-top:15px;">
                 Great job working together!
+                </div>
               </div>
             </div>
-          </div>
-        `;
-
+          `;
+        
         const feedbackHTML = `
-          <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:#fff; text-align:left;">
+          <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:var(--text); text-align:left; background:var(--bg); min-height:100vh;">
             ${feedbackSection}
 
             <!-- Survey Section -->
-            <h2 style="text-align:center; margin-bottom:30px; color:#fff;">Post-Study Survey</h2>
-            <p style="margin-bottom:25px; font-size:16px; line-height:1.5;">Thank you for participating! Please answer a few brief questions about your experience.</p>
-
-            <form id="post-study-survey" style="background:#0b0b0b; padding:25px; border-radius:12px; border:1px solid #3e3e42;">
-
+            <h2 style="text-align:center; margin-bottom:30px; color:var(--text);">Post-Study Survey</h2>
+            <p style="margin-bottom:25px; font-size:16px; line-height:1.5; color:var(--text);">Thank you for participating! Please answer a few brief questions about your experience.</p>
+            
+            <form id="post-study-survey" style="background:#ffffff; padding:25px; border-radius:12px; border:1px solid var(--border); box-shadow: var(--shadow);">
+              
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How difficult was the collaborative task?</label>
-                <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">How difficult was the collaborative task?</label>
+                <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                   <option value="">Select difficulty level</option>
                   <option value="very_easy">Very Easy</option>
                   <option value="easy">Easy</option>
@@ -721,41 +724,41 @@
               </div>
 
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Were the instructions clear and easy to follow throughout the task?</label>
-                <select name="instructions_clear" id="instructions_clear" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">Were the instructions clear and easy to follow throughout the task?</label>
+                <select name="instructions_clear" id="instructions_clear" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                   <option value="">Select an option</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </select>
                 <div id="instructions_feedback" style="margin-top:10px; display:none;">
                   <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please briefly explain what was unclear about the instructions:</label>
-                  <textarea name="instructions_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide brief feedback about what was unclear..."></textarea>
+                  <textarea name="instructions_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999; resize:vertical;" placeholder="Please provide brief feedback about what was unclear..."></textarea>
                 </div>
               </div>
 
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you have a clear understanding of both the task and the question being asked?</label>
-                <select name="task_understanding" id="task_understanding" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">Did you have a clear understanding of both the task and the question being asked?</label>
+                <select name="task_understanding" id="task_understanding" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                   <option value="">Select an option</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </select>
                 <div id="task_feedback" style="margin-top:10px; display:none;">
                   <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Please briefly explain what was unclear about the task or question:</label>
-                  <textarea name="task_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Please provide brief feedback about what was unclear..."></textarea>
+                  <textarea name="task_feedback" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999; resize:vertical;" placeholder="Please provide brief feedback about what was unclear..."></textarea>
                 </div>
               </div>
 
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Did you use pen and paper to sketch or do any rough work while answering the question?</label>
-                <select name="pen_paper" id="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">Did you use pen and paper to sketch or do any rough work while answering the question?</label>
+                <select name="pen_paper" id="pen_paper" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                   <option value="">Select an option</option>
                   <option value="yes">Yes</option>
                   <option value="no">No</option>
                 </select>
                 <div id="pen_paper_followup" style="margin-top:10px; display:none;">
                   <label style="display:block; margin-bottom:8px; font-weight:bold; color:#ff9800;">Did you sketch a rough map of the room to help answer the question?</label>
-                  <select name="sketched_map" id="sketched_map" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                  <select name="sketched_map" id="sketched_map" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                     <option value="">Select an option</option>
                     <option value="yes">Yes</option>
                     <option value="no">No</option>
@@ -764,8 +767,8 @@
               </div>
 
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How well did you communicate with your partner?</label>
-                <select name="communication" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">How well did you communicate with your partner?</label>
+                <select name="communication" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                   <option value="">Select communication quality</option>
                   <option value="excellent">Excellent</option>
                   <option value="good">Good</option>
@@ -775,8 +778,8 @@
               </div>
 
               <div style="margin-bottom:20px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">How confident are you in your final answer? (1 = Not confident, 5 = Very confident)</label>
-                <select name="confidence" required style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555;">
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">How confident are you in your final answer? (1 = Not confident, 5 = Very confident)</label>
+                <select name="confidence" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
                   <option value="">Select confidence level</option>
                   <option value="1">1 - Not confident</option>
                   <option value="2">2</option>
@@ -787,8 +790,8 @@
               </div>
 
               <div style="margin-bottom:25px;">
-                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#8bd5ff;">Any additional comments about the study?</label>
-                <textarea name="comments" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#1f1f22; color:#fff; border:1px solid #555; resize:vertical;" placeholder="Optional comments..."></textarea>
+                <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">Any additional comments about the study?</label>
+                <textarea name="comments" rows="3" style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999; resize:vertical;" placeholder="Optional comments..."></textarea>
               </div>
 
               <div style="text-align:center;">
@@ -799,7 +802,7 @@
             </form>
           </div>
         `;
-
+        
         display_element.innerHTML = feedbackHTML;
 
         // Handle dynamic feedback fields
@@ -854,7 +857,7 @@
         if (penPaperSelect && penPaperFollowup) {
           const sketchedMapSelect = penPaperFollowup.querySelector('select[name="sketched_map"]');
           console.log('Sketched map select found:', !!sketchedMapSelect);
-
+          
           penPaperSelect.addEventListener('change', function() {
             console.log('Pen paper changed to:', this.value);
             if (this.value === 'yes') {
@@ -887,10 +890,10 @@
               surveyData[key] = value;
             }
             console.log('[DyadicChat] Survey data collected:', surveyData);
-
+            
             // Track survey submit time
             surveySubmitTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-
+            
             // Debug: Log timing data before sending
             console.log('[DyadicChat] Timing data being sent:', {
               consentPageStartTime,
@@ -902,12 +905,12 @@
               answerSubmitTime,
               surveySubmitTime
             });
-
+            
             // Validate timing data
             if (!consentPageStartTime || !instructionsPageStartTime || !waitingPageStartTime || !chatBeginTime) {
               console.warn('[DyadicChat] Missing critical timing data!');
             }
-
+            
             // Send survey data to server
             console.log('[DyadicChat] Submitting survey data:', surveyData);
             console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
@@ -932,15 +935,15 @@
             } else {
               console.error('[DyadicChat] No socket connection available for survey submission');
             }
-
+            
             // Combine answer data with survey data
             const finalData = {
               ...window.__answerData,
               survey: surveyData
             };
-
+            
             // Show completion message and end trial
-            display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#fff;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
+            display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
             self.jsPsych.finishTrial(finalData);
             redirectToProlific();
           });
@@ -1086,16 +1089,16 @@
 
 
       display_element.innerHTML = htmlWait();
-
+      
       // Set waiting page start time
       waitingPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-
+      
       // 5-minute pairing timeout
       (function(){
         const TIMEOUT_MS = 5 * 60 * 1000;
         const timer = setTimeout(() => {
           try { if (!window.__pairedOnce) {
-            display_element.innerHTML = '<div class="dc-wait"><div class="dc-spinner"></div><div style="font-size:18px; text-align:center;">Sorry — no partner joined within 5 minutes.</div><div style="font-size:13px;color:#9aa0a6; text-align:center;">You can close this tab and try again later.</div></div>';
+            display_element.innerHTML = '<div class="dc-wait"><div class="dc-spinner"></div><div style="font-size:18px; text-align:center; color:var(--text);">Sorry — no partner joined within 5 minutes.</div><div style="font-size:13px;color:var(--muted); text-align:center;">You can close this tab and try again later.</div></div>';
             if (window.jsPsych) { window.jsPsych.finishTrial({ pairing_timeout: true }); }
           }} catch(e){}
         }, TIMEOUT_MS);
@@ -1109,10 +1112,10 @@
       socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
         // Set reaction time start point when users get paired
         t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-
+        
         // Set chat begin time
         chatBeginTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-
+        
         // Store user's question status and answer data
         window.__userHasQuestion = p.item.has_question;
         window.__userHasOptions = p.item.has_options;
@@ -1121,7 +1124,7 @@
         console.log('[DyadicChat] User has question:', p.item.has_question);
         console.log('[DyadicChat] User has options:', p.item.has_options);
         console.log('[DyadicChat] Item data:', p.item);
-
+        
         if (p.item.has_question && p.item.has_options) {
           // Store the correct answer index, text, and options for this user
           correctAnswerIndex = p.item.correct_answer;
@@ -1131,7 +1134,7 @@
           console.log('[DyadicChat] User has question with options - showing early termination button');
 
         }
-
+        
         display_element.innerHTML = htmlChat(p);
         let pairedPayload = p;
 
@@ -1162,14 +1165,14 @@
           }
 
           // Set up event listeners
-          const sendBtn = document.getElementById('dc-send');
-          if (sendBtn) sendBtn.addEventListener('click', sendMsg);
-          const submitBtn = document.getElementById('dc-submit');
-          if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
+        const sendBtn = document.getElementById('dc-send');
+        if (sendBtn) sendBtn.addEventListener('click', sendMsg);
+        const submitBtn = document.getElementById('dc-submit');
+        if (submitBtn) submitBtn.addEventListener('click', submitAnswer);
           const endChatEarlyBtn = document.getElementById('dc-end-chat-early');
           if (endChatEarlyBtn) endChatEarlyBtn.addEventListener('click', endChatEarly);
         }, 0);
-
+        
         // Add instructions toggle functionality
         const toggleButton = document.getElementById('toggle-instructions');
         const instructionsContent = document.getElementById('dc-instructions-content');
@@ -1179,7 +1182,7 @@
           // Set initial state to minimized
           instructionsContent.style.display = 'none';
           toggleButton.textContent = 'Expand';
-
+          
           toggleButton.addEventListener('click', function() {
             if (isMinimized) {
               instructionsContent.style.display = 'block';
@@ -1192,7 +1195,7 @@
             }
           });
         }
-
+        
         setupTextarea();
         setupZoom();
         startHeartbeat(); // Start heartbeat monitoring
@@ -1266,8 +1269,8 @@
           updateMessages();
         }, 100);
       });
-      socket.on('chat:closed', function(){
-        chatClosed = true;
+      socket.on('chat:closed', function(){ 
+        chatClosed = true; 
 
         // Stop typing indicator and hide partner's typing indicator
         stopTyping();
@@ -1278,10 +1281,10 @@
         }
 
         updateMessages();
-
+        
         // Track chat end time
         chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-
+        
         // If user has no question (helper agent), automatically submit
         // This notifies the server that they've completed the question
         if (!window.__userHasQuestion || !window.__userHasOptions) {
@@ -1351,14 +1354,14 @@
 
         // Show transition screen briefly before loading next question
         display_element.innerHTML = `
-          <div style="padding:40px; font-size:20px; text-align:center; color:#fff;">
+          <div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">
             <div style="margin-bottom:20px;">
               <div class="dc-spinner" style="margin:0 auto;"></div>
             </div>
             <div style="margin-top:20px;">
               Loading next question...
             </div>
-            <div style="margin-top:10px; font-size:16px; color:#8bd5ff;">
+            <div style="margin-top:10px; font-size:16px; color:#0066cc;">
               Question ${p.questionNumber} of ${p.totalQuestions}
             </div>
           </div>
@@ -1544,13 +1547,13 @@
 
     socket.on('end:partner', function(){
         stopHeartbeat();
-      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
+      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Your partner disconnected or closed the tab. This session has ended.</div>'; } catch(e){}
       try { window.jsPsych.finishTrial({ ended: 'partner_disconnect' }); } catch(e){}
     });
 
     socket.on('connection_lost', function(){
         stopHeartbeat();
-      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#ff6b6b;">Connection lost. Please refresh the page to start a new session.</div>'; } catch(e){}
+      try { display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:#cc0000; background:var(--bg); min-height:100vh;">Connection lost. Please refresh the page to start a new session.</div>'; } catch(e){}
       try { window.jsPsych.finishTrial({ ended: 'connection_lost' }); } catch(e){}
       });
 
