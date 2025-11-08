@@ -1180,6 +1180,15 @@ io.on('connection', (socket) => {
                 room.finishedByPid[socketPid] = true;
               }
               console.log(`[DyadicChat] Marked disconnecting user ${socket.id} (PID: ${socketPid}) as finished`);
+              
+              // Clean up the room since study has ended
+              try {
+                persistRoom(room);
+                rooms.delete(roomId);
+                console.log(`[DyadicChat] Cleaned up room ${roomId} after disconnect ended study`);
+              } catch(e) {
+                console.error('[DyadicChat] Error cleaning up room after disconnect:', e);
+              }
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
         }
