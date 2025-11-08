@@ -304,7 +304,8 @@ function generateQuestionSequence() {
 
   // Then sample regular questions (reduce count by 1 if we added a demo)
   const demoAdded = sequence.length > 0;
-  const regularQuestionCount = demoAdded ? QUESTIONS_PER_CATEGORY[QUESTION_TYPE] - 1 : QUESTIONS_PER_CATEGORY[QUESTION_TYPE];
+  const baseCount = QUESTIONS_PER_CATEGORY[QUESTION_TYPE] || 0;
+  const regularQuestionCount = demoAdded ? Math.max(0, baseCount - 1) : baseCount;
 
   // If QUESTION_TYPE is a specific type (not 'all_types'), only use that type
   if (QUESTION_TYPE !== 'all_types' && QUESTIONS_PER_CATEGORY[QUESTION_TYPE]) {

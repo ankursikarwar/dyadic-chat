@@ -869,18 +869,63 @@ const consentTrial = {
         }
 
         // Create instructions trial dynamically based on role
+        // The role will be set by the time this trial loads (from paired:instructions event)
         function createInstructionsTrial() {
-          const role = window.userRole || 'answerer'; // Default to answerer if not set
-          const questionType = window.serverQuestionType || serverConfig.questionType;
-          const maxTurns = window.maxTurns || serverConfig.maxTurns;
-          
-          return {
-            type: jsPsychInstructions,
-            pages: [generateRoleSpecificInstructions(role, questionType, maxTurns)],
+          try {
+            // Get role dynamically - will be set by paired:instructions event before this trial loads
+            const getRole = () => window.userRole || 'answerer'; // Default to answerer if not set
+            const getQuestionType = () => window.serverQuestionType || serverConfig.questionType;
+            const getMaxTurns = () => window.maxTurns || serverConfig.maxTurns;
+            
+            // Get initial role (might be undefined, but that's okay - will update in on_load)
+            const initialRole = getRole();
+            const initialQuestionType = getQuestionType();
+            const initialMaxTurns = getMaxTurns();
+            
+            return {
+              type: jsPsychInstructions,
+              pages: [generateRoleSpecificInstructions(initialRole, initialQuestionType, initialMaxTurns)], // Initial placeholder
             show_clickable_nav: true,
             button_label_next: "Begin Task",
             button_label_previous: "Back",
             on_load: function() {
+              // Get role and config dynamically when instructions page loads
+              // At this point, paired:instructions should have already set window.userRole
+              const role = getRole();
+              const questionType = getQuestionType();
+              const maxTurns = getMaxTurns();
+              
+              console.log('[DyadicChat] Loading instructions with role:', role, 'questionType:', questionType, 'maxTurns:', maxTurns);
+              
+              // Only update if role has changed or if we need to refresh
+              // Generate the correct instructions based on current role
+              const instructionsHTML = generateRoleSpecificInstructions(role, questionType, maxTurns);
+              
+              // Update the pages array
+              this.pages = [instructionsHTML];
+              
+              // Update the DOM directly since the plugin has already rendered
+              // The plugin creates a div with class 'instr-page' containing pages[0]
+              const updateInstructions = () => {
+                const instrPage = document.querySelector('.instr-page');
+                if (instrPage) {
+                  instrPage.innerHTML = instructionsHTML;
+                  console.log('[DyadicChat] Updated instructions display with role:', role);
+                  return true;
+                }
+                return false;
+              };
+              
+              // Try to update immediately
+              if (!updateInstructions()) {
+                // If not found, try after a short delay
+                setTimeout(() => {
+                  if (!updateInstructions()) {
+                    setTimeout(updateInstructions, 200);
+                  }
+                }, 100);
+              }
+              
               // Track instructions page start time
               if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
                 window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
@@ -893,7 +938,17 @@ const consentTrial = {
                 window.socket.emit('instructions:ready');
               }
             }
-          };
+            };
+          } catch (e) {
+            console.error('[DyadicChat] Error creating instructions trial:', e);
+            // Return a fallback trial to prevent breaking the timeline
+            return {
+              type: jsPsychInstructions,
+              pages: ['<h2>Instructions</h2><p>Please wait while instructions load...</p>'],
+              show_clickable_nav: true,
+              button_label_next: "Begin Task"
+            };
+          }
         }
 
         const chatTrial = {
@@ -913,7 +968,7 @@ const consentTrial = {
         const timeline = [
           consentTrial,
           waitingForPairingTrial,
-          createInstructionsTrial(),
+          createInstructionsTrial(), // Call the function to get the trial object
           waitingForPartnerInstructionsTrial,
           chatTrial
         ];
