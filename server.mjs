@@ -1002,7 +1002,46 @@ io.on('connection', (socket) => {
       console.log(`[DyadicChat] Disconnect handler: socket=${socket.id}, pid=${socketPid}, wasAlreadyFinished=${wasAlreadyFinished}, hasSubmittedSurvey=${hasSubmittedSurvey}`);
 
       // Check if user is in instructions phase (hasn't finished instructions yet)
-      const isInInstructionsPhase = room.instructionsReady && !room.instructionsReady[socket.id];
+      // Check by socket ID first, then by PID if socket ID not found (reconnection case)
+      let isInInstructionsPhase = false;
+      if (room.instructionsReady) {
+        // Check if this socket ID hasn't finished instructions
+        const socketReady = room.instructionsReady[socket.id];
+        
+        if (socketReady === false) {
+          // Explicitly false - user is in instructions phase
+          isInInstructionsPhase = true;
+        } else if (socketReady === undefined && socketPid) {
+          // Socket ID not found - might be reconnection, check by PID
+          const socketIdsForPid = Object.keys(room.userPids || {}).filter(sid => room.userPids[sid] === socketPid);
+          if (socketIdsForPid.length > 0) {
+            // Check if any of these socket IDs haven't finished instructions
+            isInInstructionsPhase = socketIdsForPid.some(sid => {
+              const ready = room.instructionsReady[sid];
+              return ready === false || ready === undefined;
+            });
+          } else {
+            // No socket IDs found for this PID - assume in instructions phase if not finished
+            isInInstructionsPhase = !wasAlreadyFinished && !hasSubmittedSurvey;
+          }
+        } else if (socketReady === undefined) {
+          // No socket ID and no PID - assume in instructions phase if not finished
+          isInInstructionsPhase = !wasAlreadyFinished && !hasSubmittedSurvey;
+        }
+        // If socketReady === true, user has finished instructions, so isInInstructionsPhase stays false
+      }
+      
+      // Check if user is in questions phase (finished instructions but hasn't submitted survey)
+      // This means they're either in the chat/questions phase or waiting between questions
+      const isInQuestionsPhase = !isInInstructionsPhase && !hasSubmittedSurvey && !wasAlreadyFinished;
+      
+      // Determine if we should end the study immediately (instructions or questions phase)
+      const shouldEndStudy = isInInstructionsPhase || isInQuestionsPhase;
+      
+      // Use 1 second timeout for instructions/questions phases, 3 seconds for survey phase
+      const disconnectTimeoutMs = shouldEndStudy ? 1000 : 3000;
+      
+      console.log(`[DyadicChat] Disconnect detected: isInInstructionsPhase=${isInInstructionsPhase}, isInQuestionsPhase=${isInQuestionsPhase}, shouldEndStudy=${shouldEndStudy}, timeout=${disconnectTimeoutMs}ms`);
       
       // Don't immediately notify partner - wait a bit to see if user reconnects
       // This prevents false "partner disconnected" messages during brief reconnections
@@ -1058,6 +1097,36 @@ io.on('connection', (socket) => {
           // Log the status for debugging
           console.log(`[DyadicChat] Timeout handler: socket=${socket.id}, pid=${socketPid}, currentWasFinished=${currentWasFinished}, currentHasSubmittedSurvey=${currentHasSubmittedSurvey}`);
           
+          // Re-check if still in instructions/questions phase (in case state changed during wait)
+          // Check by socket ID first, then by PID if socket ID not found (reconnection case)
+          let currentIsInInstructionsPhase = false;
+          if (room.instructionsReady) {
+            const socketReady = room.instructionsReady[socket.id];
+            
+            if (socketReady === false) {
+              // Explicitly false - user is in instructions phase
+              currentIsInInstructionsPhase = true;
+            } else if (socketReady === undefined && socketPid) {
+              // Socket ID not found - might be reconnection, check by PID
+              const socketIdsForPid = Object.keys(room.userPids || {}).filter(sid => room.userPids[sid] === socketPid);
+              if (socketIdsForPid.length > 0) {
+                currentIsInInstructionsPhase = socketIdsForPid.some(sid => {
+                  const ready = room.instructionsReady[sid];
+                  return ready === false || ready === undefined;
+                });
+              } else {
+                // No socket IDs found for this PID - assume in instructions phase if not finished
+                currentIsInInstructionsPhase = !currentWasFinished && !currentHasSubmittedSurvey;
+              }
+            } else if (socketReady === undefined) {
+              // No socket ID and no PID - assume in instructions phase if not finished
+              currentIsInInstructionsPhase = !currentWasFinished && !currentHasSubmittedSurvey;
+            }
+            // If socketReady === true, user has finished instructions, so currentIsInInstructionsPhase stays false
+          }
+          const currentIsInQuestionsPhase = !currentIsInInstructionsPhase && !currentHasSubmittedSurvey && !currentWasFinished;
+          const currentShouldEndStudy = currentIsInInstructionsPhase || currentIsInQuestionsPhase;
+          
           // Only notify partner if:
           // 1. They hadn't completed the study yet (not finished), AND
           // 2. They haven't submitted their survey (if they submitted survey, partner can still complete theirs)
@@ -1065,12 +1134,43 @@ io.on('connection', (socket) => {
             console.log(`[DyadicChat] NOTIFYING PARTNER: User ${socket.id} (PID: ${socketPid}) disconnected without finishing or submitting survey`);
             try {
               // If user disconnected during instructions phase, send specific event
-              if (isInInstructionsPhase) {
+              if (currentIsInInstructionsPhase) {
                 io.to(other.id).emit('end:partner:instructions');
-                console.log(`[DyadicChat] Notified partner ${other.id} of disconnect during instructions phase`);
-              } else {
+                console.log(`[DyadicChat] Notified partner ${other.id} of disconnect during instructions phase - study ending`);
+              } else if (currentIsInQuestionsPhase) {
+                // User disconnected during questions phase - end study
           io.to(other.id).emit('end:partner');
+                console.log(`[DyadicChat] Notified partner ${other.id} of disconnect during questions phase - study ending`);
+              } else {
+                // Fallback for other cases
+                io.to(other.id).emit('end:partner');
                 console.log(`[DyadicChat] Notified partner ${other.id} of disconnect after timeout - user did not reconnect`);
+              }
+              
+              // If in instructions or questions phase, mark both users as finished to end the study
+              if (currentShouldEndStudy) {
+                console.log(`[DyadicChat] Ending study for both users due to disconnect during ${currentIsInInstructionsPhase ? 'instructions' : 'questions'} phase`);
+                // Mark both users as finished
+                if (other) {
+                  room.finished[other.id] = true;
+                  const otherPid = other.prolific?.PID || room.userPids[other.id];
+                  if (otherPid && !room.finishedByPid) {
+                    room.finishedByPid = {};
+                  }
+                  if (otherPid) {
+                    room.finishedByPid[otherPid] = true;
+                  }
+                  console.log(`[DyadicChat] Marked other user ${other.id} (PID: ${otherPid}) as finished due to partner disconnect`);
+                }
+                // Mark disconnecting user as finished
+                room.finished[socket.id] = true;
+                if (socketPid && !room.finishedByPid) {
+                  room.finishedByPid = {};
+                }
+                if (socketPid) {
+                  room.finishedByPid[socketPid] = true;
+                }
+                console.log(`[DyadicChat] Marked disconnecting user ${socket.id} (PID: ${socketPid}) as finished`);
               }
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
@@ -1085,7 +1185,7 @@ io.on('connection', (socket) => {
         } else {
           console.log(`[DyadicChat] User ${socketPid} reconnected, not notifying partner of disconnect`);
         }
-      }, 3000); // Wait 3 seconds before notifying partner
+      }, disconnectTimeoutMs); // Wait 1 second for instructions/questions, 3 seconds for survey
       
       // Store timeout so we can clear it if user reconnects
       if (!room.disconnectTimeouts) {
@@ -1691,8 +1791,8 @@ io.on('connection', (socket) => {
       console.log(`[DyadicChat] Other socket ${other.id} connected: ${otherSocketStillConnected}`);
       if (otherSocketStillConnected) {
         console.log(`[DyadicChat] Forwarding message from ${socket.id} to ${other.id}, text: "${text}"`);
-        io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
-        io.to(other.id).emit('turn:you');
+      io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
+      io.to(other.id).emit('turn:you');
         console.log(`[DyadicChat] Successfully sent chat:message and turn:you to ${other.id}`);
       } else {
         console.error(`[DyadicChat] ERROR: Other user ${other.id} is not connected! Cannot forward message.`);
