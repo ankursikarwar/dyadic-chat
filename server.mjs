@@ -611,55 +611,127 @@ io.on('connection', (socket) => {
     const roomId = socket.currentRoom;
     if (roomId && rooms.has(roomId)) {
       const room = rooms.get(roomId);
+      
+      // CRITICAL: Use room.userRoles as the ONLY source of truth for role assignment
+      // Do NOT infer roles from room.users array order or any other source
+      const userRole = room.userRoles[socket.id];
+      
+      if (!userRole) {
+          console.error(`[DyadicChat] ERROR: No role found in userRoles for socket ${socket.id}`);
+          console.error(`[DyadicChat] Available userRoles:`, room.userRoles);
+          console.error(`[DyadicChat] Room users:`, room.users.map(u => ({ id: u.id, role: room.userRoles[u.id] })));
+          console.error(`[DyadicChat] Room answerer: ${room.answerer?.id}, helper: ${room.helper?.id}`);
+          return; // Don't send paired event if we can't determine role
+      }
+      
+      const isAnswerer = userRole === 'answerer';
+      
+      // Find the user object for logging
       const user = room.users.find(u => u.id === socket.id);
-      if (user) {
-        // Re-send the paired event with current item data
-        const item = room.item;
-        
-        // Use room.userRoles as the source of truth for role assignment
-        // This ensures consistency with paired:instructions event
-        const userRole = room.userRoles[socket.id] || 'answerer'; // Default to answerer if not found
-        const isAnswerer = userRole === 'answerer';
-        
-        console.log(`[DyadicChat] request:paired_data for ${socket.id}, role from userRoles: ${userRole}, isAnswerer: ${isAnswerer}`);
-        
-        // Get answerer and helper from room (these are the authoritative references)
-        const answerer = room.answerer || (isAnswerer ? user : room.users.find(u => room.userRoles[u.id] === 'answerer'));
-        const helper = room.helper || (!isAnswerer ? user : room.users.find(u => room.userRoles[u.id] === 'helper'));
-        
-        const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
-        const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
-        const helperQuestionField = user1HasQuestion ? 'user_2' : 'user_1';
-        
-        const itemForUser = isAnswerer ? {
-          ...item,
-          image_url: answererQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
-          goal_question: answererQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
-          correct_answer: answererQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
-          options: answererQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
-          has_question: true, // Answerer always has the question
-          has_options: !!(answererQuestionField === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
-        } : {
-          ...item,
-          image_url: helperQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
-          goal_question: helperQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
-          correct_answer: helperQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
-          options: helperQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
-          has_question: false, // Helper never has the question
-          has_options: false
-        };
-        
+      const userPid = user?.prolific?.PID || socket.prolific?.PID || 'unknown';
+      
+      console.log(`[DyadicChat] request:paired_data for socket ${socket.id} (PID: ${userPid})`);
+      console.log(`[DyadicChat] Role from userRoles[${socket.id}]: ${userRole}, isAnswerer: ${isAnswerer}`);
+      console.log(`[DyadicChat] Room answerer ID: ${room.answerer?.id}, helper ID: ${room.helper?.id}`);
+      console.log(`[DyadicChat] Requesting socket matches answerer: ${socket.id === room.answerer?.id}, matches helper: ${socket.id === room.helper?.id}`);
+      
+      // Re-send the paired event with current item data
+      const item = room.item;
+      
+      // Get answerer and helper from room (these are the authoritative references)
+      // First try room.answerer/room.helper, then find by role from userRoles
+      let answerer = room.answerer;
+      let helper = room.helper;
+      
+      // Verify answerer/helper are still valid sockets
+      if (!answerer || !io.sockets.sockets.has(answerer.id)) {
+        answerer = room.users.find(u => room.userRoles[u.id] === 'answerer' && io.sockets.sockets.has(u.id));
+        if (answerer) room.answerer = answerer;
+      }
+      if (!helper || !io.sockets.sockets.has(helper.id)) {
+        helper = room.users.find(u => room.userRoles[u.id] === 'helper' && io.sockets.sockets.has(u.id));
+        if (helper) room.helper = helper;
+      }
+      
+      // Final fallback to originalUsers
+      if (!answerer || !io.sockets.sockets.has(answerer.id)) {
+        answerer = room.originalUsers[0];
+      }
+      if (!helper || !io.sockets.sockets.has(helper.id)) {
+        helper = room.originalUsers[1];
+      }
+      
+      // Verify we have valid answerer and helper
+      if (!answerer || !helper) {
+        console.error(`[DyadicChat] ERROR: Could not find valid answerer or helper for room ${roomId}`);
+        return;
+      }
+      
+      // CRITICAL VALIDATION: Ensure the requesting socket's role matches what we determined
+      // This prevents any race conditions or ordering issues
+      const actualRoleFromRoom = room.userRoles[socket.id];
+      let finalIsAnswerer = isAnswerer;
+      if (actualRoleFromRoom !== userRole) {
+        console.error(`[DyadicChat] CRITICAL ERROR: Role mismatch! userRole=${userRole}, actualRoleFromRoom=${actualRoleFromRoom}`);
+        console.error(`[DyadicChat] This should never happen. Using actualRoleFromRoom=${actualRoleFromRoom}`);
+        // Use the actual role from room as the source of truth
+        finalIsAnswerer = actualRoleFromRoom === 'answerer';
+      }
+      
+      // Double-check: the requesting user should match either answerer or helper
+      if (socket.id !== answerer.id && socket.id !== helper.id) {
+        console.error(`[DyadicChat] ERROR: Socket ${socket.id} is not answerer (${answerer.id}) or helper (${helper.id})`);
+        console.error(`[DyadicChat] Room userRoles:`, room.userRoles);
+        console.error(`[DyadicChat] Room users:`, room.users.map(u => u.id));
+        return;
+      }
+      
+      // FINAL VALIDATION: Ensure finalIsAnswerer matches the actual socket IDs
+      if (finalIsAnswerer && socket.id !== answerer.id) {
+        console.error(`[DyadicChat] CRITICAL ERROR: finalIsAnswerer=true but socket.id (${socket.id}) !== answerer.id (${answerer.id})`);
+        console.error(`[DyadicChat] Correcting: socket should be helper, not answerer`);
+        finalIsAnswerer = false;
+      }
+      if (!finalIsAnswerer && socket.id !== helper.id) {
+        console.error(`[DyadicChat] CRITICAL ERROR: finalIsAnswerer=false but socket.id (${socket.id}) !== helper.id (${helper.id})`);
+        console.error(`[DyadicChat] Correcting: socket should be answerer, not helper`);
+        finalIsAnswerer = true;
+      }
+      
+      const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
+      const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
+      const helperQuestionField = user1HasQuestion ? 'user_2' : 'user_1';
+      
+      const itemForUser = finalIsAnswerer ? {
+        ...item,
+        image_url: answererQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
+        goal_question: answererQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
+        correct_answer: answererQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+        options: answererQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        has_question: true, // Answerer always has the question
+        has_options: !!(answererQuestionField === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
+      } : {
+        ...item,
+        image_url: helperQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
+        goal_question: helperQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
+        correct_answer: helperQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+        options: helperQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+        has_question: false, // Helper never has the question
+        has_options: false
+      };
+      
+        const finalRole = finalIsAnswerer ? 'answerer' : 'helper';
         io.to(socket.id).emit('paired', {
           roomId,
           item: itemForUser,
+          role: finalRole, // Include role for client verification (use finalRole, not userRole)
           min_turns: MAX_TURNS,
           server_question_type: QUESTION_TYPE,
           questionNumber: room.currentQuestionIndex + 1,
           totalQuestions: room.questionSequence.length,
           isDemo: room.questionSequence[room.currentQuestionIndex]?.isDemo || false
         });
-        console.log(`[DyadicChat] Re-sent paired event to ${socket.id} (role: ${userRole}) for room ${roomId}`);
-      }
+        console.log(`[DyadicChat] Re-sent paired event to ${socket.id} (finalRole: ${finalRole}, has_question: ${itemForUser.has_question}) for room ${roomId}`);
     }
   });
 
@@ -953,6 +1025,7 @@ io.on('connection', (socket) => {
         const nextQuestion = room.questionSequence[nextIndex];
         io.to(answerer.id).emit('next_question', {
           item: itemForAnswerer,
+          role: 'answerer', // Include role for client verification
           min_turns: MAX_TURNS,
           server_question_type: QUESTION_TYPE,
           questionNumber: nextIndex + 1,
@@ -961,6 +1034,7 @@ io.on('connection', (socket) => {
         });
         io.to(helper.id).emit('next_question', {
           item: itemForHelper,
+          role: 'helper', // Include role for client verification
           min_turns: MAX_TURNS,
           server_question_type: QUESTION_TYPE,
           questionNumber: nextIndex + 1,
@@ -1352,9 +1426,24 @@ io.on('connection', (socket) => {
         has_options: false
       };
 
+      // Verify socket IDs before sending
+      const answererSocket = io.sockets.sockets.get(answerer.id);
+      const helperSocket = io.sockets.sockets.get(helper.id);
+      
+      if (!answererSocket) {
+        console.error(`[DyadicChat] ERROR: Answerer socket ${answerer.id} not found! Cannot send paired event.`);
+      }
+      if (!helperSocket) {
+        console.error(`[DyadicChat] ERROR: Helper socket ${helper.id} not found! Cannot send paired event.`);
+      }
+      
+      console.log(`[DyadicChat] Sending paired event to answerer ${answerer.id} (PID: ${answerer.prolific?.PID}) with has_question=${itemForAnswerer.has_question}`);
+      console.log(`[DyadicChat] Sending paired event to helper ${helper.id} (PID: ${helper.prolific?.PID}) with has_question=${itemForHelper.has_question}`);
+      
       io.to(answerer.id).emit('paired', {
         roomId,
         item: itemForAnswerer,
+        role: 'answerer', // Include role for client verification
         min_turns: MAX_TURNS,
         server_question_type: QUESTION_TYPE,
         questionNumber: 1,
@@ -1364,6 +1453,7 @@ io.on('connection', (socket) => {
       io.to(helper.id).emit('paired', {
         roomId,
         item: itemForHelper,
+        role: 'helper', // Include role for client verification
         min_turns: MAX_TURNS,
         server_question_type: QUESTION_TYPE,
         questionNumber: 1,

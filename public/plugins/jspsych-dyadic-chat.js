@@ -1124,6 +1124,16 @@
         // Set chat begin time
         chatBeginTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         
+        // Verify role consistency
+        const expectedRole = window.userRole; // Set by paired:instructions
+        const receivedRole = p.role; // From paired event
+        if (expectedRole && receivedRole && expectedRole !== receivedRole) {
+          console.error(`[DyadicChat] ROLE MISMATCH ERROR! Expected role from instructions: ${expectedRole}, but received role in paired event: ${receivedRole}`);
+          console.error(`[DyadicChat] This indicates a server-side bug. has_question=${p.item.has_question}, expected answerer=${expectedRole === 'answerer'}`);
+        } else if (expectedRole && receivedRole) {
+          console.log(`[DyadicChat] Role verified: ${receivedRole} (matches instructions)`);
+        }
+        
         // Store user's question status and answer data
         window.__userHasQuestion = p.item.has_question;
         window.__userHasOptions = p.item.has_options;
@@ -1131,6 +1141,7 @@
         console.log('[DyadicChat] Paired payload:', p);
         console.log('[DyadicChat] User has question:', p.item.has_question);
         console.log('[DyadicChat] User has options:', p.item.has_options);
+        console.log('[DyadicChat] Role from event:', p.role, 'Role from instructions:', window.userRole);
         console.log('[DyadicChat] Item data:', p.item);
         
         if (p.item.has_question && p.item.has_options) {
