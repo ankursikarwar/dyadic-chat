@@ -122,8 +122,17 @@
 //     return baseInstructions;
 //   }
 
-  function generateSidebarInstructions(questionType, minMessages = 10) {
-    console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType);
+  function generateSidebarInstructions(questionType, minMessages = 10, role = 'answerer') {
+    console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType, 'role:', role);
+    
+    if (role === 'answerer') {
+      return generateAnswererSidebarInstructions(questionType, minMessages);
+    } else {
+      return generateHelperSidebarInstructions(questionType, minMessages);
+    }
+  }
+
+  function generateAnswererSidebarInstructions(questionType, maxTurns) {
     const baseInstructions = `
 <div class="instr instr-aesthetic">
   <style>
@@ -132,37 +141,131 @@
     .instr-aesthetic li { margin: 6px 0; color: #1a1a1a; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
     .instr-aesthetic h2 { margin-bottom: 10px; color: #1a1a1a; }
+    .instr-section { margin-bottom: 20px; }
+    .instr-section h3 { color: #0066cc; margin-top: 15px; margin-bottom: 10px; font-size: 1.1em; }
+    .instr-section h4 { color: #1a1a1a; margin-top: 15px; margin-bottom: 10px; font-size: 1em; }
     .consent-box h2 { margin: 0 0 12px 0; }
 </style>
-  <ol class="nice">
-    <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
-    <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
-    <li>Task Details (Read Carefully):
-      <ol type="a">
-        <li>You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</li>
-        <li>One of you will be the Answerer and the other one will be the Helper.</li>
-        <li>If you are the Answerer, you will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</li>
-        <li>If you are the Helper, you won’t receive any question. Your task will be to help your partner (Answerer) to answer the question correctly.</li>
-        <li>Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</li>
+  <!-- Study Section -->
+  <div class="instr-section">
+    <h3>Study</h3>
+    <ol class="nice">
+      <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
+      <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
+    </ol>
+  </div>
+
+  <!-- Task Details Section -->
+  <div class="instr-section">
+    <h3>Task Details</h3>
+    <ol class="nice">
+      <li><strong style="color: #0066cc;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+      <li><strong style="color: #cc0000;">You are the Answerer.</strong></li>
+      <li><strong style="color: #0066cc;">You will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</strong></li>
+      <li><strong style="color: #0066cc;">Your partner is the Helper and will help you answer the question correctly.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: Your partner (helper) will not be able to see the question.</strong></li>
+      <li><strong style="color: #0066cc;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
+      <li><strong style="color: #0066cc;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
+      <li><strong style="color: #0066cc;">Note (taking turns in the conversation):</strong>
+        <ol type="a">
+          <li><strong style="color: #0066cc;">You have to send the first message.</strong></li>
+          <li><strong style="color: #0066cc;">You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</strong></li>
+        </ol>
+      </li>
+      <li><strong style="color: #0066cc;">You can choose to terminate the conversation early by pressing the "End Chat and Answer Now" button if you think you have found the correct answer.</strong></li>
+      <li><strong style="color: #0066cc;">After the conversation is complete (either by choosing to terminate, or by reaching the maximum number of allowed messages), you must select the best option you think is correct and click "Submit Answer".</strong></li>
+    </ol>
+    
+    <!-- Read Carefully Subsection -->
+    <div style="margin-top: 20px;">
+      <h4>Read Carefully</h4>
+      <ul class="nice" style="margin-top: 10px;">
         ${getQuestionTypeSpecificSidebarInstructions(questionType)}
-      </ol>
-    </li>
-    <li>You and your partner will have a maximum of ${minMessages} messages each that you can send to each other.</li>
-    <li>Note (taking turns in the conversation):
-      <ol type="a">
-        <li>The Answerer sends the first message.</li>
-        <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
-      </ol>
-    </li>
-    <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
-    <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
-    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
-    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you’ve fully completed the task.</strong></li>
-    <li>You will attempt 3 total questions in the entire session. Your assigned role (Answerer or Helper) might change across these 3 questions.</li>
-    <li>You can zoom into the image to inspect details.</li>
-    <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
-    <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded. </li>
-  </ol>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Do's and Don'ts Section -->
+  <div class="instr-section">
+    <h3>Do's and Don'ts</h3>
+    <ol class="nice">
+      <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
+      <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you've fully completed the task.</strong></li>
+      <li>You will attempt 3 total questions in the entire session.</li>
+      <li>You can zoom into the image to inspect details.</li>
+      <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
+      <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
+    </ol>
+  </div>
+</div>
+`;
+    return baseInstructions;
+  }
+
+  function generateHelperSidebarInstructions(questionType, maxTurns) {
+    const baseInstructions = `
+<div class="instr instr-aesthetic">
+  <style>
+    .instr-aesthetic { color: #1a1a1a; }
+    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; color: #1a1a1a; }
+    .instr-aesthetic li { margin: 6px 0; color: #1a1a1a; }
+    .instr-aesthetic ol[type="a"] { margin-top: 6px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; color: #1a1a1a; }
+    .instr-section { margin-bottom: 20px; }
+    .instr-section h3 { color: #cc0000; margin-top: 15px; margin-bottom: 10px; font-size: 1.1em; }
+    .instr-section h4 { color: #1a1a1a; margin-top: 15px; margin-bottom: 10px; font-size: 1em; }
+    .consent-box h2 { margin: 0 0 12px 0; }
+</style>
+  <!-- Study Section -->
+  <div class="instr-section">
+    <h3>Study</h3>
+    <ol class="nice">
+      <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
+      <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
+    </ol>
+  </div>
+
+  <!-- Task Details Section -->
+  <div class="instr-section">
+    <h3>Task Details</h3>
+    <ol class="nice">
+      <li><strong style="color: #cc0000;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+      <li><strong style="color: #0066cc;">You are the Helper.</strong></li>
+      <li><strong style="color: #cc0000;">Your partner is the Answerer and they will receive a multiple choice question about the room.</strong></li>
+      <li><strong style="color: #0066cc;">You won't receive any question yourself. Your task is to help your partner (Answerer) to answer the question correctly.</strong></li>
+      <li><strong style="color: #cc0000;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
+      <li><strong style="color: #cc0000;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
+      <li><strong style="color: #cc0000;">Note (taking turns in the conversation):</strong>
+        <ol type="a">
+          <li><strong style="color: #cc0000;">Your partner will send the first message.</strong></li>
+          <li><strong style="color: #cc0000;">You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</strong></li>
+        </ol>
+      </li>
+      <li><strong style="color: #cc0000;">After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</strong></li>
+      <li><strong style="color: #cc0000;">Once your partner has submitted their answer, you will move on to the next question.</strong></li>
+    </ol>
+    
+    <!-- Read Carefully Subsection -->
+    <div style="margin-top: 20px;">
+      <h4>Read Carefully</h4>
+      <ul class="nice" style="margin-top: 10px;">
+        ${getQuestionTypeSpecificSidebarInstructions(questionType)}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Do's and Don'ts Section -->
+  <div class="instr-section">
+    <h3>Do's and Don'ts</h3>
+    <ol class="nice">
+      <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to help your partner. If you do not engage properly, payment might not be issued.</strong></li>
+      <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you've fully completed the task.</strong></li>
+      <li>You will attempt 3 total questions in the entire session.</li>
+      <li>You can zoom into the image to inspect details.</li>
+      <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
+      <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
+    </ol>
+  </div>
 </div>
 `;
     return baseInstructions;
@@ -393,8 +496,10 @@
                     '      <div id="dc-instructions-content" class="dc-instructions">', (function() {
                       // Use server question type for sidebar instructions if available, otherwise fall back to item question type
                       const questionTypeForInstructions = p.server_question_type || (p && p.item && p.item.question_type) || 'all_types';
-                      console.log('[DyadicChat] Generating sidebar instructions for question_type:', questionTypeForInstructions);
-                      return generateSidebarInstructions(questionTypeForInstructions, minMessages);
+                      // Get role from paired event or fall back to window.userRole
+                      const roleForInstructions = p.role || window.userRole || 'answerer';
+                      console.log('[DyadicChat] Generating sidebar instructions for question_type:', questionTypeForInstructions, 'role:', roleForInstructions);
+                      return generateSidebarInstructions(questionTypeForInstructions, minMessages, roleForInstructions);
                     })(), '</div>',
           '    </section>',
           '    <section class="dc-center">',

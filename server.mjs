@@ -505,6 +505,9 @@ function tryPair(){
   if (queue.length >= 2){
     const user1 = queue.shift();
     const user2 = queue.shift();
+    
+    // CRITICAL: Log queue order to verify which user is first
+    console.log(`[DyadicChat] Queue order: user1=${user1.id} (PID: ${user1.prolific?.PID}), user2=${user2.id} (PID: ${user2.prolific?.PID})`);
     console.log(`[DyadicChat] Attempting to pair ${user1.id} (PID: ${user1.prolific?.PID}) with ${user2.id} (PID: ${user2.prolific?.PID})`);
 
     if (REQUIRE_DISTINCT_PID && user1?.prolific?.PID === user2?.prolific?.PID) {
@@ -568,7 +571,10 @@ function tryPair(){
     const answerer = user1;  // First user who joins = answerer
     const helper = user2;    // Second user who joins = helper
 
-    console.log(`[DyadicChat] Role assignment: ${answerer.id} (first in queue) = answerer, ${helper.id} (second in queue) = helper`);
+    // CRITICAL: Log PIDs to verify assignment
+    console.log(`[DyadicChat] Role assignment: ${answerer.id} (PID: ${answerer.prolific?.PID}, first in queue) = answerer`);
+    console.log(`[DyadicChat] Role assignment: ${helper.id} (PID: ${helper.prolific?.PID}, second in queue) = helper`);
+    console.log(`[DyadicChat] Verifying: answerer PID=${answerer.prolific?.PID}, helper PID=${helper.prolific?.PID}`);
     console.log(`[DyadicChat] Item ${item.sample_id}: user_1_question="${item.user_1_question}", user_2_question="${item.user_2_question}"`);
 
     answerer.join(roomId);
@@ -629,6 +635,9 @@ function tryPair(){
       room.userRoles[helper.id] = 'helper';
     }
     
+    // CRITICAL: Verify originalUsers array matches our assignment
+    console.log(`[DyadicChat] originalUsers[0] (answerer): ${room.originalUsers[0].id} (PID: ${room.userPids[room.originalUsers[0].id]})`);
+    console.log(`[DyadicChat] originalUsers[1] (helper): ${room.originalUsers[1].id} (PID: ${room.userPids[room.originalUsers[1].id]})`);
     console.log(`[DyadicChat] Sending paired:instructions event to answerer (${answerer.id}, PID: ${answerer.prolific?.PID}) and helper (${helper.id}, PID: ${helper.prolific?.PID})`);
     console.log(`[DyadicChat] Role assignment confirmed: userRoles[${answerer.id}]=${room.userRoles[answerer.id]}, userRoles[${helper.id}]=${room.userRoles[helper.id]}`);
     console.log(`[DyadicChat] Room userPids:`, room.userPids);
@@ -645,12 +654,39 @@ function tryPair(){
       console.error(`[DyadicChat] ERROR: Helper socket ${helper.id} not found when sending paired:instructions`);
     }
     
+    // CRITICAL: Verify socket IDs match before sending
+    const answererSocket = io.sockets.sockets.get(answerer.id);
+    const helperSocket = io.sockets.sockets.get(helper.id);
+    
+    if (!answererSocket) {
+      console.error(`[DyadicChat] CRITICAL ERROR: Answerer socket ${answerer.id} (PID: ${answerer.prolific?.PID}) not found in io.sockets.sockets!`);
+    }
+    if (!helperSocket) {
+      console.error(`[DyadicChat] CRITICAL ERROR: Helper socket ${helper.id} (PID: ${helper.prolific?.PID}) not found in io.sockets.sockets!`);
+    }
+    
+    // CRITICAL: Verify PIDs match before sending
+    const answererPidFromSocket = answererSocket?.prolific?.PID;
+    const helperPidFromSocket = helperSocket?.prolific?.PID;
+    
+    if (answererPidFromSocket && answererPidFromSocket !== answerer.prolific?.PID) {
+      console.error(`[DyadicChat] CRITICAL ERROR: Answerer PID mismatch! Socket has PID: ${answererPidFromSocket}, but answerer object has PID: ${answerer.prolific?.PID}`);
+    }
+    if (helperPidFromSocket && helperPidFromSocket !== helper.prolific?.PID) {
+      console.error(`[DyadicChat] CRITICAL ERROR: Helper PID mismatch! Socket has PID: ${helperPidFromSocket}, but helper object has PID: ${helper.prolific?.PID}`);
+    }
+    
+    // Send to answerer
+    console.log(`[DyadicChat] Sending paired:instructions to answerer socket ${answerer.id} (PID: ${answerer.prolific?.PID}) with role='answerer'`);
     io.to(answerer.id).emit('paired:instructions', {
       roomId,
       role: 'answerer',
       server_question_type: QUESTION_TYPE,
       maxTurns: MAX_TURNS
     });
+    
+    // Send to helper
+    console.log(`[DyadicChat] Sending paired:instructions to helper socket ${helper.id} (PID: ${helper.prolific?.PID}) with role='helper'`);
     io.to(helper.id).emit('paired:instructions', {
       roomId,
       role: 'helper',
@@ -659,8 +695,8 @@ function tryPair(){
     });
     
     // Log what was sent for verification
-    console.log(`[DyadicChat] Sent paired:instructions to answerer ${answerer.id} with role='answerer'`);
-    console.log(`[DyadicChat] Sent paired:instructions to helper ${helper.id} with role='helper'`);
+    console.log(`[DyadicChat] Sent paired:instructions to answerer ${answerer.id} (PID: ${answerer.prolific?.PID}) with role='answerer'`);
+    console.log(`[DyadicChat] Sent paired:instructions to helper ${helper.id} (PID: ${helper.prolific?.PID}) with role='helper'`);
 
     // DON'T send initial paired event immediately - wait for both users to finish instructions
     // The paired event will be sent when request:paired_data is called, or when both are ready
@@ -809,21 +845,91 @@ io.on('connection', (socket) => {
     return;
   }
 
-  // Clear any existing room assignment for reconnecting users
-  socket.currentRoom = null;
-
-  console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
-  queue.push(socket);
-  console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
-  console.log(`[DyadicChat] Calling tryPair() - function type: ${typeof tryPair}`);
-  try {
-    if (typeof tryPair === 'function') {
-  tryPair();
-    } else {
-      console.error(`[DyadicChat] ERROR: tryPair is not a function! Type: ${typeof tryPair}`);
+  // CRITICAL: Check if this is a reconnection - if user already has a room, restore them instead of queuing
+  let existingRoom = null;
+  let existingRoomId = null;
+  for (const [roomId, room] of rooms.entries()) {
+    // Check if this PID is already in this room
+    const pidInRoom = Object.values(room.userPids || {}).includes(pid) || 
+                      room.users.some(u => u.prolific?.PID === pid) ||
+                      (room.originalUsers && room.originalUsers.some(u => u.prolific?.PID === pid));
+    if (pidInRoom) {
+      existingRoom = room;
+      existingRoomId = roomId;
+      console.log(`[DyadicChat] Found existing room ${roomId} for reconnecting user ${socket.id} (PID: ${pid})`);
+      break;
     }
-  } catch (e) {
-    console.error(`[DyadicChat] ERROR calling tryPair():`, e);
+  }
+  
+  if (existingRoom && existingRoomId) {
+    // This is a reconnection - restore user to their existing room
+    console.log(`[DyadicChat] Reconnecting user ${socket.id} (PID: ${pid}) to existing room ${existingRoomId}`);
+    socket.currentRoom = existingRoomId;
+    
+    // Find the original socket for this PID and replace it
+    const originalSocketIndex = existingRoom.users.findIndex(u => u.prolific?.PID === pid);
+    if (originalSocketIndex >= 0) {
+      const originalSocket = existingRoom.users[originalSocketIndex];
+      console.log(`[DyadicChat] Replacing original socket ${originalSocket.id} with new socket ${socket.id} for PID ${pid}`);
+      
+      // Update room.users
+      existingRoom.users[originalSocketIndex] = socket;
+      
+      // Update room.userRoles and room.userPids with new socket ID
+      if (existingRoom.userRoles[originalSocket.id]) {
+        existingRoom.userRoles[socket.id] = existingRoom.userRoles[originalSocket.id];
+        delete existingRoom.userRoles[originalSocket.id];
+      }
+      if (existingRoom.userPids[originalSocket.id]) {
+        existingRoom.userPids[socket.id] = existingRoom.userPids[originalSocket.id];
+        delete existingRoom.userPids[originalSocket.id];
+      }
+      
+      // Update room.answerer or room.helper if this socket was one of them
+      if (existingRoom.answerer && existingRoom.answerer.id === originalSocket.id) {
+        existingRoom.answerer = socket;
+        console.log(`[DyadicChat] Updated room.answerer to new socket ${socket.id}`);
+      }
+      if (existingRoom.helper && existingRoom.helper.id === originalSocket.id) {
+        existingRoom.helper = socket;
+        console.log(`[DyadicChat] Updated room.helper to new socket ${socket.id}`);
+      }
+      
+      // Re-join the room
+      socket.join(existingRoomId);
+      
+      // Re-send paired:instructions with the correct role
+      const userRole = existingRoom.userRoles[socket.id];
+      if (userRole) {
+        console.log(`[DyadicChat] Re-sending paired:instructions to reconnected user ${socket.id} (PID: ${pid}) with role=${userRole}`);
+        io.to(socket.id).emit('paired:instructions', {
+          roomId: existingRoomId,
+          role: userRole,
+          server_question_type: QUESTION_TYPE,
+          maxTurns: MAX_TURNS
+        });
+      } else {
+        console.error(`[DyadicChat] ERROR: Could not determine role for reconnected user ${socket.id} (PID: ${pid})`);
+      }
+    } else {
+      console.error(`[DyadicChat] ERROR: Could not find original socket for PID ${pid} in room ${existingRoomId}`);
+    }
+  } else {
+    // This is a new user - add to queue
+    console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
+    socket.currentRoom = null;
+    queue.push(socket);
+    console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
+    console.log(`[DyadicChat] Calling tryPair() - function type: ${typeof tryPair}`);
+    try {
+      if (typeof tryPair === 'function') {
+        tryPair();
+      } else {
+        console.error(`[DyadicChat] ERROR: tryPair is not a function! Type: ${typeof tryPair}`);
+      }
+    } catch (e) {
+      console.error(`[DyadicChat] ERROR calling tryPair():`, e);
+    }
   }
 
   socket.on('disconnect', (reason) => {

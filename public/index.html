@@ -105,12 +105,11 @@
     <h3>Task Details</h3>
     <ol class="nice">
       <li><strong style="color: #0066cc;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-      <li><strong style="color: #0066cc;">You are the Answerer.</strong></li>
+      <li><strong style="color: #cc0000;">You are the Answerer.</strong></li>
       <li><strong style="color: #0066cc;">You will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</strong></li>
       <li><strong style="color: #0066cc;">Your partner is the Helper and will help you answer the question correctly.</strong></li>
       <li><strong style="color: #cc0000;">NOTE: Your partner (helper) will not be able to see the question.</strong></li>
       <li><strong style="color: #0066cc;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
-      ${getQuestionTypeSpecificInstructions(questionType)}
       <li><strong style="color: #0066cc;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
       <li><strong style="color: #0066cc;">Note (taking turns in the conversation):</strong>
         <ol type="a">
@@ -121,6 +120,14 @@
       <li><strong style="color: #0066cc;">You can choose to terminate the conversation early by pressing the "End Chat and Answer Now" button if you think you have found the correct answer.</strong></li>
       <li><strong style="color: #0066cc;">After the conversation is complete (either by choosing to terminate, or by reaching the maximum number of allowed messages), you must select the best option you think is correct and click "Submit Answer".</strong></li>
     </ol>
+    
+    <!-- Read Carefully Subsection -->
+    <div style="margin-top: 30px;">
+      <h4 style="color: #1a1a1a; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
+      <ul class="nice" style="margin-top: 15px;">
+        ${getQuestionTypeSpecificInstructions(questionType)}
+      </ul>
+    </div>
   </div>
 
   <!-- Do's and Don'ts Section -->
@@ -141,7 +148,7 @@
 
   <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
     <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
-    <img src="/inst_img/interface.png" alt="Task Interface" style="max-width: 100%; height: auto;">
+    <img src="/inst_img/interface_answerer.png" alt="Task Interface" style="max-width: 100%; height: auto;">
   </div>
 
   <p>Click "Begin Task" when you are ready.</p>
@@ -177,22 +184,29 @@
   <div class="instr-section">
     <h3>Task Details</h3>
     <ol class="nice">
-      <li>You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</li>
-      <li><strong style="color: #cc0000;">You are the Helper.</strong></li>
-      <li>Your partner is the Answerer and they will receive a multiple choice question about the room.</li>
-      <li>You won't receive any question yourself. Your task is to help your partner (Answerer) to answer the question correctly.</li>
-      <li>Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</li>
-      ${getQuestionTypeSpecificInstructions(questionType)}
-      <li>You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</li>
-      <li>Note (taking turns in the conversation):
+      <li><strong style="color: #cc0000;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+      <li><strong style="color: #0066cc;">You are the Helper.</strong></li>
+      <li><strong style="color: #cc0000;">Your partner is the Answerer and they will receive a multiple choice question about the room.</strong></li>
+      <li><strong style="color: #0066cc;">You won't receive any question yourself. Your task is to help your partner (Answerer) to answer the question correctly.</strong></li>
+      <li><strong style="color: #cc0000;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
+      <li><strong style="color: #cc0000;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
+      <li><strong style="color: #cc0000;">Note (taking turns in the conversation):</strong>
         <ol type="a">
-          <li>Your partner will send the first message.</li>
-          <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
+          <li><strong style="color: #cc0000;">Your partner will send the first message.</strong></li>
+          <li><strong style="color: #cc0000;">You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</strong></li>
         </ol>
       </li>
-      <li>After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</li>
-      <li>Once your partner has submitted their answer, you will move on to the next question.</li>
+      <li><strong style="color: #cc0000;">After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</strong></li>
+      <li><strong style="color: #cc0000;">Once your partner has submitted their answer, you will move on to the next question.</strong></li>
     </ol>
+    
+    <!-- Read Carefully Subsection -->
+    <div style="margin-top: 30px;">
+      <h4 style="color: #1a1a1a; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
+      <ul class="nice" style="margin-top: 15px;">
+        ${getQuestionTypeSpecificInstructions(questionType)}
+      </ul>
+    </div>
   </div>
 
   <!-- Do's and Don'ts Section -->
@@ -213,7 +227,7 @@
 
   <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
     <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
-    <img src="/inst_img/interface.png" alt="Task Interface" style="max-width: 100%; height: auto;">
+    <img src="/inst_img/interface_helper.png" alt="Task Interface" style="max-width: 100%; height: auto;">
   </div>
 
   <p>Click "Begin Task" when you are ready.</p>
@@ -742,12 +756,16 @@ const consentTrial = {
             if (paired || blocked) return; // Prevent duplicate handling
             paired = true;
             console.log('[DyadicChat] Paired for instructions:', data);
+            console.log('[DyadicChat] Received paired:instructions - socket.id:', socket.id, 'PID:', pidFromUrl, 'role:', data.role, 'roomId:', data.roomId);
             window.pairingData = data;
             window.userRole = data.role;
             window.serverQuestionType = data.server_question_type;
             window.maxTurns = data.maxTurns;
             socket.currentRoom = data.roomId;
             window.socket = socket; // Store socket globally
+            
+            // CRITICAL: Verify the role matches our PID
+            console.log('[DyadicChat] Setting window.userRole to:', data.role, 'for PID:', pidFromUrl);
             
             // Move to instructions
             if (typeof finishTrialFn === 'function') {
