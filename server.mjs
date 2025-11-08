@@ -615,9 +615,17 @@ io.on('connection', (socket) => {
       if (user) {
         // Re-send the paired event with current item data
         const item = room.item;
-        // Answerer is always room.users[0] (first user), helper is room.users[1] (second user)
-        const answerer = room.answerer || room.users[0];
-        const isAnswerer = user.id === answerer.id;
+        
+        // Use room.userRoles as the source of truth for role assignment
+        // This ensures consistency with paired:instructions event
+        const userRole = room.userRoles[socket.id] || 'answerer'; // Default to answerer if not found
+        const isAnswerer = userRole === 'answerer';
+        
+        console.log(`[DyadicChat] request:paired_data for ${socket.id}, role from userRoles: ${userRole}, isAnswerer: ${isAnswerer}`);
+        
+        // Get answerer and helper from room (these are the authoritative references)
+        const answerer = room.answerer || (isAnswerer ? user : room.users.find(u => room.userRoles[u.id] === 'answerer'));
+        const helper = room.helper || (!isAnswerer ? user : room.users.find(u => room.userRoles[u.id] === 'helper'));
         
         const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
         const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
@@ -629,7 +637,7 @@ io.on('connection', (socket) => {
           goal_question: answererQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
           correct_answer: answererQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
           options: answererQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
-          has_question: true,
+          has_question: true, // Answerer always has the question
           has_options: !!(answererQuestionField === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
         } : {
           ...item,
@@ -647,9 +655,10 @@ io.on('connection', (socket) => {
           min_turns: MAX_TURNS,
           server_question_type: QUESTION_TYPE,
           questionNumber: room.currentQuestionIndex + 1,
-          totalQuestions: room.questionSequence.length
+          totalQuestions: room.questionSequence.length,
+          isDemo: room.questionSequence[room.currentQuestionIndex]?.isDemo || false
         });
-        console.log(`[DyadicChat] Re-sent paired event to ${socket.id} for room ${roomId}`);
+        console.log(`[DyadicChat] Re-sent paired event to ${socket.id} (role: ${userRole}) for room ${roomId}`);
       }
     }
   });
@@ -852,9 +861,36 @@ io.on('connection', (socket) => {
       room.chatClosed = false;
 
       // Answerer and helper are constant throughout the trial
-      // Answerer is always the first user who joined, helper is always the second
-      const answerer = room.answerer || room.originalUsers[0];
-      const helper = room.helper || room.originalUsers[1];
+      // Use room.userRoles as the source of truth to find current socket objects
+      // This handles cases where sockets disconnect/reconnect
+      let answerer = room.answerer;
+      let helper = room.helper;
+      
+      // If answerer/helper not found, find them by role from userRoles
+      if (!answerer || !io.sockets.sockets.has(answerer.id)) {
+        answerer = room.users.find(u => room.userRoles[u.id] === 'answerer') || room.originalUsers[0];
+        // Update room.answerer if we found a valid socket
+        if (answerer && io.sockets.sockets.has(answerer.id)) {
+          room.answerer = answerer;
+        }
+      }
+      if (!helper || !io.sockets.sockets.has(helper.id)) {
+        helper = room.users.find(u => room.userRoles[u.id] === 'helper') || room.originalUsers[1];
+        // Update room.helper if we found a valid socket
+        if (helper && io.sockets.sockets.has(helper.id)) {
+          room.helper = helper;
+        }
+      }
+      
+      // Final fallback: use originalUsers if still not found
+      if (!answerer || !io.sockets.sockets.has(answerer.id)) {
+        answerer = room.originalUsers[0];
+      }
+      if (!helper || !io.sockets.sockets.has(helper.id)) {
+        helper = room.originalUsers[1];
+      }
+      
+      console.log(`[DyadicChat] Question ${nextIndex + 1}: Using answerer=${answerer?.id}, helper=${helper?.id} (from userRoles)`);
 
       const item = room.item;
       const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
@@ -1267,7 +1303,8 @@ io.on('connection', (socket) => {
       room.instructionsReady[answerer.id] = false;
       room.instructionsReady[helper.id] = false;
 
-      console.log(`[DyadicChat] Sending paired:instructions event to answerer (${answerer.id}) and helper (${helper.id})`);
+      console.log(`[DyadicChat] Sending paired:instructions event to answerer (${answerer.id}, PID: ${answerer.prolific?.PID}) and helper (${helper.id}, PID: ${helper.prolific?.PID})`);
+      console.log(`[DyadicChat] Role assignment confirmed: userRoles[${answerer.id}]=${room.userRoles[answerer.id]}, userRoles[${helper.id}]=${room.userRoles[helper.id]}`);
 
       // Send role information early for instructions page
       io.to(answerer.id).emit('paired:instructions', {
