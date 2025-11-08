@@ -428,7 +428,8 @@
         ].join('');
       }
 
-      const socket = io(trial.socketUrl, { query: { pid: pidLabel } });
+      // Use existing socket if provided, otherwise create new one
+      const socket = trial.existingSocket || io(trial.socketUrl, { query: { pid: pidLabel } });
       let myTurn = false, chatClosed = false;
       let msgCount = 0;
       let heartbeatInterval = null;
@@ -1109,6 +1110,13 @@
       /* duplicate removed */
       /* duplicate removed */
 
+      // Check if we already have pairing data from instructions phase
+      if (window.pairingData && window.pairingData.item) {
+        console.log('[DyadicChat] Using existing pairing data from instructions phase');
+        // Request the full paired event from server
+        socket.emit('request:paired_data');
+      }
+      
       socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
         // Set reaction time start point when users get paired
         t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();

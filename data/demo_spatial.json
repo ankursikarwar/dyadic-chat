@@ -1,0 +1,35 @@
+{
+    "sample_id": "demo_spatial_00000",
+    "isDemo": true,
+    "question_type": "spatial",
+    "room_part": "LivingRoom_v3001_Final_Part4_1",
+    "scene_id": "3158573",
+    "global_map_image": null,
+    "user_1_image_local_path": "demo",
+    "user_2_image_local_path": "demo",
+    "user_1_image": "demo",
+    "user_2_image": "demo",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Demo question for spatial orientation.",
+    "user_2_question": null,
+    "options_user_1": [
+        "right",
+        "front",
+        "left",
+        "behind"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "right",
+    "user_2_gt_answer_text": null,
+    "difficulty": 1,
+    "description_difficulty": [
+        2
+    ],
+    "angle": 82.5138014615784,
+    "distance": 3.6752167891263974,
+    "question_object": "Door",
+    "correct_answer": "right"
+}

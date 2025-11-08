@@ -34,6 +34,8 @@
       .instr-page-top { margin-top: 24px; }
       .instr li { margin: 8px 0; }
       .instr strong { color: #0066cc; }
+      .dc-spinner { width: 20px; height: 20px; border: 3px solid rgba(0,0,0,.2); border-top-color: #333; border-radius: 50%; animation: dcspin 0.9s linear infinite; margin: 20px auto; }
+      @keyframes dcspin { to { transform: rotate(360deg); } }
       /* Override any jsPsych default styles for consent page */
       .jspsych-content .consent-box,
       .jspsych-content .consent-box *,
@@ -46,6 +48,7 @@
   <body>
     <script>
       const jsPsych = initJsPsych();
+      window.jsPsych = jsPsych; // Make jsPsych available globally for fallback
       const __qp = new URLSearchParams(location.search);
       const pidFromUrl = __qp.get('PID') || __qp.get('PROLIFIC_PID') || 'DEBUG_LOCAL';
 
@@ -65,8 +68,17 @@
           </div>
         </div>`;
 
-      // Function to generate instructions based on question type
-      function generateInstructions(questionType, maxTurns) {
+      // Function to generate role-specific instructions
+      function generateRoleSpecificInstructions(role, questionType, maxTurns) {
+        if (role === 'answerer') {
+          return generateAnswererInstructions(questionType, maxTurns);
+        } else {
+          return generateHelperInstructions(questionType, maxTurns);
+        }
+      }
+
+      // Function to generate answerer instructions
+      function generateAnswererInstructions(questionType, maxTurns) {
         const baseInstructions = `
 <div class="instr instr-aesthetic instr-page-top" style="margin-top: 28px;">
   <style>
@@ -82,9 +94,9 @@
     <li>Task Details (Read Carefully):
       <ol type="a">
         <li>You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</li>
-        <li>One of you will be the Answerer and the other one will be the Helper.</li>
-        <li>If you are the Answerer, you will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</li>
-        <li>If you are the Helper, you won’t receive any question. Your task will be to help your partner (Answerer) to answer the question correctly.</li>
+        <li><strong style="color: #0066cc;">You are the Answerer.</strong></li>
+        <li>You will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</li>
+        <li>Your partner is the Helper and will help you answer the question correctly.</li>
         <li>Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</li>
         ${getQuestionTypeSpecificInstructions(questionType)}
       </ol>
@@ -94,15 +106,15 @@
     <li>You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</li>
     <li>Note (taking turns in the conversation):
       <ol type="a">
-        <li>The Answerer sends the first message.</li>
+        <li>You have to send the first message.</li>
         <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
       </ol>
     </li>
-    <li>If you are the Answerer, you can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
-    <li>After the conversation is complete (either by choosing to terminate, or the pair reaches the maximum number of allowed messages), the Answerer should select the best option they think is correct and click "Submit Answer".</li>
+    <li>You can choose to terminate the conversation early by pressing the “End Chat and Answer Now” button if you think you have found the correct answer.</li>
+    <li>After the conversation is complete (either by choosing to terminate, or by reaching the maximum number of allowed messages), you must select the best option you think is correct and click "Submit Answer".</li>
     <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
     <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you’ve fully completed the task.</strong></li>
-    <li>You will attempt 3 total questions in the entire session. Your assigned role (Answerer or Helper) might change across these 3 questions.</li>
+    <li>You will attempt 3 total questions in the entire session.</li>
     <li>You can zoom into the image to inspect details.</li>
     <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language . </li>
     <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded. </li>
@@ -110,6 +122,63 @@
 
   <!-- Divider -->
   <div style="margin: 60px auto; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #0066cc, transparent);"></div>
+
+  <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
+    <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
+    <img src="/inst_img/interface.png" alt="Task Interface" style="max-width: 100%; height: auto;">
+  </div>
+
+  <p>Click "Begin Task" when you are ready.</p>
+</div>
+`;
+        return baseInstructions;
+      }
+
+      // Function to generate helper instructions
+      function generateHelperInstructions(questionType, maxTurns) {
+        const baseInstructions = `
+<div class="instr instr-aesthetic instr-page-top" style="margin-top: 28px;">
+  <style>
+    .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
+    .instr-aesthetic li { margin: 6px 0; }
+    .instr-aesthetic ol[type="a"] { margin-top: 6px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; }
+  </style>
+  <h2>Instructions</h2>
+  <ol class="nice">
+    <li>This is a collaborative task. You will be connected with another participant via chat to solve a question.</li>
+    <li>You have to communicate and collaborate with your partner in order to solve the question correctly.</li>
+    <li>Task Details (Read Carefully):
+      <ol type="a">
+        <li>You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</li>
+        <li><strong style="color: #cc0000;">You are the Helper.</strong></li>
+        <li>Your partner is the Answerer and theywill receive a multiple choice question about the room.</li>
+        <li>Your task is to help your partner (Answerer) to answer the question correctly. You won't receive any question yourself.</li>
+        <li>Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</li>
+        ${getQuestionTypeSpecificInstructions(questionType)}
+      </ol>
+    </li>
+    <br>
+    <br>
+    <li>You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</li>
+    <li>Note (taking turns in the conversation):
+      <ol type="a">
+        <li>Your partner will send the first message.</li>
+        <li>You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</li>
+      </ol>
+    </li>
+    <li>After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</li>
+    <li>Once your partner has submitted their answer, you will move on to the next question.</li>
+    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to help your partner. If you do not engage properly, payment might not be issued.</strong></li>
+    <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you've fully completed the task.</strong></li>
+    <li>You will attempt 3 total questions in the entire session.</li>
+    <li>You can zoom into the image to inspect details.</li>
+    <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
+    <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
+  </ol>
+
+  <!-- Divider -->
+  <div style="margin: 60px auto; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #cc0000, transparent);"></div>
 
   <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
     <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
@@ -522,6 +591,271 @@ const consentTrial = {
     }
   }
 };
+
+      // Custom waiting trial plugin - register on window like other plugins
+      (function() {
+        class WaitingTrialPlugin {
+          constructor(jsPsych) {
+            this.jsPsych = jsPsych;
+          }
+          
+          trial(display_element, trial) {
+            // Store display_element reference for dynamic updates
+            trial._displayElement = display_element;
+            
+            const updateDisplay = (message, showSpinner = true, additionalText = 'Please keep this tab open.') => {
+              display_element.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                  <h2 style="color: #1a1a1a; margin-bottom: 20px;">${message}</h2>
+                  ${showSpinner ? '<div class="dc-spinner"></div>' : ''}
+                  <div style="font-size: 14px; color: #999999; margin-top: 20px;">
+                    ${additionalText}
+                  </div>
+                </div>
+              `;
+            };
+            
+            updateDisplay(trial.message);
+            
+            if (trial.on_wait) {
+              const finishTrialFn = () => {
+                this.jsPsych.finishTrial();
+              };
+              // Store finishTrial function and updateDisplay function on the trial object
+              trial._finishTrial = finishTrialFn;
+              trial._updateDisplay = updateDisplay;
+              trial.on_wait(finishTrialFn, updateDisplay);
+            }
+          }
+        }
+        
+        WaitingTrialPlugin.info = {
+          name: 'waiting-trial',
+          parameters: {
+            message: { type: String, default: 'Please wait...' },
+            on_wait: { type: Function, default: null }
+          }
+        };
+        
+        // Register on window like other plugins
+        window.jsPsychWaitingTrial = WaitingTrialPlugin;
+      })();
+      
+      const waitingTrialPlugin = window.jsPsychWaitingTrial;
+
+      // Waiting page for pairing
+      const waitingForPairingTrial = {
+        type: waitingTrialPlugin,
+        message: 'Connecting to Partner',
+        on_wait: function(finishTrial, updateDisplay) {
+          console.log('[DyadicChat] Starting socket connection with PID:', pidFromUrl);
+          console.log('[DyadicChat] finishTrial type:', typeof finishTrial, finishTrial);
+          console.log('[DyadicChat] updateDisplay type:', typeof updateDisplay, updateDisplay);
+          
+          // Store finishTrial and updateDisplay in variables accessible in closures
+          const finishTrialFn = finishTrial;
+          const updateDisplayFn = updateDisplay;
+          
+          // Connect to socket with PID in query string (server expects this)
+          const socket = io(window.location.origin, { 
+            query: { pid: pidFromUrl } 
+          });
+          socket.prolific = { PID: pidFromUrl };
+          
+          let connected = false;
+          let paired = false;
+          let blocked = false;
+          
+          // Wait for socket to connect
+          socket.on('connect', () => {
+            connected = true;
+            console.log('[DyadicChat] Socket connected, socket ID:', socket.id, 'waiting for pairing...');
+          });
+          
+          socket.on('paired:instructions', (data) => {
+            if (paired || blocked) return; // Prevent duplicate handling
+            paired = true;
+            console.log('[DyadicChat] Paired for instructions:', data);
+            window.pairingData = data;
+            window.userRole = data.role;
+            window.serverQuestionType = data.server_question_type;
+            window.maxTurns = data.maxTurns;
+            socket.currentRoom = data.roomId;
+            window.socket = socket; // Store socket globally
+            
+            // Move to instructions
+            if (typeof finishTrialFn === 'function') {
+              console.log('[DyadicChat] Calling finishTrial function');
+              finishTrialFn();
+            } else {
+              console.error('[DyadicChat] finishTrial is not a function:', typeof finishTrialFn, finishTrialFn);
+              // Fallback: try to finish trial using jsPsych directly
+              if (window.jsPsych) {
+                console.log('[DyadicChat] Using fallback: window.jsPsych.finishTrial()');
+                window.jsPsych.finishTrial();
+              }
+            }
+          });
+          
+          // Handle connection errors
+          socket.on('connect_error', (error) => {
+            console.error('[DyadicChat] Socket connection error:', error);
+          });
+          
+          // Handle blocked events - update display instead of showing alert
+          socket.on('blocked:deck_complete', () => {
+            if (blocked) return;
+            blocked = true;
+            console.error('[DyadicChat] Blocked: deck complete');
+            
+            // Always update the display directly to ensure it works
+            const updatePageDisplay = () => {
+              // Try multiple selectors to find the display element
+              let displayEl = document.querySelector('.jspsych-content');
+              if (!displayEl) {
+                displayEl = document.querySelector('#jspsych-content');
+              }
+              if (!displayEl) {
+                displayEl = document.body;
+              }
+              
+              if (displayEl) {
+                displayEl.innerHTML = `
+                  <div style="text-align: center; padding: 40px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h2 style="color: #1a1a1a; margin-bottom: 20px; font-size: 28px;">Study is Full</h2>
+                    <div style="font-size: 18px; color: #666666; margin-top: 20px; max-width: 600px;">
+                      Sorry, the study is full. All items have been completed. You can close this tab.
+                    </div>
+                  </div>
+                `;
+                console.log('[DyadicChat] Display updated to show study is full');
+              } else {
+                console.error('[DyadicChat] Could not find display element to update');
+              }
+            };
+            
+            // Try using updateDisplayFn first, then fallback to direct update
+            if (updateDisplayFn && typeof updateDisplayFn === 'function') {
+              try {
+                updateDisplayFn('Study is Full', false, 'Sorry, the study is full. All items have been completed. You can close this tab.');
+              } catch (e) {
+                console.error('[DyadicChat] Error calling updateDisplayFn:', e);
+                updatePageDisplay();
+              }
+            } else {
+              updatePageDisplay();
+            }
+          });
+          
+          socket.on('blocked:repeat_pid', () => {
+            if (blocked) return;
+            blocked = true;
+            console.error('[DyadicChat] Blocked: repeat PID');
+            
+            // Always update the display directly to ensure it works
+            const updatePageDisplay = () => {
+              // Try multiple selectors to find the display element
+              let displayEl = document.querySelector('.jspsych-content');
+              if (!displayEl) {
+                displayEl = document.querySelector('#jspsych-content');
+              }
+              if (!displayEl) {
+                displayEl = document.body;
+              }
+              
+              if (displayEl) {
+                displayEl.innerHTML = `
+                  <div style="text-align: center; padding: 40px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h2 style="color: #1a1a1a; margin-bottom: 20px; font-size: 28px;">Already Participated</h2>
+                    <div style="font-size: 18px; color: #666666; margin-top: 20px; max-width: 600px;">
+                      You have already participated in this study. You can close this tab.
+                    </div>
+                  </div>
+                `;
+                console.log('[DyadicChat] Display updated to show already participated');
+              } else {
+                console.error('[DyadicChat] Could not find display element to update');
+              }
+            };
+            
+            // Try using updateDisplayFn first, then fallback to direct update
+            if (updateDisplayFn && typeof updateDisplayFn === 'function') {
+              try {
+                updateDisplayFn('Already Participated', false, 'You have already participated in this study. You can close this tab.');
+              } catch (e) {
+                console.error('[DyadicChat] Error calling updateDisplayFn:', e);
+                updatePageDisplay();
+              }
+            } else {
+              updatePageDisplay();
+            }
+          });
+          
+          // Timeout after 5 minutes
+          setTimeout(() => {
+            if (!paired && !blocked) {
+              console.warn('[DyadicChat] Pairing timeout after 5 minutes');
+              if (updateDisplayFn && typeof updateDisplayFn === 'function') {
+                updateDisplayFn('Pairing Timeout', false, 'No partner found within 5 minutes. Please refresh and try again.');
+              } else {
+                const displayEl = document.querySelector('.jspsych-content');
+                if (displayEl) {
+                  displayEl.innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                      <h2 style="color: #1a1a1a; margin-bottom: 20px;">Pairing Timeout</h2>
+                      <div style="font-size: 14px; color: #999999; margin-top: 20px;">
+                        No partner found within 5 minutes. Please refresh and try again.
+                      </div>
+                    </div>
+                  `;
+                }
+              }
+            }
+          }, 5 * 60 * 1000);
+        }
+      };
+
+      // Waiting page for partner to finish instructions
+      const waitingForPartnerInstructionsTrial = {
+        type: waitingTrialPlugin,
+        message: 'Waiting for your partner to finish reading the instructions...',
+        on_wait: function(finishTrial) {
+          // Store finishTrial in a variable accessible in closures
+          const finishTrialFn = finishTrial;
+          
+          if (window.socket) {
+            // Check if partner already finished
+            let partnerReady = false;
+            
+            window.socket.on('instructions:partner_ready', () => {
+              console.log('[DyadicChat] Partner finished instructions');
+              partnerReady = true;
+            });
+            
+            window.socket.on('instructions:both_ready', () => {
+              console.log('[DyadicChat] Both users ready, proceeding to study');
+              if (typeof finishTrialFn === 'function') {
+                finishTrialFn();
+              } else if (window.jsPsych) {
+                window.jsPsych.finishTrial();
+              }
+            });
+            
+            // If partner was already ready when we got here, we might have missed the event
+            // The server will send both_ready when we notify we're ready
+            // So we just wait for both_ready
+          } else {
+            console.error('[DyadicChat] No socket available for waiting');
+            // Fallback: wait a bit then proceed
+            if (typeof finishTrialFn === 'function') {
+              setTimeout(() => finishTrialFn(), 2000);
+            } else if (window.jsPsych) {
+              setTimeout(() => window.jsPsych.finishTrial(), 2000);
+            }
+          }
+        }
+      };
+
       // Fetch server config first, then initialize jsPsych
       async function initializeExperiment() {
         let serverConfig = { questionType: 'all_types', maxTurns: 10 };
@@ -534,19 +868,33 @@ const consentTrial = {
           console.warn('[DyadicChat] Failed to fetch server config, using defaults:', error);
         }
 
-        const instructionsTrial = {
-          type: jsPsychInstructions,
-          pages: [generateInstructions(serverConfig.questionType, serverConfig.maxTurns)], // Use server config
-          show_clickable_nav: true,
-          button_label_next: "Begin Task",
-          button_label_previous: "Back",
-          on_load: function() {
-            // Track instructions page start time
-            if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
-              window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+        // Create instructions trial dynamically based on role
+        function createInstructionsTrial() {
+          const role = window.userRole || 'answerer'; // Default to answerer if not set
+          const questionType = window.serverQuestionType || serverConfig.questionType;
+          const maxTurns = window.maxTurns || serverConfig.maxTurns;
+          
+          return {
+            type: jsPsychInstructions,
+            pages: [generateRoleSpecificInstructions(role, questionType, maxTurns)],
+            show_clickable_nav: true,
+            button_label_next: "Begin Task",
+            button_label_previous: "Back",
+            on_load: function() {
+              // Track instructions page start time
+              if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
+                window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+              }
+            },
+            on_finish: function() {
+              // Notify server that instructions are complete
+              if (window.socket && window.socket.currentRoom) {
+                console.log('[DyadicChat] Instructions finished, notifying server');
+                window.socket.emit('instructions:ready');
+              }
             }
-          }
-        };
+          };
+        }
 
         const chatTrial = {
           type: jsPsychDyadicChat,
@@ -557,10 +905,20 @@ const consentTrial = {
           answer_options: ['A','B','C','D'],
           wait_timeout_sec: 120,
           image_url: '',
-          question_type: serverConfig.questionType // Use server config
+          question_type: serverConfig.questionType, // Use server config
+          existingSocket: window.socket // Pass existing socket if available
         };
 
-        jsPsych.run([consentTrial, instructionsTrial, chatTrial]);
+        // Create timeline
+        const timeline = [
+          consentTrial,
+          waitingForPairingTrial,
+          createInstructionsTrial(),
+          waitingForPartnerInstructionsTrial,
+          chatTrial
+        ];
+
+        jsPsych.run(timeline);
       }
 
       // Initialize the experiment
