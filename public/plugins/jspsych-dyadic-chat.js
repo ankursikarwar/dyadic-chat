@@ -925,6 +925,11 @@
             console.log('[DyadicChat] Submitting survey data:', surveyData);
             console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
             if (window.__socket) {
+              // Show completion message immediately
+              display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses are being submitted...</div>';
+              
+              // Wait for server acknowledgment before redirecting
+              // This ensures the server has processed the survey submission before the socket disconnects
               window.__socket.emit('survey:submit', {
                 survey: surveyData,
                 answerData: window.__answerData,
@@ -940,22 +945,34 @@
                 }
               }, (response) => {
                 console.log('[DyadicChat] Survey submission response:', response);
+                
+                // Combine answer data with survey data
+                const finalData = {
+                  ...window.__answerData,
+                  survey: surveyData
+                };
+                
+                // Update completion message
+                display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
+                
+                // Add a small delay before redirecting to ensure server has fully processed
+                setTimeout(() => {
+                  self.jsPsych.finishTrial(finalData);
+                  redirectToProlific();
+                }, 500); // 500ms delay to ensure server processing is complete
               });
-              console.log('[DyadicChat] Survey data sent to server');
+              console.log('[DyadicChat] Survey data sent to server, waiting for acknowledgment...');
             } else {
               console.error('[DyadicChat] No socket connection available for survey submission');
+              // Fallback: still try to complete
+              const finalData = {
+                ...window.__answerData,
+                survey: surveyData
+              };
+              display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
+              self.jsPsych.finishTrial(finalData);
+              redirectToProlific();
             }
-            
-            // Combine answer data with survey data
-            const finalData = {
-              ...window.__answerData,
-              survey: surveyData
-            };
-            
-            // Show completion message and end trial
-            display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
-            self.jsPsych.finishTrial(finalData);
-            redirectToProlific();
           });
         } else {
           console.error('[DyadicChat] Survey form not found in DOM');
