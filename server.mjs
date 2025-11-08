@@ -1045,13 +1045,21 @@ io.on('connection', (socket) => {
       
       // Don't immediately notify partner - wait a bit to see if user reconnects
       // This prevents false "partner disconnected" messages during brief reconnections
+      // EXCEPTION: For instructions/questions phases, always notify (refresh should end study)
       const disconnectTimeout = setTimeout(() => {
-        // Only notify if user hasn't reconnected (check by PID)
-        const userReconnected = socketPid && Array.from(io.sockets.sockets.values()).some(s => 
-          s.prolific?.PID === socketPid && s.currentRoom === roomId
-        );
+        // For instructions/questions phases, always notify (don't check for reconnection)
+        // For survey phase, only notify if user hasn't reconnected
+        let shouldNotify = true;
+        if (!shouldEndStudy) {
+          // Survey phase - check if user reconnected
+          const userReconnected = socketPid && Array.from(io.sockets.sockets.values()).some(s => 
+            s.prolific?.PID === socketPid && s.currentRoom === roomId
+          );
+          shouldNotify = !userReconnected;
+        }
+        // If shouldEndStudy is true (instructions/questions), always notify regardless of reconnection
         
-        if (!userReconnected) {
+        if (shouldNotify) {
           // Mark this user as finished only if they haven't reconnected
           if (!room.finished[socket.id]) {
       room.finished[socket.id] = true;
@@ -1256,17 +1264,46 @@ io.on('connection', (socket) => {
       const room = rooms.get(roomId);
       const socketPid = socket.prolific?.PID;
       
-      // If this is a reconnection (same PID, different socket ID), clear any pending disconnect notifications
+      // If this is a reconnection (same PID, different socket ID), check if we should clear disconnect timeout
+      // CRITICAL: For instructions/questions phases, don't clear timeout - a refresh should end the study
       if (socketPid && room.disconnectTimeouts) {
         // Find the original socket ID for this PID
         const originalSocketId = Object.keys(room.userPids || {}).find(sid => room.userPids[sid] === socketPid);
         if (originalSocketId && originalSocketId !== socket.id && room.disconnectTimeouts[originalSocketId]) {
-          console.log(`[DyadicChat] User ${socketPid} reconnected (new socket: ${socket.id}, old: ${originalSocketId}), clearing disconnect timeout`);
-          clearTimeout(room.disconnectTimeouts[originalSocketId]);
-          delete room.disconnectTimeouts[originalSocketId];
-          // Clear finished status if it was set
-          if (room.finished[originalSocketId]) {
-            delete room.finished[originalSocketId];
+          // Check if user is in instructions or questions phase
+          // Use the original socket's state to determine this
+          let isInInstructionsOrQuestions = false;
+          if (room.instructionsReady) {
+            const originalSocketReady = room.instructionsReady[originalSocketId];
+            // If original socket hasn't finished instructions
+            if (originalSocketReady === false || originalSocketReady === undefined) {
+              isInInstructionsOrQuestions = true;
+              console.log(`[DyadicChat] Original socket ${originalSocketId} was in instructions phase (ready=${originalSocketReady})`);
+            } else if (originalSocketReady === true) {
+              // Original socket finished instructions - check if they submitted survey
+              // If not submitted, they're in questions phase
+              const originalSocketPid = room.userPids[originalSocketId];
+              const hasSubmitted = room.surveysByPid && room.surveysByPid[originalSocketPid];
+              if (!hasSubmitted) {
+                isInInstructionsOrQuestions = true;
+                console.log(`[DyadicChat] Original socket ${originalSocketId} was in questions phase (no survey submitted)`);
+              } else {
+                console.log(`[DyadicChat] Original socket ${originalSocketId} had submitted survey, not in instructions/questions phase`);
+              }
+            }
+          }
+          
+          if (isInInstructionsOrQuestions) {
+            console.log(`[DyadicChat] User ${socketPid} reconnected during instructions/questions phase - NOT clearing disconnect timeout (refresh should end study)`);
+            // Don't clear the timeout - let it fire to end the study
+          } else {
+            console.log(`[DyadicChat] User ${socketPid} reconnected (new socket: ${socket.id}, old: ${originalSocketId}), clearing disconnect timeout`);
+            clearTimeout(room.disconnectTimeouts[originalSocketId]);
+            delete room.disconnectTimeouts[originalSocketId];
+            // Clear finished status if it was set
+            if (room.finished[originalSocketId]) {
+              delete room.finished[originalSocketId];
+            }
           }
         }
       }
