@@ -1439,7 +1439,7 @@
             hideTypingIndicator();
           }, 5000);
         } else {
-          console.log('[DyadicChat] Partner is typing but it's my turn, ignoring typing indicator');
+          console.log('[DyadicChat] Partner is typing but it\'s my turn, ignoring typing indicator');
         }
       });
       socket.on('typing:stop', function(){
