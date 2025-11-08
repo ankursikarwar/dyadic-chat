@@ -885,6 +885,17 @@ io.on('connection', (socket) => {
         delete existingRoom.userPids[originalSocket.id];
       }
       
+      // CRITICAL: Transfer instructionsReady state from old socket ID to new socket ID
+      if (existingRoom.instructionsReady && existingRoom.instructionsReady[originalSocket.id] !== undefined) {
+        existingRoom.instructionsReady[socket.id] = existingRoom.instructionsReady[originalSocket.id];
+        delete existingRoom.instructionsReady[originalSocket.id];
+        console.log(`[DyadicChat] Transferred instructionsReady state: ${existingRoom.instructionsReady[socket.id]} (old socket: ${originalSocket.id}, new socket: ${socket.id})`);
+      } else if (existingRoom.instructionsReady) {
+        // If instructionsReady doesn't exist for old socket, initialize it as false for new socket
+        existingRoom.instructionsReady[socket.id] = false;
+        console.log(`[DyadicChat] Initialized instructionsReady for new socket ${socket.id} as false`);
+      }
+      
       // Update room.answerer or room.helper if this socket was one of them
       if (existingRoom.answerer && existingRoom.answerer.id === originalSocket.id) {
         existingRoom.answerer = socket;
@@ -1482,22 +1493,43 @@ io.on('connection', (socket) => {
       if (room.instructionsReady) {
         room.instructionsReady[socket.id] = true;
         console.log(`[DyadicChat] User ${socket.id} finished instructions in room ${roomId}`);
+        console.log(`[DyadicChat] Current instructionsReady state:`, room.instructionsReady);
         
         // Check if both users are ready
-        const allReady = Object.values(room.instructionsReady).every(ready => ready === true);
+        // Get the current socket IDs from room.users to check their ready status
+        const user1Ready = room.users[0] && room.instructionsReady[room.users[0].id] === true;
+        const user2Ready = room.users[1] && room.instructionsReady[room.users[1].id] === true;
+        const allReady = user1Ready && user2Ready;
+        
+        console.log(`[DyadicChat] Instructions ready check: user1 (${room.users[0]?.id}) ready=${user1Ready}, user2 (${room.users[1]?.id}) ready=${user2Ready}, allReady=${allReady}`);
+        
         if (allReady) {
           console.log(`[DyadicChat] Both users ready in room ${roomId}, allowing them to proceed`);
           // Notify both users they can proceed
           room.users.forEach(user => {
-            io.to(user.id).emit('instructions:both_ready');
+            const userStillConnected = io.sockets.sockets.has(user.id);
+            if (userStillConnected) {
+              console.log(`[DyadicChat] Sending instructions:both_ready to ${user.id}`);
+              io.to(user.id).emit('instructions:both_ready');
+            } else {
+              console.warn(`[DyadicChat] User ${user.id} is not connected, cannot send instructions:both_ready`);
+            }
           });
         } else {
           // Notify the other user that their partner finished instructions
           const otherUser = room.users.find(u => u.id !== socket.id);
           if (otherUser) {
-            io.to(otherUser.id).emit('instructions:partner_ready');
+            const otherStillConnected = io.sockets.sockets.has(otherUser.id);
+            if (otherStillConnected) {
+              console.log(`[DyadicChat] Sending instructions:partner_ready to ${otherUser.id}`);
+              io.to(otherUser.id).emit('instructions:partner_ready');
+            } else {
+              console.warn(`[DyadicChat] Other user ${otherUser.id} is not connected, cannot send instructions:partner_ready`);
+            }
           }
         }
+      } else {
+        console.error(`[DyadicChat] ERROR: room.instructionsReady is not initialized for room ${roomId}`);
       }
     }
   });
