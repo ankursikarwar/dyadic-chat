@@ -1458,6 +1458,19 @@ io.on('connection', (socket) => {
           isDemo: room.questionSequence[room.currentQuestionIndex]?.isDemo || false
         });
         
+        // CRITICAL: For the first question, send turn:you to answerer and turn:wait to helper
+        // This ensures the answerer can send the first message even if the initial turn:you was missed
+        if (room.currentQuestionIndex === 0) {
+          const isAnswerer = finalRole === 'answerer';
+          if (isAnswerer) {
+            console.log(`[DyadicChat] Sending turn:you to answerer ${socket.id} with paired event (first question)`);
+            io.to(socket.id).emit('turn:you');
+          } else {
+            console.log(`[DyadicChat] Sending turn:wait to helper ${socket.id} with paired event (first question)`);
+            io.to(socket.id).emit('turn:wait');
+          }
+        }
+        
         console.log(`[DyadicChat] Successfully sent paired event to ${socket.id}`);
     }
   });
