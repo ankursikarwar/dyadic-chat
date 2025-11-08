@@ -1423,18 +1423,24 @@
         updateMessages();
       });
       socket.on('typing:start', function(){
-        // Show typing indicator
-        showTypingIndicator();
+        // Only show typing indicator if it's NOT the user's turn
+        // If it's the user's turn, they should be typing, not the partner
+        if (!myTurn) {
+          console.log('[DyadicChat] Partner is typing (not my turn), showing indicator');
+          showTypingIndicator();
 
-        // Clear existing timeout
-        if (partnerTypingTimeout) {
-          clearTimeout(partnerTypingTimeout);
+          // Clear existing timeout
+          if (partnerTypingTimeout) {
+            clearTimeout(partnerTypingTimeout);
+          }
+
+          // Auto-hide after 5 seconds if no message is received
+          partnerTypingTimeout = setTimeout(() => {
+            hideTypingIndicator();
+          }, 5000);
+        } else {
+          console.log('[DyadicChat] Partner is typing but it's my turn, ignoring typing indicator');
         }
-
-        // Auto-hide after 5 seconds if no message is received
-        partnerTypingTimeout = setTimeout(() => {
-          hideTypingIndicator();
-        }, 5000);
       });
       socket.on('typing:stop', function(){
         // Hide typing indicator
@@ -1452,6 +1458,12 @@
         // This prevents turn:you from reopening a closed chat
         if (!chatClosed) {
           chatClosed = false; // Ensure chat is not closed (only if not already closed)
+        }
+        // Hide typing indicator when it becomes the user's turn (partner shouldn't be typing)
+        hideTypingIndicator();
+        if (partnerTypingTimeout) {
+          clearTimeout(partnerTypingTimeout);
+          partnerTypingTimeout = null;
         }
         pendingTurnEvent = 'you'; // Store for later processing if needed
         console.log('[DyadicChat] turn:you - state updated: myTurn=true, chatClosed=', chatClosed);

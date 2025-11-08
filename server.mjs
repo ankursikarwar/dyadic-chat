@@ -1475,6 +1475,9 @@ io.on('connection', (socket) => {
           const isAnswerer = finalRole === 'answerer';
           if (isAnswerer) {
             console.log(`[DyadicChat] Sending turn:you to answerer ${socket.id} with paired event (first question)`);
+            // CRITICAL: Update room.nextSenderId to the current socket ID (in case of reconnection)
+            room.nextSenderId = socket.id;
+            console.log(`[DyadicChat] Updated room.nextSenderId to ${socket.id} for answerer`);
             io.to(socket.id).emit('turn:you');
           } else {
             console.log(`[DyadicChat] Sending turn:wait to helper ${socket.id} with paired event (first question)`);
@@ -1535,22 +1538,28 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat:message', (msg={}) => {
+    console.log(`[DyadicChat] Received chat:message from ${socket.id}, msg:`, msg);
     const roomId = socket.currentRoom;
+    console.log(`[DyadicChat] Socket ${socket.id} currentRoom: ${roomId}`);
     if (!roomId || !rooms.has(roomId)) {
       // Room no longer exists, ignore the message
       console.log(`[DyadicChat] User ${socket.id} tried to send message to non-existent room ${roomId}`);
       return;
     }
     const room = rooms.get(roomId);
+    console.log(`[DyadicChat] Room found: ${roomId}, room.users: ${room.users?.map(u => u.id).join(',') || 'none'}, room.answerer: ${room.answerer?.id}, room.helper: ${room.helper?.id}`);
     
     // CRITICAL: Check if chat is already closed - reject message immediately
+    console.log(`[DyadicChat] Checking chat status: chatClosed=${room.chatClosed}`);
     if (room.chatClosed) {
       console.log(`[DyadicChat] User ${socket.id} tried to send message but chat is closed`);
       io.to(socket.id).emit('chat:closed');
       return;
     }
 
+    console.log(`[DyadicChat] Checking nextSenderId: room.nextSenderId=${room.nextSenderId}, socket.id=${socket.id}`);
     if (room.nextSenderId && room.nextSenderId !== socket.id){
+      console.log(`[DyadicChat] Wrong turn! Expected ${room.nextSenderId}, but ${socket.id} tried to send. Sending turn:wait.`);
       io.to(socket.id).emit('turn:wait');
       return;
     }
@@ -1561,6 +1570,7 @@ io.on('connection', (socket) => {
     // So max messages = minTurns * 2
     const currentMsgCount = room.msgCount || 0;
     const maxMessages = room.minTurns * 2;
+    console.log(`[DyadicChat] Message count check: currentMsgCount=${currentMsgCount}, maxMessages=${maxMessages}, minTurns=${room.minTurns}`);
     
     // If we've already reached the max messages, reject this message
     if (currentMsgCount >= maxMessages) {
@@ -1628,64 +1638,70 @@ io.on('connection', (socket) => {
       }
     }
 
-    // Find the other user - use room.answerer/room.helper for reliability
-    // This is more reliable than room.users.find() which might have stale socket references
-    let other = null;
-    if (room.answerer && room.answerer.id === socket.id) {
-      other = room.helper;
-    } else if (room.helper && room.helper.id === socket.id) {
-      other = room.answerer;
-    } else {
-      // Fallback: try to find by socket ID in room.users
-      other = room.users.find(u => u.id !== socket.id);
-      console.warn(`[DyadicChat] Could not find other user via room.answerer/helper, using fallback. Socket: ${socket.id}, answerer: ${room.answerer?.id}, helper: ${room.helper?.id}`);
+    // Find the other user - first try room.users, then verify socket is connected
+    console.log(`[DyadicChat] Looking for other user. Current socket: ${socket.id}, room.users: [${room.users.map(u => `${u.id} (PID: ${u.prolific?.PID})`).join(', ')}]`);
+    let other = room.users.find(u => u.id !== socket.id);
+    console.log(`[DyadicChat] Found other via room.users.find(): ${other?.id || 'null'}`);
+    
+    // If not found in room.users, try room.answerer/helper as fallback
+    if (!other) {
+      console.log(`[DyadicChat] Not found in room.users, trying room.answerer/helper. answerer.id=${room.answerer?.id}, helper.id=${room.helper?.id}`);
+      if (room.answerer && room.answerer.id === socket.id) {
+        other = room.helper;
+        console.log(`[DyadicChat] Current socket is answerer, using helper: ${other?.id}`);
+      } else if (room.helper && room.helper.id === socket.id) {
+        other = room.answerer;
+        console.log(`[DyadicChat] Current socket is helper, using answerer: ${other?.id}`);
+      }
+    }
+    
+    // If still not found, try to find by PID (reconnection case)
+    if (!other && socket.prolific?.PID) {
+      const socketPid = socket.prolific.PID;
+      console.log(`[DyadicChat] Still not found, trying PID lookup. Current PID: ${socketPid}, room.userPids:`, room.userPids);
+      const otherPid = Object.values(room.userPids || {}).find(pid => pid !== socketPid);
+      if (otherPid) {
+        console.log(`[DyadicChat] Found other PID: ${otherPid}, searching for socket...`);
+        const otherSocket = Array.from(io.sockets.sockets.values()).find(s => 
+          s.prolific?.PID === otherPid && s.currentRoom === roomId
+        );
+        if (otherSocket) {
+          other = otherSocket;
+          console.log(`[DyadicChat] Found other user by PID: ${other.id} (PID: ${otherPid})`);
+          // Update room.users if needed
+          const userIndex = room.users.findIndex(u => u.prolific?.PID === otherPid);
+          if (userIndex >= 0) {
+            room.users[userIndex] = otherSocket;
+            console.log(`[DyadicChat] Updated room.users[${userIndex}] to ${otherSocket.id}`);
+          }
+        } else {
+          console.error(`[DyadicChat] Could not find socket for PID ${otherPid} in room ${roomId}`);
+        }
+      } else {
+        console.error(`[DyadicChat] Could not find other PID in room.userPids`);
+      }
     }
     
     room.nextSenderId = other ? other.id : null;
+    console.log(`[DyadicChat] Final other user: ${other?.id || 'null'}, nextSenderId: ${room.nextSenderId || 'null'}`);
     
     if (other) {
       // Verify the other socket is still connected before sending
       const otherSocketStillConnected = io.sockets.sockets.has(other.id);
+      console.log(`[DyadicChat] Other socket ${other.id} connected: ${otherSocketStillConnected}`);
       if (otherSocketStillConnected) {
-        console.log(`[DyadicChat] Forwarding message from ${socket.id} to ${other.id}`);
+        console.log(`[DyadicChat] Forwarding message from ${socket.id} to ${other.id}, text: "${text}"`);
         io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
         io.to(other.id).emit('turn:you');
+        console.log(`[DyadicChat] Successfully sent chat:message and turn:you to ${other.id}`);
       } else {
         console.error(`[DyadicChat] ERROR: Other user ${other.id} is not connected! Cannot forward message.`);
         console.error(`[DyadicChat] Room state: answerer=${room.answerer?.id}, helper=${room.helper?.id}, users=${room.users.map(u => u.id).join(',')}`);
-        // Try to find the other user by PID and update room.answerer/helper
-        const socketPid = socket.prolific?.PID;
-        const otherPid = other.prolific?.PID || room.userPids[other.id];
-        if (otherPid) {
-          const actualOtherSocket = Array.from(io.sockets.sockets.values()).find(s => 
-            s.prolific?.PID === otherPid && s.currentRoom === roomId
-          );
-          if (actualOtherSocket) {
-            console.log(`[DyadicChat] Found other user by PID: ${actualOtherSocket.id} (PID: ${otherPid}), updating room references`);
-            // Update room references
-            if (room.answerer && room.answerer.id === other.id) {
-              room.answerer = actualOtherSocket;
-            }
-            if (room.helper && room.helper.id === other.id) {
-              room.helper = actualOtherSocket;
-            }
-            // Update room.users
-            const userIndex = room.users.findIndex(u => u.id === other.id);
-            if (userIndex >= 0) {
-              room.users[userIndex] = actualOtherSocket;
-            }
-            other = actualOtherSocket;
-            room.nextSenderId = other.id;
-            console.log(`[DyadicChat] Retrying message forward to updated socket ${other.id}`);
-            io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
-            io.to(other.id).emit('turn:you');
-          } else {
-            console.error(`[DyadicChat] Could not find other user by PID ${otherPid} in room ${roomId}`);
-          }
-        }
+        console.error(`[DyadicChat] Available sockets:`, Array.from(io.sockets.sockets.keys()));
       }
     } else {
       console.error(`[DyadicChat] ERROR: Could not find other user! Socket: ${socket.id}, room.users: ${room.users.map(u => u.id).join(',')}`);
+      console.error(`[DyadicChat] Room state: answerer=${room.answerer?.id}, helper=${room.helper?.id}`);
     }
     io.to(socket.id).emit('turn:wait');
   });
