@@ -571,24 +571,46 @@ io.on('connection', (socket) => {
     if (roomId && rooms.has(roomId)){
       const room = rooms.get(roomId);
       const other = room.users.find(u => u.id !== socket.id);
+      const socketPid = socket.prolific?.PID;
 
       // Check if this user had already completed the study
       const wasAlreadyFinished = room.finished[socket.id];
 
-      // Mark this user as finished
+      // Don't immediately notify partner - wait a bit to see if user reconnects
+      // This prevents false "partner disconnected" messages during brief reconnections
+      const disconnectTimeout = setTimeout(() => {
+        // Only notify if user hasn't reconnected (check by PID)
+        const userReconnected = socketPid && Array.from(io.sockets.sockets.values()).some(s => 
+          s.prolific?.PID === socketPid && s.currentRoom === roomId
+        );
+        
+        if (!userReconnected) {
+          // Mark this user as finished only if they haven't reconnected
+          if (!room.finished[socket.id]) {
       room.finished[socket.id] = true;
+          }
 
       // Only notify partner if they hadn't completed the study yet
       if (other && !wasAlreadyFinished) {
         try {
           io.to(other.id).emit('end:partner');
-          console.log(`[DyadicChat] Notified partner ${other.id} of disconnect - they must refresh to rejoin`);
+              console.log(`[DyadicChat] Notified partner ${other.id} of disconnect after timeout - user did not reconnect`);
         } catch(e) {
           console.error('[DyadicChat] Error notifying partner:', e);
         }
       } else if (other && wasAlreadyFinished) {
         console.log(`[DyadicChat] User ${socket.id} disconnected after completing study, partner can continue`);
       }
+        } else {
+          console.log(`[DyadicChat] User ${socketPid} reconnected, not notifying partner of disconnect`);
+        }
+      }, 3000); // Wait 3 seconds before notifying partner
+      
+      // Store timeout so we can clear it if user reconnects
+      if (!room.disconnectTimeouts) {
+        room.disconnectTimeouts = {};
+      }
+      room.disconnectTimeouts[socket.id] = disconnectTimeout;
 
       // Clean up the room if:
       // 1. No partner exists, OR
@@ -613,12 +635,43 @@ io.on('connection', (socket) => {
     
     if (roomId && rooms.has(roomId)) {
       const room = rooms.get(roomId);
+      const socketPid = socket.prolific?.PID;
+      
+      // If this is a reconnection (same PID, different socket ID), clear any pending disconnect notifications
+      if (socketPid && room.disconnectTimeouts) {
+        // Find the original socket ID for this PID
+        const originalSocketId = Object.keys(room.userPids || {}).find(sid => room.userPids[sid] === socketPid);
+        if (originalSocketId && originalSocketId !== socket.id && room.disconnectTimeouts[originalSocketId]) {
+          console.log(`[DyadicChat] User ${socketPid} reconnected (new socket: ${socket.id}, old: ${originalSocketId}), clearing disconnect timeout`);
+          clearTimeout(room.disconnectTimeouts[originalSocketId]);
+          delete room.disconnectTimeouts[originalSocketId];
+          // Clear finished status if it was set
+          if (room.finished[originalSocketId]) {
+            delete room.finished[originalSocketId];
+          }
+        }
+      }
       
       // CRITICAL: First verify this socket is actually in the room
-      const userInRoom = room.users.find(u => u.id === socket.id);
+      // If socket reconnected, it might not be in room.users yet - check by PID
+      let userInRoom = room.users.find(u => u.id === socket.id);
+      if (!userInRoom && socketPid) {
+        // Check if this PID is already in the room (reconnection case)
+        const userByPid = room.users.find(u => u.prolific?.PID === socketPid);
+        if (userByPid) {
+          console.log(`[DyadicChat] User ${socketPid} reconnected, updating socket reference (old: ${userByPid.id}, new: ${socket.id})`);
+          // Update the socket reference in room.users
+          const userIndex = room.users.indexOf(userByPid);
+          if (userIndex >= 0) {
+            room.users[userIndex] = socket;
+            userInRoom = socket;
+          }
+        }
+      }
+      
       if (!userInRoom) {
-        console.error(`[DyadicChat] ERROR: Socket ${socket.id} is not in room ${roomId}`);
-        console.error(`[DyadicChat] Room users:`, room.users.map(u => u.id));
+        console.error(`[DyadicChat] ERROR: Socket ${socket.id} (PID: ${socketPid}) is not in room ${roomId}`);
+        console.error(`[DyadicChat] Room users:`, room.users.map(u => ({ id: u.id, pid: u.prolific?.PID })));
         console.error(`[DyadicChat] Room userRoles:`, room.userRoles);
         return;
       }
