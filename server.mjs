@@ -1596,11 +1596,64 @@ io.on('connection', (socket) => {
       }
     }
 
-    const other = room.users.find(u => u.id !== socket.id);
+    // Find the other user - use room.answerer/room.helper for reliability
+    // This is more reliable than room.users.find() which might have stale socket references
+    let other = null;
+    if (room.answerer && room.answerer.id === socket.id) {
+      other = room.helper;
+    } else if (room.helper && room.helper.id === socket.id) {
+      other = room.answerer;
+    } else {
+      // Fallback: try to find by socket ID in room.users
+      other = room.users.find(u => u.id !== socket.id);
+      console.warn(`[DyadicChat] Could not find other user via room.answerer/helper, using fallback. Socket: ${socket.id}, answerer: ${room.answerer?.id}, helper: ${room.helper?.id}`);
+    }
+    
     room.nextSenderId = other ? other.id : null;
-    if (other){
-      io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
-      io.to(other.id).emit('turn:you');
+    
+    if (other) {
+      // Verify the other socket is still connected before sending
+      const otherSocketStillConnected = io.sockets.sockets.has(other.id);
+      if (otherSocketStillConnected) {
+        console.log(`[DyadicChat] Forwarding message from ${socket.id} to ${other.id}`);
+        io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
+        io.to(other.id).emit('turn:you');
+      } else {
+        console.error(`[DyadicChat] ERROR: Other user ${other.id} is not connected! Cannot forward message.`);
+        console.error(`[DyadicChat] Room state: answerer=${room.answerer?.id}, helper=${room.helper?.id}, users=${room.users.map(u => u.id).join(',')}`);
+        // Try to find the other user by PID and update room.answerer/helper
+        const socketPid = socket.prolific?.PID;
+        const otherPid = other.prolific?.PID || room.userPids[other.id];
+        if (otherPid) {
+          const actualOtherSocket = Array.from(io.sockets.sockets.values()).find(s => 
+            s.prolific?.PID === otherPid && s.currentRoom === roomId
+          );
+          if (actualOtherSocket) {
+            console.log(`[DyadicChat] Found other user by PID: ${actualOtherSocket.id} (PID: ${otherPid}), updating room references`);
+            // Update room references
+            if (room.answerer && room.answerer.id === other.id) {
+              room.answerer = actualOtherSocket;
+            }
+            if (room.helper && room.helper.id === other.id) {
+              room.helper = actualOtherSocket;
+            }
+            // Update room.users
+            const userIndex = room.users.findIndex(u => u.id === other.id);
+            if (userIndex >= 0) {
+              room.users[userIndex] = actualOtherSocket;
+            }
+            other = actualOtherSocket;
+            room.nextSenderId = other.id;
+            console.log(`[DyadicChat] Retrying message forward to updated socket ${other.id}`);
+            io.to(other.id).emit('chat:message', { text, serverTs: rec.t });
+            io.to(other.id).emit('turn:you');
+          } else {
+            console.error(`[DyadicChat] Could not find other user by PID ${otherPid} in room ${roomId}`);
+          }
+        }
+      }
+    } else {
+      console.error(`[DyadicChat] ERROR: Could not find other user! Socket: ${socket.id}, room.users: ${room.users.map(u => u.id).join(',')}`);
     }
     io.to(socket.id).emit('turn:wait');
   });
