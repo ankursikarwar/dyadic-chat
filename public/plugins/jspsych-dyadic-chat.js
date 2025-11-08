@@ -1110,14 +1110,13 @@
       /* duplicate removed */
       /* duplicate removed */
 
-      // Check if we already have pairing data from instructions phase
-      if (window.pairingData && window.pairingData.item) {
-        console.log('[DyadicChat] Using existing pairing data from instructions phase');
-        // Request the full paired event from server
-        socket.emit('request:paired_data');
-      }
-      
-      socket.on('paired', function(p){ window.__pairedOnce = true; try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
+      // CRITICAL: Set up the paired event listener FIRST, before requesting data
+      // This ensures we don't miss the event if it arrives quickly
+      console.log('[DyadicChat] Setting up paired event listener...');
+      socket.on('paired', function(p){ 
+        console.log('[DyadicChat] Received paired event!', p);
+        window.__pairedOnce = true; 
+        try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
         // Set reaction time start point when users get paired
         t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         
@@ -1219,6 +1218,67 @@
         setupZoom();
         startHeartbeat(); // Start heartbeat monitoring
       });
+      
+      // Now that the paired event listener is set up, request paired data from server
+      // Send the expected role from instructions to help server verify correctness
+      console.log('[DyadicChat] Paired event listener set up, now requesting paired data...');
+      console.log('[DyadicChat] Socket connected:', socket.connected);
+      console.log('[DyadicChat] Socket ID:', socket.id);
+      console.log('[DyadicChat] Socket currentRoom:', socket.currentRoom);
+      console.log('[DyadicChat] window.pairingData:', window.pairingData);
+      
+      // Function to request paired data
+      const requestPairedData = () => {
+        if (window.pairingData && window.pairingData.roomId) {
+          const expectedRole = window.userRole; // Set by paired:instructions
+          console.log('[DyadicChat] Requesting paired data from server (roomId:', window.pairingData.roomId, ', expectedRole:', expectedRole, ')');
+          
+          // Verify socket is connected
+          if (!socket.connected) {
+            console.warn('[DyadicChat] WARNING: Socket is not connected. Current state:', {
+              connected: socket.connected,
+              disconnected: socket.disconnected,
+              id: socket.id
+            });
+            // Try to reconnect
+            if (socket.disconnected) {
+              console.log('[DyadicChat] Attempting to reconnect socket...');
+              socket.connect();
+              // Wait for connection, then retry
+              socket.once('connect', () => {
+                console.log('[DyadicChat] Socket reconnected, retrying request...');
+                setTimeout(requestPairedData, 200);
+              });
+            }
+            return;
+          }
+          
+          // Ensure socket has currentRoom set
+          if (!socket.currentRoom && window.pairingData.roomId) {
+            socket.currentRoom = window.pairingData.roomId;
+            console.log('[DyadicChat] Set socket.currentRoom to:', window.pairingData.roomId);
+          }
+          
+          // Request the full paired event from server, including expected role for verification
+          socket.emit('request:paired_data', { expectedRole: expectedRole });
+          console.log('[DyadicChat] Emitted request:paired_data event');
+          
+          // Set up a timeout to retry if we don't receive paired event within 2 seconds
+          if (!window.__pairedOnce) {
+            setTimeout(() => {
+              if (!window.__pairedOnce) {
+                console.warn('[DyadicChat] No paired event received after 2 seconds, retrying...');
+                requestPairedData();
+              }
+            }, 2000);
+          }
+        } else {
+          console.warn('[DyadicChat] No pairing data found, waiting for paired event...');
+        }
+      };
+      
+      // Wait a tiny bit to ensure listener is fully registered, then request
+      setTimeout(requestPairedData, 100);
 
       socket.on('chat:message', function(msg){
         // Hide typing indicator when message is received
