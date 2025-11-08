@@ -916,14 +916,14 @@ io.on('connection', (socket) => {
     }
   } else {
     // This is a new user - add to queue
-    console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
+  console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
     socket.currentRoom = null;
-    queue.push(socket);
-    console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
+  queue.push(socket);
+  console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
     console.log(`[DyadicChat] Calling tryPair() - function type: ${typeof tryPair}`);
     try {
       if (typeof tryPair === 'function') {
-        tryPair();
+  tryPair();
       } else {
         console.error(`[DyadicChat] ERROR: tryPair is not a function! Type: ${typeof tryPair}`);
       }
@@ -2010,6 +2010,11 @@ io.on('connection', (socket) => {
         console.log('[DyadicChat] Saved survey data for disconnected room', roomId);
       } catch(e) {
         console.error('[DyadicChat] Error saving survey data:', e);
+      }
+      
+      // CRITICAL: Call callback even if room doesn't exist, so client can redirect
+      if (callback) {
+        callback({ success: true, message: 'Survey data received (room already cleaned up)' });
       }
       return;
     }
