@@ -1039,6 +1039,7 @@ io.on('connection', (socket) => {
       // Determine if we should end the study immediately (instructions or questions phase)
       const shouldEndStudy = isInInstructionsPhase || isInQuestionsPhase;
       
+      //Working
       // Use 1 second timeout for instructions/questions phases, 3 seconds for survey phase
       const disconnectTimeoutMs = shouldEndStudy ? 1000 : 3000;
       
