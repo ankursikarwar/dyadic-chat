@@ -9,6 +9,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: '*' } });
 
+// Add Socket.IO connection middleware to log ALL connection attempts at the lowest level
+io.use((socket, next) => {
+  const pidFromQuery = (socket.handshake.query && String(socket.handshake.query.pid||'').trim()) || 'DEBUG_LOCAL';
+  console.log(`[DyadicChat] Socket.IO middleware: Connection attempt from ${socket.id} (PID: ${pidFromQuery})`);
+  next(); // Always allow the connection to proceed to the handler
+});
+
 const PORT = process.env.PORT || 3000;
 const MAX_TURNS = Number(process.env.MAX_TURNS || 10); // one turn = two messages (both users)
 const REQUIRE_DISTINCT_PID = process.env.REQUIRE_DISTINCT_PID !== '1';
@@ -306,13 +313,19 @@ function generateQuestionSequence() {
   const demoAdded = sequence.length > 0;
   const baseCount = QUESTIONS_PER_CATEGORY[QUESTION_TYPE] || 0;
   const regularQuestionCount = demoAdded ? Math.max(0, baseCount - 1) : baseCount;
+  
+  console.log(`[DyadicChat] Question sequence generation: baseCount=${baseCount}, demoAdded=${demoAdded}, regularQuestionCount=${regularQuestionCount}`);
 
   // If QUESTION_TYPE is a specific type (not 'all_types'), only use that type
   if (QUESTION_TYPE !== 'all_types' && QUESTIONS_PER_CATEGORY[QUESTION_TYPE]) {
     const count = regularQuestionCount;
     if (count > 0) {
+    console.log(`[DyadicChat] Attempting to sample ${count} regular questions for category ${QUESTION_TYPE}`);
     const categoryQuestions = sampleQuestionsByCategory(QUESTION_TYPE, count, usedItemIds);
-    console.log(`[DyadicChat] Selected ${categoryQuestions.length} questions for category ${QUESTION_TYPE}`);
+    console.log(`[DyadicChat] Selected ${categoryQuestions.length} questions for category ${QUESTION_TYPE} (requested ${count})`);
+    if (categoryQuestions.length < count) {
+      console.warn(`[DyadicChat] WARNING: Only found ${categoryQuestions.length} questions but requested ${count}. This may be because many items are already marked.`);
+    }
     categoryQuestions.forEach(item => {
       const itemId = item.id || item.sample_id || String(item);
       // Explicit check: ensure no duplicates within the sequence
@@ -471,18 +484,247 @@ function formatReactionTime(rtMs) {
 const queue = [];
 const rooms = new Map();
 
-// Track server state to disconnect existing users on any failure
-let serverStarting = true;
-
-// Disconnect all existing users when server starts (after any failure/restart)
-io.on('connection', (socket) => {
-  if (serverStarting) {
-    // Send failure message and disconnect
-    io.to(socket.id).emit('connection_lost');
-    setTimeout(() => socket.disconnect(true), 100);
+// Define tryPair function OUTSIDE the connection handler so it's shared across all connections
+// This is critical for recursive pairing to work correctly
+function tryPair(){
+  // Defensive checks to ensure all dependencies are available
+  if (typeof io === 'undefined') {
+    console.error(`[DyadicChat] ERROR: io is not defined in tryPair()!`);
     return;
   }
-});
+  if (typeof generateQuestionSequence !== 'function') {
+    console.error(`[DyadicChat] ERROR: generateQuestionSequence is not a function!`);
+    return;
+  }
+  if (typeof nextItem !== 'function') {
+    console.error(`[DyadicChat] ERROR: nextItem is not a function!`);
+    return;
+  }
+  
+  console.log(`[DyadicChat] tryPair called, queue length: ${queue.length}`);
+  if (queue.length >= 2){
+    const user1 = queue.shift();
+    const user2 = queue.shift();
+    console.log(`[DyadicChat] Attempting to pair ${user1.id} (PID: ${user1.prolific?.PID}) with ${user2.id} (PID: ${user2.prolific?.PID})`);
+
+    if (REQUIRE_DISTINCT_PID && user1?.prolific?.PID === user2?.prolific?.PID) {
+      console.log(`[DyadicChat] Same PID detected, re-queuing users`);
+      queue.unshift(user1);
+      queue.push(user2);
+      // Don't try to pair again immediately to avoid potential infinite loop
+      // The next user connection will trigger tryPair()
+      return;
+    }
+
+    // Note: PID repeat check moved to connection time (after consent, before pairing)
+
+    const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+    console.log(`[DyadicChat] Creating room ${roomId} for users ${user1.id} and ${user2.id}`);
+
+    // Generate question sequence for this room
+    const questionSequence = generateQuestionSequence();
+
+    if (questionSequence.length === 0) {
+      console.error(`[DyadicChat] No questions generated for room ${roomId}, using fallback`);
+      // Fallback to old behavior
+      const item = nextItem();
+      const room = {
+        id: roomId, users:[user1, user2], item,
+        messages:[], answers:{}, finished:{}, surveys:{},
+        msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
+        nextSenderId:null,
+        questionSequence: [], currentQuestionIndex: 0,
+        pairedAt: Date.now(),
+        pairedAt_formatted: formatTimestamp(Date.now()),
+        userRoles: { [user1.id]: 'user_1', [user2.id]: 'user_2' },
+        userPids: { [user1.id]: user1.prolific.PID || 'unknown', [user2.id]: user2.prolific.PID || 'unknown' }
+      };
+      rooms.set(roomId, room);
+      io.to(user1.id).emit('blocked:deck_complete');
+      io.to(user2.id).emit('blocked:deck_complete');
+      setTimeout(() => { user1.disconnect(true); user2.disconnect(true); }, 100);
+      
+      // CRITICAL: After handling deck complete, check if there are more users to pair
+      // This ensures other pairs can still be created even if one pair hits deck complete
+      if (queue.length >= 2) {
+        console.log(`[DyadicChat] Deck complete for one pair, but more users in queue (${queue.length}), scheduling next pair attempt`);
+        setTimeout(() => {
+          console.log(`[DyadicChat] Executing recursive tryPair() call after deck complete, current queue length: ${queue.length}`);
+          tryPair();
+        }, 100);
+      } else {
+        console.log(`[DyadicChat] Deck complete for one pair, no more pairs to create (queue length: ${queue.length})`);
+      }
+      return;
+    }
+
+    // Start with first question
+    const firstQuestion = questionSequence[0];
+    const item = firstQuestion.item;
+    // Note: PIDs are marked as seen only after study completion (in survey:submit handler)
+
+    // First user in queue is always the answerer, second user is always the helper
+    // This assignment is constant throughout the trial
+    const answerer = user1;  // First user who joins = answerer
+    const helper = user2;    // Second user who joins = helper
+
+    console.log(`[DyadicChat] Role assignment: ${answerer.id} (first in queue) = answerer, ${helper.id} (second in queue) = helper`);
+    console.log(`[DyadicChat] Item ${item.sample_id}: user_1_question="${item.user_1_question}", user_2_question="${item.user_2_question}"`);
+
+    answerer.join(roomId);
+    helper.join(roomId);
+    answerer.currentRoom = roomId;
+    helper.currentRoom = roomId;
+
+    // Track which physical user (from queue) corresponds to item user_1 and user_2
+    // IMPORTANT: This mapping is based on queue order
+    // user1 (answerer) from queue = item user_1, user2 (helper) from queue = item user_2
+    const physicalUserToItemUser = {
+      [answerer.id]: 'user_1',  // Answerer (first in queue) is always item user_1
+      [helper.id]: 'user_2'     // Helper (second in queue) is always item user_2
+    };
+
+    const room = {
+      id: roomId, users:[answerer, helper], item,
+      messages:[], answers:{}, finished:{}, surveys:{},
+      msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
+      nextSenderId:null,
+      questionSequence: questionSequence, // Store full question sequence
+      currentQuestionIndex: 0, // Track which question we're on
+      questionAnswers: [], // Store answers for each question
+      physicalUserToItemUser: physicalUserToItemUser, // Map physical users to item users
+      originalUsers: [answerer, helper], // Keep reference to original queue order (answerer, helper)
+      answerer: answerer, // Store answerer reference
+      helper: helper, // Store helper reference
+      pairedAt: Date.now(),
+      pairedAt_formatted: formatTimestamp(Date.now()),
+      userRoles: {
+        [answerer.id]: 'answerer',
+        [helper.id]: 'helper'
+      },
+      userPids: {
+        [answerer.id]: answerer.prolific.PID || 'unknown',
+        [helper.id]: helper.prolific.PID || 'unknown'
+      }
+    };
+    rooms.set(roomId, room);
+
+    // Initialize instruction readiness tracking
+    room.instructionsReady = {};
+    room.instructionsReady[answerer.id] = false;
+    room.instructionsReady[helper.id] = false;
+
+    // CRITICAL: Verify roles are set correctly before sending instructions
+    const answererRoleCheck = room.userRoles[answerer.id];
+    const helperRoleCheck = room.userRoles[helper.id];
+    
+    if (answererRoleCheck !== 'answerer') {
+      console.error(`[DyadicChat] CRITICAL ERROR: answerer.id=${answerer.id} has role=${answererRoleCheck}, expected 'answerer'`);
+      console.error(`[DyadicChat] Fixing: setting userRoles[${answerer.id}]='answerer'`);
+      room.userRoles[answerer.id] = 'answerer';
+    }
+    if (helperRoleCheck !== 'helper') {
+      console.error(`[DyadicChat] CRITICAL ERROR: helper.id=${helper.id} has role=${helperRoleCheck}, expected 'helper'`);
+      console.error(`[DyadicChat] Fixing: setting userRoles[${helper.id}]='helper'`);
+      room.userRoles[helper.id] = 'helper';
+    }
+    
+    console.log(`[DyadicChat] Sending paired:instructions event to answerer (${answerer.id}, PID: ${answerer.prolific?.PID}) and helper (${helper.id}, PID: ${helper.prolific?.PID})`);
+    console.log(`[DyadicChat] Role assignment confirmed: userRoles[${answerer.id}]=${room.userRoles[answerer.id]}, userRoles[${helper.id}]=${room.userRoles[helper.id]}`);
+    console.log(`[DyadicChat] Room userPids:`, room.userPids);
+
+    // Send role information early for instructions page
+    // CRITICAL: Double-check we're sending to the correct sockets
+    const answererSocketCheck = io.sockets.sockets.get(answerer.id);
+    const helperSocketCheck = io.sockets.sockets.get(helper.id);
+    
+    if (!answererSocketCheck) {
+      console.error(`[DyadicChat] ERROR: Answerer socket ${answerer.id} not found when sending paired:instructions`);
+    }
+    if (!helperSocketCheck) {
+      console.error(`[DyadicChat] ERROR: Helper socket ${helper.id} not found when sending paired:instructions`);
+    }
+    
+    io.to(answerer.id).emit('paired:instructions', {
+      roomId,
+      role: 'answerer',
+      server_question_type: QUESTION_TYPE,
+      maxTurns: MAX_TURNS
+    });
+    io.to(helper.id).emit('paired:instructions', {
+      roomId,
+      role: 'helper',
+      server_question_type: QUESTION_TYPE,
+      maxTurns: MAX_TURNS
+    });
+    
+    // Log what was sent for verification
+    console.log(`[DyadicChat] Sent paired:instructions to answerer ${answerer.id} with role='answerer'`);
+    console.log(`[DyadicChat] Sent paired:instructions to helper ${helper.id} with role='helper'`);
+
+    // DON'T send initial paired event immediately - wait for both users to finish instructions
+    // The paired event will be sent when request:paired_data is called, or when both are ready
+    // This prevents race conditions and ensures roles are correct
+    console.log(`[DyadicChat] Paired event will be sent when users request it via request:paired_data (after instructions)`);
+
+    // Determine which item fields to use based on whether user_1_question exists
+    const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
+    
+    // If user_1_question exists: answerer gets user_1 fields, helper gets user_2 fields
+    // If user_1_question is empty: answerer gets user_2 fields, helper gets user_1 fields
+    const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
+    const helperQuestionField = user1HasQuestion ? 'user_2' : 'user_1';
+
+    // Send data to answerer (always gets the question)
+    const itemForAnswerer = {
+      ...item,
+      image_url: answererQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
+      goal_question: answererQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
+      correct_answer: answererQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+      options: answererQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+      has_question: true, // Answerer always has the question
+      has_options: !!(answererQuestionField === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
+    };
+
+    // Send data to helper (never gets the question)
+    const itemForHelper = {
+      ...item,
+      image_url: helperQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
+      goal_question: helperQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
+      correct_answer: helperQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
+      options: helperQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
+      has_question: false, // Helper never has the question
+      has_options: false
+    };
+
+    // Store item data for later use (when request:paired_data is called)
+    // Don't send paired event immediately - wait for users to request it after instructions
+
+    // The answerer always gets the first turn
+    room.nextSenderId = answerer.id;
+    io.to(answerer.id).emit('turn:you');
+    io.to(helper.id).emit('turn:wait');
+    console.log(`[DyadicChat] Pairing complete, answerer (${answerer.id}) starts first, helper (${helper.id}) waits`);
+    
+    // CRITICAL: After pairing, check if there are more users in queue to pair
+    // This ensures multiple pairs can be created simultaneously
+    if (queue.length >= 2) {
+      console.log(`[DyadicChat] More users in queue (${queue.length}), scheduling next pair attempt`);
+      // Use setTimeout to avoid potential stack overflow and allow current pairing to complete
+      setTimeout(() => {
+        console.log(`[DyadicChat] Executing recursive tryPair() call, current queue length: ${queue.length}`);
+        tryPair();
+      }, 100);
+    } else {
+      console.log(`[DyadicChat] No more pairs to create (queue length: ${queue.length})`);
+    }
+  } else {
+    console.log(`[DyadicChat] Not enough users in queue (${queue.length}), waiting for more`);
+  }
+}
+
+// Track server state to disconnect existing users on any failure
+let serverStarting = true;
 
 // Mark server as fully started after a brief delay
 setTimeout(() => {
@@ -530,13 +772,27 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 io.on('connection', (socket) => {
-  const pid = (socket.handshake.query && String(socket.handshake.query.pid||'').trim()) || 'DEBUG_LOCAL';
+  // Log ALL connection attempts immediately
+  const pidFromQuery = (socket.handshake.query && String(socket.handshake.query.pid||'').trim()) || 'DEBUG_LOCAL';
+  console.log(`[DyadicChat] Connection attempt: ${socket.id} (PID from query: ${pidFromQuery}), serverStarting: ${serverStarting}`);
+  
+  // CRITICAL: Check if server is still starting - if so, disconnect immediately
+  // This must be checked FIRST before any other processing
+  if (serverStarting) {
+    console.log(`[DyadicChat] Server still starting, disconnecting ${socket.id}`);
+    io.to(socket.id).emit('connection_lost');
+    setTimeout(() => socket.disconnect(true), 100);
+    return;
+  }
+  
+  const pid = pidFromQuery;
   socket.prolific = { PID: pid };
 
   if (STOP_WHEN_DECK_COMPLETE){
     const totalItems = items.length;
     // Check markedItems (type-specific deck state) instead of completedItems (global across all types)
     if (totalItems > 0 && markedItems.size >= totalItems){
+      console.log(`[DyadicChat] Blocking ${socket.id} (PID: ${pid}) - deck complete`);
       io.to(socket.id).emit('blocked:deck_complete');
       // Give client time to update display before disconnecting
       setTimeout(()=>socket.disconnect(true), 500);
@@ -546,6 +802,7 @@ io.on('connection', (socket) => {
   
   // Check if user has already participated (after consent, at connection time)
   if (BLOCK_REPEAT_PID && seenPidsMap[pid]){
+    console.log(`[DyadicChat] Blocking ${socket.id} (PID: ${pid}) - already participated`);
     io.to(socket.id).emit('blocked:repeat_pid');
     // Give client time to update display before disconnecting
     setTimeout(()=>socket.disconnect(true), 500);
@@ -558,7 +815,16 @@ io.on('connection', (socket) => {
   console.log(`[DyadicChat] New connection: ${socket.id} (PID: ${pid}), adding to queue`);
   queue.push(socket);
   console.log(`[DyadicChat] Queue length after adding: ${queue.length}`);
-  tryPair();
+  console.log(`[DyadicChat] Calling tryPair() - function type: ${typeof tryPair}`);
+  try {
+    if (typeof tryPair === 'function') {
+      tryPair();
+    } else {
+      console.error(`[DyadicChat] ERROR: tryPair is not a function! Type: ${typeof tryPair}`);
+    }
+  } catch (e) {
+    console.error(`[DyadicChat] ERROR calling tryPair():`, e);
+  }
 
   socket.on('disconnect', (reason) => {
     console.log(`[DyadicChat] Socket ${socket.id} disconnected: ${reason}`);
@@ -678,12 +944,12 @@ io.on('connection', (socket) => {
       
       // Log expected role from client for debugging
       if (expectedRole) {
-        console.log(`[DyadicChat] Client expects role: ${expectedRole} (PID: ${socket.prolific?.PID})`);
+        console.log(`[DyadicChat] Client expects role: ${expectedRole} (PID: ${socketPid})`);
       }
       
       // CRITICAL: Use PID as PRIMARY lookup method, socket ID as fallback
       // This is because socket IDs change on reconnection, but PIDs are stable
-      const socketPid = socket.prolific?.PID;
+      // Note: socketPid is already declared above
       let userRole = null;
       
       // PRIMARY: Look up role by PID (stable identifier)
@@ -845,15 +1111,15 @@ io.on('connection', (socket) => {
       
       // Double-check: the requesting user should match either answerer or helper
       // Use PID comparison instead of socket ID (socket IDs change on reconnection)
-      const socketPidForCheck = socket.prolific?.PID;
+      // Note: socketPid is already declared above
       const answererPid = answerer.prolific?.PID || room.userPids[answerer.id];
       const helperPid = helper.prolific?.PID || room.userPids[helper.id];
       
-      const isAnswererByPid = socketPidForCheck && answererPid && socketPidForCheck === answererPid;
-      const isHelperByPid = socketPidForCheck && helperPid && socketPidForCheck === helperPid;
+      const isAnswererByPid = socketPid && answererPid && socketPid === answererPid;
+      const isHelperByPid = socketPid && helperPid && socketPid === helperPid;
       
       if (!isAnswererByPid && !isHelperByPid && socket.id !== answerer.id && socket.id !== helper.id) {
-        console.error(`[DyadicChat] ERROR: Socket ${socket.id} (PID: ${socketPidForCheck}) is not answerer (${answerer.id}, PID: ${answererPid}) or helper (${helper.id}, PID: ${helperPid})`);
+        console.error(`[DyadicChat] ERROR: Socket ${socket.id} (PID: ${socketPid}) is not answerer (${answerer.id}, PID: ${answererPid}) or helper (${helper.id}, PID: ${helperPid})`);
         console.error(`[DyadicChat] Room userRoles:`, room.userRoles);
         console.error(`[DyadicChat] Room users:`, room.users.map(u => ({ id: u.id, pid: u.prolific?.PID })));
         console.error(`[DyadicChat] Room userPids:`, room.userPids);
@@ -968,12 +1234,52 @@ io.on('connection', (socket) => {
       return;
     }
     const room = rooms.get(roomId);
-    if (room.chatClosed) return;
+    
+    // CRITICAL: Check if chat is already closed - reject message immediately
+    if (room.chatClosed) {
+      console.log(`[DyadicChat] User ${socket.id} tried to send message but chat is closed`);
+      io.to(socket.id).emit('chat:closed');
+      return;
+    }
 
     if (room.nextSenderId && room.nextSenderId !== socket.id){
       io.to(socket.id).emit('turn:wait');
       return;
     }
+    
+    // CRITICAL: Check if this message would exceed max turns BEFORE processing
+    // minTurns = maximum number of completed turns allowed
+    // Each turn = 2 messages (one from each user)
+    // So max messages = minTurns * 2
+    const currentMsgCount = room.msgCount || 0;
+    const maxMessages = room.minTurns * 2;
+    
+    // If we've already reached the max messages, reject this message
+    if (currentMsgCount >= maxMessages) {
+      console.log(`[DyadicChat] Max messages reached (${currentMsgCount} >= ${maxMessages}), rejecting message`);
+      if (!room.chatClosed) {
+        room.chatClosed = true;
+        io.to(roomId).emit('chat:closed');
+      }
+      return;
+    }
+    
+    const newMsgCount = currentMsgCount + 1;
+    const completedTurns = Math.floor(newMsgCount / 2);
+    
+    // If this message would reach or exceed the max turns, close chat
+    // But still allow this message if it's exactly at the limit (the last allowed message)
+    if (completedTurns >= room.minTurns) {
+      console.log(`[DyadicChat] Max turns reached (${completedTurns} >= ${room.minTurns}), closing chat`);
+      room.chatClosed = true;
+      io.to(roomId).emit('chat:closed');
+      // If this message would exceed the limit, reject it
+      if (newMsgCount > maxMessages) {
+        console.log(`[DyadicChat] Message would exceed max messages (${newMsgCount} > ${maxMessages}), rejecting`);
+        return;
+      }
+    }
+    
     const text = String(msg.text || '').slice(0, 2000);
     const now = Date.now();
     const rec = {
@@ -985,9 +1291,11 @@ io.on('connection', (socket) => {
     };
     room.messages.push(rec);
 
-    room.msgCount = (room.msgCount || 0) + 1;
-    const completedTurns = Math.floor(room.msgCount / 2);
-    if (completedTurns >= room.minTurns){
+    room.msgCount = newMsgCount;
+    
+    // Double-check: if we've now exceeded max turns after processing, ensure chat is closed
+    const finalCompletedTurns = Math.floor(room.msgCount / 2);
+    if (finalCompletedTurns >= room.minTurns && !room.chatClosed){
       room.chatClosed = true;
       io.to(roomId).emit('chat:closed');
 
@@ -1474,202 +1782,6 @@ io.on('connection', (socket) => {
   socket.on('ping', () => {
     socket.emit('pong');
   });
-
-  function tryPair(){
-    console.log(`[DyadicChat] tryPair called, queue length: ${queue.length}`);
-    if (queue.length >= 2){
-      const user1 = queue.shift();
-      const user2 = queue.shift();
-      console.log(`[DyadicChat] Attempting to pair ${user1.id} (PID: ${user1.prolific?.PID}) with ${user2.id} (PID: ${user2.prolific?.PID})`);
-
-      if (REQUIRE_DISTINCT_PID && user1?.prolific?.PID === user2?.prolific?.PID) {
-        console.log(`[DyadicChat] Same PID detected, re-queuing users`);
-        queue.unshift(user1);
-        queue.push(user2);
-        return;
-      }
-
-      // Note: PID repeat check moved to connection time (after consent, before pairing)
-
-      const roomId = 'r_' + Date.now() + '_' + Math.floor(Math.random()*9999);
-      console.log(`[DyadicChat] Creating room ${roomId} for users ${user1.id} and ${user2.id}`);
-
-      // Generate question sequence for this room
-      const questionSequence = generateQuestionSequence();
-
-      if (questionSequence.length === 0) {
-        console.error(`[DyadicChat] No questions generated for room ${roomId}, using fallback`);
-        // Fallback to old behavior
-        const item = nextItem();
-        const room = {
-          id: roomId, users:[user1, user2], item,
-          messages:[], answers:{}, finished:{}, surveys:{},
-          msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
-          nextSenderId:null,
-          questionSequence: [], currentQuestionIndex: 0,
-          pairedAt: Date.now(),
-          pairedAt_formatted: formatTimestamp(Date.now()),
-          userRoles: { [user1.id]: 'user_1', [user2.id]: 'user_2' },
-          userPids: { [user1.id]: user1.prolific.PID || 'unknown', [user2.id]: user2.prolific.PID || 'unknown' }
-        };
-        rooms.set(roomId, room);
-        io.to(user1.id).emit('blocked:deck_complete');
-        io.to(user2.id).emit('blocked:deck_complete');
-        setTimeout(() => { user1.disconnect(true); user2.disconnect(true); }, 100);
-        return;
-      }
-
-      // Start with first question
-      const firstQuestion = questionSequence[0];
-      const item = firstQuestion.item;
-      // Note: PIDs are marked as seen only after study completion (in survey:submit handler)
-
-      // First user in queue is always the answerer, second user is always the helper
-      // This assignment is constant throughout the trial
-      const answerer = user1;  // First user who joins = answerer
-      const helper = user2;    // Second user who joins = helper
-
-      console.log(`[DyadicChat] Role assignment: ${answerer.id} (first in queue) = answerer, ${helper.id} (second in queue) = helper`);
-      console.log(`[DyadicChat] Item ${item.sample_id}: user_1_question="${item.user_1_question}", user_2_question="${item.user_2_question}"`);
-
-      answerer.join(roomId);
-      helper.join(roomId);
-      answerer.currentRoom = roomId;
-      helper.currentRoom = roomId;
-
-      // Track which physical user (from queue) corresponds to item user_1 and user_2
-      // IMPORTANT: This mapping is based on queue order
-      // user1 (answerer) from queue = item user_1, user2 (helper) from queue = item user_2
-      const physicalUserToItemUser = {
-        [answerer.id]: 'user_1',  // Answerer (first in queue) is always item user_1
-        [helper.id]: 'user_2'     // Helper (second in queue) is always item user_2
-      };
-
-      const room = {
-        id: roomId, users:[answerer, helper], item,
-        messages:[], answers:{}, finished:{}, surveys:{},
-        msgCount:0, chatClosed:false, minTurns: MAX_TURNS,
-        nextSenderId:null,
-        questionSequence: questionSequence, // Store full question sequence
-        currentQuestionIndex: 0, // Track which question we're on
-        questionAnswers: [], // Store answers for each question
-        physicalUserToItemUser: physicalUserToItemUser, // Map physical users to item users
-        originalUsers: [answerer, helper], // Keep reference to original queue order (answerer, helper)
-        answerer: answerer, // Store answerer reference
-        helper: helper, // Store helper reference
-        pairedAt: Date.now(),
-        pairedAt_formatted: formatTimestamp(Date.now()),
-        userRoles: {
-          [answerer.id]: 'answerer',
-          [helper.id]: 'helper'
-        },
-        userPids: {
-          [answerer.id]: answerer.prolific.PID || 'unknown',
-          [helper.id]: helper.prolific.PID || 'unknown'
-        }
-      };
-      rooms.set(roomId, room);
-
-      // Initialize instruction readiness tracking
-      room.instructionsReady = {};
-      room.instructionsReady[answerer.id] = false;
-      room.instructionsReady[helper.id] = false;
-
-      // CRITICAL: Verify roles are set correctly before sending instructions
-      const answererRoleCheck = room.userRoles[answerer.id];
-      const helperRoleCheck = room.userRoles[helper.id];
-      
-      if (answererRoleCheck !== 'answerer') {
-        console.error(`[DyadicChat] CRITICAL ERROR: answerer.id=${answerer.id} has role=${answererRoleCheck}, expected 'answerer'`);
-        console.error(`[DyadicChat] Fixing: setting userRoles[${answerer.id}]='answerer'`);
-        room.userRoles[answerer.id] = 'answerer';
-      }
-      if (helperRoleCheck !== 'helper') {
-        console.error(`[DyadicChat] CRITICAL ERROR: helper.id=${helper.id} has role=${helperRoleCheck}, expected 'helper'`);
-        console.error(`[DyadicChat] Fixing: setting userRoles[${helper.id}]='helper'`);
-        room.userRoles[helper.id] = 'helper';
-      }
-      
-      console.log(`[DyadicChat] Sending paired:instructions event to answerer (${answerer.id}, PID: ${answerer.prolific?.PID}) and helper (${helper.id}, PID: ${helper.prolific?.PID})`);
-      console.log(`[DyadicChat] Role assignment confirmed: userRoles[${answerer.id}]=${room.userRoles[answerer.id]}, userRoles[${helper.id}]=${room.userRoles[helper.id]}`);
-      console.log(`[DyadicChat] Room userPids:`, room.userPids);
-
-      // Send role information early for instructions page
-      // CRITICAL: Double-check we're sending to the correct sockets
-      const answererSocketCheck = io.sockets.sockets.get(answerer.id);
-      const helperSocketCheck = io.sockets.sockets.get(helper.id);
-      
-      if (!answererSocketCheck) {
-        console.error(`[DyadicChat] ERROR: Answerer socket ${answerer.id} not found when sending paired:instructions`);
-      }
-      if (!helperSocketCheck) {
-        console.error(`[DyadicChat] ERROR: Helper socket ${helper.id} not found when sending paired:instructions`);
-      }
-      
-      io.to(answerer.id).emit('paired:instructions', {
-        roomId,
-        role: 'answerer',
-        server_question_type: QUESTION_TYPE,
-        maxTurns: MAX_TURNS
-      });
-      io.to(helper.id).emit('paired:instructions', {
-        roomId,
-        role: 'helper',
-        server_question_type: QUESTION_TYPE,
-        maxTurns: MAX_TURNS
-      });
-      
-      // Log what was sent for verification
-      console.log(`[DyadicChat] Sent paired:instructions to answerer ${answerer.id} with role='answerer'`);
-      console.log(`[DyadicChat] Sent paired:instructions to helper ${helper.id} with role='helper'`);
-
-      // DON'T send initial paired event immediately - wait for both users to finish instructions
-      // The paired event will be sent when request:paired_data is called, or when both are ready
-      // This prevents race conditions and ensures roles are correct
-      console.log(`[DyadicChat] Paired event will be sent when users request it via request:paired_data (after instructions)`);
-
-      // Determine which item fields to use based on whether user_1_question exists
-      const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
-      
-      // If user_1_question exists: answerer gets user_1 fields, helper gets user_2 fields
-      // If user_1_question is empty: answerer gets user_2 fields, helper gets user_1 fields
-      const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
-      const helperQuestionField = user1HasQuestion ? 'user_2' : 'user_1';
-
-      // Send data to answerer (always gets the question)
-      const itemForAnswerer = {
-        ...item,
-        image_url: answererQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
-        goal_question: answererQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
-        correct_answer: answererQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
-        options: answererQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
-        has_question: true, // Answerer always has the question
-        has_options: !!(answererQuestionField === 'user_1' ? (item.options_user_1 && item.options_user_1.length > 0) : (item.options_user_2 && item.options_user_2.length > 0))
-      };
-
-      // Send data to helper (never gets the question)
-      const itemForHelper = {
-        ...item,
-        image_url: helperQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
-        goal_question: helperQuestionField === 'user_1' ? item.user_1_question : item.user_2_question,
-        correct_answer: helperQuestionField === 'user_1' ? (item.user_1_gt_answer_idx ?? item.user_1_gt_answer ?? null) : (item.user_2_gt_answer_idx ?? item.user_2_gt_answer ?? null),
-        options: helperQuestionField === 'user_1' ? (item.options_user_1 || item.options) : (item.options_user_2 || item.options),
-        has_question: false, // Helper never has the question
-        has_options: false
-      };
-
-      // Store item data for later use (when request:paired_data is called)
-      // Don't send paired event immediately - wait for users to request it after instructions
-
-      // The answerer always gets the first turn
-      room.nextSenderId = answerer.id;
-      io.to(answerer.id).emit('turn:you');
-      io.to(helper.id).emit('turn:wait');
-      console.log(`[DyadicChat] Pairing complete, answerer (${answerer.id}) starts first, helper (${helper.id}) waits`);
-    } else {
-      console.log(`[DyadicChat] Not enough users in queue (${queue.length}), waiting for more`);
-    }
-  }
 });
 
 function persistRoom(room){

@@ -1316,9 +1316,14 @@
       socket.on('turn:you', function(){
         console.log('[DyadicChat] Received turn:you event - enabling send button');
         myTurn = true;
-        chatClosed = false; // Ensure chat is not closed
+        // CRITICAL: Don't override chatClosed if chat is already closed
+        // Only set chatClosed = false if it's not already closed
+        // This prevents turn:you from reopening a closed chat
+        if (!chatClosed) {
+          chatClosed = false; // Ensure chat is not closed (only if not already closed)
+        }
         pendingTurnEvent = 'you'; // Store for later processing if needed
-        console.log('[DyadicChat] turn:you - state updated: myTurn=true, chatClosed=false');
+        console.log('[DyadicChat] turn:you - state updated: myTurn=true, chatClosed=', chatClosed);
         // Use multiple setTimeout calls to ensure DOM is ready and state is updated
         setTimeout(() => {
           console.log('[DyadicChat] turn:you - calling updateMessages, myTurn:', myTurn, 'chatClosed:', chatClosed);
