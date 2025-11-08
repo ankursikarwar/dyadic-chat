@@ -429,7 +429,16 @@
       }
 
       // Use existing socket if provided, otherwise create new one
-      const socket = trial.existingSocket || io(trial.socketUrl, { query: { pid: pidLabel } });
+      // Enable automatic reconnection with exponential backoff for network resilience
+      const socket = trial.existingSocket || io(trial.socketUrl, { 
+        query: { pid: pidLabel },
+        reconnection: true,
+        reconnectionDelay: 1000,        // Start with 1 second delay
+        reconnectionDelayMax: 5000,      // Max 5 seconds between attempts
+        reconnectionAttempts: Infinity,  // Keep trying indefinitely
+        timeout: 20000,                  // Connection timeout
+        transports: ['websocket', 'polling'] // Try websocket first, fallback to polling
+      });
       let myTurn = false, chatClosed = false;
       let msgCount = 0;
       let heartbeatInterval = null;
@@ -1628,6 +1637,74 @@
       socket.on('pong', () => {
         lastPongTime = Date.now();
       });
+
+      // Handle reconnection events for network resilience
+      socket.on('connect', () => {
+        console.log('[DyadicChat] Socket connected/reconnected, socket ID:', socket.id);
+        lastPongTime = Date.now();
+        // Hide any connection warning if it exists
+        const connectionWarning = document.getElementById('dc-connection-warning');
+        if (connectionWarning) {
+          connectionWarning.style.display = 'none';
+        }
+        // If we have a room, request paired data to restore state
+        if (window.pairingData && window.pairingData.roomId) {
+          console.log('[DyadicChat] Reconnected, requesting paired data to restore state');
+          socket.currentRoom = window.pairingData.roomId;
+          socket.emit('request:paired_data', { expectedRole: window.userRole });
+        }
+      });
+
+      socket.on('disconnect', (reason) => {
+        console.log('[DyadicChat] Socket disconnected:', reason);
+        // Show connection warning for brief disconnections
+        if (reason === 'io server disconnect' || reason === 'transport close' || reason === 'transport error') {
+          // These are usually temporary - show a subtle warning
+          showConnectionWarning('Connection lost. Reconnecting...');
+        }
+      });
+
+      socket.on('reconnect', (attemptNumber) => {
+        console.log('[DyadicChat] Socket reconnected after', attemptNumber, 'attempts');
+        hideConnectionWarning();
+      });
+
+      socket.on('reconnect_attempt', (attemptNumber) => {
+        console.log('[DyadicChat] Reconnection attempt', attemptNumber);
+        showConnectionWarning(`Reconnecting... (attempt ${attemptNumber})`);
+      });
+
+      socket.on('reconnect_error', (error) => {
+        console.warn('[DyadicChat] Reconnection error:', error);
+        showConnectionWarning('Reconnection failed. Retrying...');
+      });
+
+      socket.on('reconnect_failed', () => {
+        console.error('[DyadicChat] Reconnection failed after all attempts');
+        showConnectionWarning('Connection lost. Please refresh the page.', true);
+      });
+
+      // Helper function to show connection warning
+      function showConnectionWarning(message, isError = false) {
+        let warning = document.getElementById('dc-connection-warning');
+        if (!warning) {
+          warning = document.createElement('div');
+          warning.id = 'dc-connection-warning';
+          warning.style.cssText = 'position:fixed; top:20px; right:20px; padding:12px 20px; background:#ff9800; color:white; border-radius:8px; z-index:10000; font-size:14px; box-shadow:0 4px 6px rgba(0,0,0,0.1);';
+          document.body.appendChild(warning);
+        }
+        warning.textContent = message;
+        warning.style.background = isError ? '#f44336' : '#ff9800';
+        warning.style.display = 'block';
+      }
+
+      // Helper function to hide connection warning
+      function hideConnectionWarning() {
+        const warning = document.getElementById('dc-connection-warning');
+        if (warning) {
+          warning.style.display = 'none';
+        }
+      }
 
     socket.on('end:partner', function(){
         stopHeartbeat();

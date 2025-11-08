@@ -657,8 +657,15 @@ const consentTrial = {
           const updateDisplayFn = updateDisplay;
           
           // Connect to socket with PID in query string (server expects this)
+          // Enable automatic reconnection with exponential backoff for network resilience
           const socket = io(window.location.origin, { 
-            query: { pid: pidFromUrl } 
+            query: { pid: pidFromUrl },
+            reconnection: true,
+            reconnectionDelay: 1000,        // Start with 1 second delay
+            reconnectionDelayMax: 5000,      // Max 5 seconds between attempts
+            reconnectionAttempts: Infinity,  // Keep trying indefinitely
+            timeout: 20000,                  // Connection timeout
+            transports: ['websocket', 'polling'] // Try websocket first, fallback to polling
           });
           socket.prolific = { PID: pidFromUrl };
           
@@ -670,6 +677,34 @@ const consentTrial = {
           socket.on('connect', () => {
             connected = true;
             console.log('[DyadicChat] Socket connected, socket ID:', socket.id, 'waiting for pairing...');
+            // Hide any connection warning
+            const warning = document.getElementById('dc-connection-warning');
+            if (warning) warning.style.display = 'none';
+          });
+
+          // Handle reconnection events
+          socket.on('disconnect', (reason) => {
+            console.log('[DyadicChat] Socket disconnected:', reason);
+            if (reason === 'io server disconnect' || reason === 'transport close' || reason === 'transport error') {
+              // Show subtle reconnection message
+              if (updateDisplayFn) {
+                updateDisplayFn('Reconnecting...', true, 'Connection lost. Attempting to reconnect...');
+              }
+            }
+          });
+
+          socket.on('reconnect', (attemptNumber) => {
+            console.log('[DyadicChat] Socket reconnected after', attemptNumber, 'attempts');
+            if (updateDisplayFn) {
+              updateDisplayFn('Connecting to Partner', true, 'Reconnected! Waiting for pairing...');
+            }
+          });
+
+          socket.on('reconnect_attempt', (attemptNumber) => {
+            console.log('[DyadicChat] Reconnection attempt', attemptNumber);
+            if (updateDisplayFn) {
+              updateDisplayFn('Reconnecting...', true, `Reconnecting... (attempt ${attemptNumber})`);
+            }
           });
           
           socket.on('paired:instructions', (data) => {
