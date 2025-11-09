@@ -138,12 +138,13 @@
   <style>
     .instr-aesthetic { color: #1a1a1a; }
     .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; color: #1a1a1a; }
-    .instr-aesthetic li { margin: 6px 0; color: #1a1a1a; }
+    .instr-aesthetic li { margin: 6px 0; color: #0066cc; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
-    .instr-aesthetic h2 { margin-bottom: 10px; color: #1a1a1a; }
+    .instr-aesthetic h2 { margin-bottom: 10px; color: #000000; }
     .instr-section { margin-bottom: 20px; }
-    .instr-section h3 { color: #0066cc; margin-top: 15px; margin-bottom: 10px; font-size: 1.1em; }
-    .instr-section h4 { color: #1a1a1a; margin-top: 15px; margin-bottom: 10px; font-size: 1em; }
+    .instr-section h3 { color: #000000; margin-top: 15px; margin-bottom: 10px; font-size: 1.1em; }
+    .instr-section h4 { color: #000000; margin-top: 15px; margin-bottom: 10px; font-size: 1em; }
+    .instr-aesthetic .nice li { color: #0066cc; }
     .consent-box h2 { margin: 0 0 12px 0; }
 </style>
   <!-- Study Section -->
@@ -208,12 +209,13 @@
   <style>
     .instr-aesthetic { color: #1a1a1a; }
     .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; color: #1a1a1a; }
-    .instr-aesthetic li { margin: 6px 0; color: #1a1a1a; }
+    .instr-aesthetic li { margin: 6px 0; color: #0066cc; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
-    .instr-aesthetic h2 { margin-bottom: 10px; color: #1a1a1a; }
+    .instr-aesthetic h2 { margin-bottom: 10px; color: #000000; }
     .instr-section { margin-bottom: 20px; }
-    .instr-section h3 { color: #cc0000; margin-top: 15px; margin-bottom: 10px; font-size: 1.1em; }
-    .instr-section h4 { color: #1a1a1a; margin-top: 15px; margin-bottom: 10px; font-size: 1em; }
+    .instr-section h3 { color: #000000; margin-top: 15px; margin-bottom: 10px; font-size: 1.1em; }
+    .instr-section h4 { color: #000000; margin-top: 15px; margin-bottom: 10px; font-size: 1em; }
+    .instr-aesthetic .nice li { color: #0066cc; }
     .consent-box h2 { margin: 0 0 12px 0; }
 </style>
   <!-- Study Section -->
@@ -1074,7 +1076,7 @@
                 ...window.__answerData,
                 survey: surveyData
               };
-              display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
+              display_element.innerHTML = '<div style="padding:40px; font-size:1.25rem; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
               self.jsPsych.finishTrial(finalData);
               redirectToProlific();
             }

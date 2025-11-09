@@ -83,13 +83,19 @@
 <div class="instr instr-aesthetic instr-page-top" style="margin-top: 28px;">
   <style>
     .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
-    .instr-aesthetic li { margin: 6px 0; }
+    .instr-aesthetic li { margin: 6px 0; color: #0066cc !important; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
-    .instr-aesthetic h2 { margin-bottom: 10px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; color: #000000; font-size: 2.5em; }
     .instr-section { margin-bottom: 30px; }
-    .instr-section h3 { color: #0066cc; margin-top: 25px; margin-bottom: 15px; font-size: 1.3em; }
+    .instr-section h3 { color: #000000; margin-top: 25px; margin-bottom: 15px; font-size: 1.3em; }
+    .instr-section h4 { color: #000000; }
+    .instr-aesthetic .nice li { color: #0066cc !important; }
+    .instr-aesthetic ol li, .instr-aesthetic ul li { color: #0066cc !important; }
+    .instr-aesthetic li::marker { color: #0066cc !important; }
+    .instr-section:first-of-type .nice li { font-weight: bold !important; }
+    .instr-section:first-of-type .nice li strong { font-weight: bold !important; }
   </style>
-  <h2>Instructions</h2>
+      <h2 style="color: #000000; font-size: 2.5em;">Instructions</h2>
   
   <!-- Study Section -->
   <div class="instr-section">
@@ -105,9 +111,9 @@
     <h3>Task Details</h3>
     <ol class="nice">
       <li><strong style="color: #0066cc;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-      <li><strong style="color: #cc0000;">You are the Answerer.</strong></li>
-      <li><strong style="color: #0066cc;">You will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</strong></li>
-      <li><strong style="color: #0066cc;">Your partner is the Helper and will help you answer the question correctly.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: You are the Answerer.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: You will be given a multiple choice question about the room with one correct answer. Given the question, you have to seek help from your partner (Helper) to answer the question correctly.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: Your partner is the Helper and will help you answer the question correctly.</strong></li>
       <li><strong style="color: #cc0000;">NOTE: Your partner (helper) will not be able to see the question.</strong></li>
       <li><strong style="color: #0066cc;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
       <li><strong style="color: #0066cc;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
@@ -123,7 +129,7 @@
     
     <!-- Read Carefully Subsection -->
     <div style="margin-top: 30px;">
-      <h4 style="color: #1a1a1a; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
+      <h4 style="color: #000000; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
       <ul class="nice" style="margin-top: 15px;">
         ${getQuestionTypeSpecificInstructions(questionType)}
       </ul>
@@ -136,10 +142,10 @@
     <ol class="nice">
       <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to solve the question. If you terminate prematurely or do not engage properly, payment might not be issued.</strong></li>
       <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you've fully completed the task.</strong></li>
-      <li>You will attempt 3 total questions in the entire session.</li>
-      <li>You can zoom into the image to inspect details.</li>
-      <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
-      <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
+      <li style="font-weight: bold;">You will attempt 3 total questions in the entire session.</li>
+      <li style="font-weight: bold;">You can zoom into the image to inspect details.</li>
+      <li style="font-weight: bold;">Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
+      <li style="font-weight: bold;">Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
     </ol>
   </div>
 
@@ -147,11 +153,11 @@
   <div style="margin: 60px auto; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #0066cc, transparent);"></div>
 
   <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
-    <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
+    <h2 style="margin-bottom: 20px; color: #000000;">Task Interface</h2>
     <img src="/inst_img/interface_answerer.png" alt="Task Interface" style="max-width: 100%; height: auto;">
   </div>
 
-  <p>Click "Begin Task" when you are ready.</p>
+  <p style="color: #0066cc; font-weight: bold;">Click "Begin Task" when you are ready.</p>
 </div>
 `;
         return baseInstructions;
@@ -163,13 +169,19 @@
 <div class="instr instr-aesthetic instr-page-top" style="margin-top: 28px;">
   <style>
     .instr-aesthetic .nice { margin: 0; padding-left: 1.2em; line-height: 1.6; }
-    .instr-aesthetic li { margin: 6px 0; }
+    .instr-aesthetic li { margin: 6px 0; color: #0066cc !important; }
     .instr-aesthetic ol[type="a"] { margin-top: 6px; }
-    .instr-aesthetic h2 { margin-bottom: 10px; }
+    .instr-aesthetic h2 { margin-bottom: 10px; color: #000000; font-size: 2.5em; }
     .instr-section { margin-bottom: 30px; }
-    .instr-section h3 { color: #cc0000; margin-top: 25px; margin-bottom: 15px; font-size: 1.3em; }
+    .instr-section h3 { color: #000000; margin-top: 25px; margin-bottom: 15px; font-size: 1.3em; }
+    .instr-section h4 { color: #000000; }
+    .instr-aesthetic .nice li { color: #0066cc !important; }
+    .instr-aesthetic ol li, .instr-aesthetic ul li { color: #0066cc !important; }
+    .instr-aesthetic li::marker { color: #0066cc !important; }
+    .instr-section:first-of-type .nice li { font-weight: bold !important; }
+    .instr-section:first-of-type .nice li strong { font-weight: bold !important; }
   </style>
-  <h2>Instructions</h2>
+      <h2 style="color: #000000; font-size: 2.5em;">Instructions</h2>
   
   <!-- Study Section -->
   <div class="instr-section">
@@ -184,25 +196,25 @@
   <div class="instr-section">
     <h3>Task Details</h3>
     <ol class="nice">
-      <li><strong style="color: #cc0000;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
-      <li><strong style="color: #0066cc;">You are the Helper.</strong></li>
-      <li><strong style="color: #cc0000;">Your partner is the Answerer and they will receive a multiple choice question about the room.</strong></li>
-      <li><strong style="color: #0066cc;">You won't receive any question yourself. Your task is to help your partner (Answerer) to answer the question correctly.</strong></li>
-      <li><strong style="color: #cc0000;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
-      <li><strong style="color: #cc0000;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
-      <li><strong style="color: #cc0000;">Note (taking turns in the conversation):</strong>
+      <li><strong style="color: #0066cc;">You and your partner will each see a different view of the same room. Some objects might be visible in both views, while other objects might be visible in only one view.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: You are the Helper.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: Your partner is the Answerer and they will receive a multiple choice question about the room.</strong></li>
+      <li><strong style="color: #cc0000;">NOTE: You won't receive any question yourself. Your task is to help your partner (Answerer) to answer the question correctly.</strong></li>
+      <li><strong style="color: #0066cc;">Overall, the goal is to discuss and collaborate with your partner to find the correct answer.</strong></li>
+      <li><strong style="color: #0066cc;">You and your partner will have a maximum of ${maxTurns} messages each that you can send to each other.</strong></li>
+      <li><strong style="color: #0066cc;">Note (taking turns in the conversation):</strong>
         <ol type="a">
-          <li><strong style="color: #cc0000;">Your partner will send the first message.</strong></li>
-          <li><strong style="color: #cc0000;">You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</strong></li>
+          <li><strong style="color: #0066cc;">Your partner will send the first message.</strong></li>
+          <li><strong style="color: #0066cc;">You cannot send consecutive messages, you have to wait for your partner to respond before sending another message.</strong></li>
         </ol>
       </li>
-      <li><strong style="color: #cc0000;">After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</strong></li>
-      <li><strong style="color: #cc0000;">Once your partner has submitted their answer, you will move on to the next question.</strong></li>
+      <li><strong style="color: #0066cc;">After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</strong></li>
+      <li><strong style="color: #0066cc;">Once your partner has submitted their answer, you will move on to the next question.</strong></li>
     </ol>
     
     <!-- Read Carefully Subsection -->
     <div style="margin-top: 30px;">
-      <h4 style="color: #1a1a1a; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
+      <h4 style="color: #000000; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
       <ul class="nice" style="margin-top: 15px;">
         ${getQuestionTypeSpecificInstructions(questionType)}
       </ul>
@@ -215,10 +227,10 @@
     <ol class="nice">
       <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: You must engage in a proper conversation and make a meaningful attempt to help your partner. If you do not engage properly, payment might not be issued.</strong></li>
       <li style="color: #cc0000;"><strong style="color: #cc0000;">IMPORTANT: Please avoid long pauses or delays in your chat responses during the task to maintain a smooth conversation. Do not exit or refresh the page until you've fully completed the task.</strong></li>
-      <li>You will attempt 3 total questions in the entire session.</li>
-      <li>You can zoom into the image to inspect details.</li>
-      <li>Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
-      <li>Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
+      <li style="font-weight: bold;">You will attempt 3 total questions in the entire session.</li>
+      <li style="font-weight: bold;">You can zoom into the image to inspect details.</li>
+      <li style="font-weight: bold;">Do not share personal information or engage in small talk. Please try to be respectful in your messages, and avoid using colloquial or slang language.</li>
+      <li style="font-weight: bold;">Ensure that you have a stable internet connection throughout the conversations. If you get disconnected, your answer will not be recorded.</li>
     </ol>
   </div>
 
@@ -226,11 +238,11 @@
   <div style="margin: 60px auto; width: 100%; height: 2px; background: linear-gradient(to right, transparent, #cc0000, transparent);"></div>
 
   <div style="margin-top: 50px; margin-bottom: 50px; text-align: center;">
-    <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Interface</h2>
+    <h2 style="margin-bottom: 20px; color: #000000;">Task Interface</h2>
     <img src="/inst_img/interface_helper.png" alt="Task Interface" style="max-width: 100%; height: auto;">
   </div>
 
-  <p>Click "Begin Task" when you are ready.</p>
+  <p style="color: #0066cc; font-weight: bold;">Click "Begin Task" when you are ready.</p>
 </div>
 `;
         return baseInstructions;
@@ -244,7 +256,7 @@
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Counting)</h2>
+                  <h2 style="margin-bottom: 20px; color: #000000;">Task Example (Counting)</h2>
 
 
                   <div style="margin-top: 15px; font-size: 18px; color: #666666;">
@@ -269,13 +281,13 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
@@ -286,14 +298,14 @@
 
                   <!-- <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Your View</h4>
                       <img src="/inst_img/${questionType}_your_view_2.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                       <p style="font-size: 16px; color: #8bd5ff; margin-top: 5px;">You see 2 lamps</p>
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Partner's View</h4>
                       <img src="/inst_img/${questionType}_partner_view_2.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -321,11 +333,11 @@
           case 'spatial':
           return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
                 <li style="color: #0066cc;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
-                <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, the directions are relative to the Answerer's own orientation, not the room layout. For example, "Behind" refers to the space directly opposite the direction the Answerer is facing.</strong></li>
+                <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, the directions in the options are relative to the Answerer's own orientation, not the room layout. For example, "Behind" refers to the area directly opposite the direction the Answerer is facing.</strong></li>
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Spatial Understanding)</h2>
+                  <h2 style="margin-bottom: 20px; color: #000000;">Task Example (Spatial Understanding)</h2>
 
                   <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
@@ -347,13 +359,13 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
@@ -362,14 +374,14 @@
 
                   <!-- <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Your View</h4>
                       <img src="/inst_img/${questionType}_your_view_2.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                       <p style="font-size: 18px; margin-top: 5px;"><b style="color: #8bd5ff;">Answer:</b> a. left</p>
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Partner's View</h4>
                       <img src="/inst_img/${questionType}_partner_view_2.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -391,7 +403,7 @@
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Anchor Object Recognition)</h2>
+                  <h2 style="margin-bottom: 20px; color: #000000;">Task Example (Anchor Object Recognition)</h2>
 
                   <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
@@ -416,13 +428,13 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
@@ -431,14 +443,14 @@
 
                   <!-- <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Your View</h4>
                       <img src="/inst_img/${questionType}_your_view_1.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                       <p style="font-size: 18px; margin-top: 5px;"><b style="color: #8bd5ff;">Answer:</b> c. square canvas wall art with gray background</p>
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Partner's View</h4>
                       <img src="/inst_img/${questionType}_partner_view_1.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -469,7 +481,7 @@
 
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Relative Distance)</h2>
+                  <h2 style="margin-bottom: 20px; color: #000000;">Task Example (Relative Distance)</h2>
 
                   <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
@@ -491,13 +503,13 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
@@ -506,14 +518,14 @@
 
                   <!-- <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Your View</h4>
                       <img src="/inst_img/${questionType}_your_view_2.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
                       <p style="font-size: 16px; color: #8bd5ff; margin-top: 5px;">You see the sofa and the rectangular shelf with multiple square compartments</p>
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Partner's View</h4>
                       <img src="/inst_img/${questionType}_partner_view_2.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
@@ -551,7 +563,7 @@
                 <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, directions are defined from the Helper's perspective, not the Answerer's. For example, "Front" refers to the space directly ahead of the Helper's current line of sight.</strong></li>
 
                 <div style="margin-top: 30px; text-align: center;">
-                  <h2 style="margin-bottom: 20px; color: #1a1a1a;">Task Example (Perspective Taking)</h2>
+                  <h2 style="margin-bottom: 20px; color: #000000;">Task Example (Perspective Taking)</h2>
 
                   <div style="margin-top: 15px; font-size: 18px; color: #666666;">
                     <div style="display: flex; gap: 20px; justify-content: center;">
@@ -574,13 +586,13 @@
 
                   <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #0066cc; margin-bottom: 10px;">Answerer's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Answerer's View</h4>
                       <img src="/inst_img/${questionType}_your_view.png"
                           alt="Your view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #cc0000; margin-bottom: 10px;">Helper's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Helper's View</h4>
                       <img src="/inst_img/${questionType}_partner_view.png"
                           alt="Partner's view example"
                           style="border: 2px solid #d0d0d0; border-radius: 8px; max-width: 600px; height: auto;">
@@ -589,14 +601,14 @@
 
                   <!-- <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
                     <div style="text-align: center;">
-                      <h4 style="color: #8bd5ff; margin-bottom: 10px;">Your View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Your View</h4>
                       <img src="/inst_img/${questionType}_your_view_2.png"
                           alt="Your view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
 
                     </div>
                     <div style="text-align: center;">
-                      <h4 style="color: #ff6b6e; margin-bottom: 10px;">Partner's View</h4>
+                      <h4 style="color: #000000; margin-bottom: 10px;">Partner's View</h4>
                       <img src="/inst_img/${questionType}_partner_view_2.png"
                           alt="Partner's view example"
                           style="border: 2px solid #3e3e42; border-radius: 8px; max-width: 600px; height: auto;">
