@@ -281,7 +281,7 @@
         return `<li style="color: #0066cc;"><strong>The task is to find the count of a given object.</strong></li>
                 <li style="color: #0066cc;"><strong>You and your partner must make sure that you are counting the total number of unique instances of that object in the room while preventing overcounting or undercounting.</strong></li>
               `;
-      case 'spatial':
+      case 'spatial_orientation':
         return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of a target object from their own viewpoint.</strong></li>
                 <li style="color: #0066cc;"><strong>The Answerer cannot see the object directly—it is visible only to the Helper. To identify where the object is located, the Answerer must communicate with the Helper and use the information obtained to infer its direction relative to themselves.</strong></li>
                 <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, the directions are relative to the Answerer's own orientation, not the room layout. For example, "Behind" refers to the space directly opposite the direction the Answerer is facing.</strong></li>
@@ -562,7 +562,7 @@
       function redirectToProlific() {
         // Redirect to Prolific completion URL after a short delay
         setTimeout(() => {
-          window.location.href = 'https://app.prolific.com/submissions/complete?cc=CSCCU793';
+          window.location.href = 'https://app.prolific.com/submissions/complete?cc=C1FXFXJ1';
         }, 2000); // 2 second delay to show completion message
       }
 

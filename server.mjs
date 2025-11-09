@@ -30,7 +30,7 @@ const QUESTION_TYPE = process.env.QUESTION_TYPE || 'counting';
 // Can be overridden via environment variable QUESTIONS_PER_CATEGORY (JSON string)
 const QUESTIONS_PER_CATEGORY_DEFAULT = {
   'counting': 3,
-  'spatial': 3,
+  'spatial_orientation': 3,
   'anchor': 3,
   'relative_distance': 3,
   'perspective_taking': 3
@@ -69,23 +69,28 @@ try {
   let demoFile = null;
   switch (QUESTION_TYPE) {
     case 'counting':
-      jsonFile = 'sampled_counting_v4.json';
+      jsonFile = 'counting_sampled_pilot.json';
+      // jsonFile = 'sampled_counting_v4.json';
       demoFile = 'demo_counting.json';
       break;
     case 'anchor':
-      jsonFile = 'sampled_anchor_v4.json';
+      jsonFile = 'anchor_sampled_pilot.json';
+      // jsonFile = 'sampled_anchor_v4.json';
       demoFile = 'demo_anchor.json';
       break;
     case 'relative_distance':
-      jsonFile = 'sampled_relative_distance_v4.json';
+      // jsonFile = 'sampled_relative_distance_v4.json';
+      jsonFile = 'relative_distance_sampled_pilot.json';
       demoFile = 'demo_relative_distance.json';
       break;
-    case 'spatial':
-      jsonFile = 'sampled_spatial_v4.json';
+    case 'spatial_orientation':
+      // jsonFile = 'sampled_spatial_v4.json';
+      jsonFile = 'spatial_sampled_pilot.json';
       demoFile = 'demo_spatial.json';
       break;
     case 'perspective_taking':
-      jsonFile = 'sampled_perspective_v4.json';
+      jsonFile = 'perspective_taking_sampled_pilot.json';
+      // jsonFile = 'sampled_perspective_v4.json';
       demoFile = 'demo_perspective_taking.json';
       break;
     default:
