@@ -1,7 +1,7 @@
 {
-    "sample_id": "demo_spatial_00000",
+    "sample_id": "demo_anchor_00000",
     "isDemo": true,
-    "question_type": "spatial",
+    "question_type": "anchor",
     "room_part": "Bedroom_v801_Part1",
     "scene_id": "8cd4b82",
     "global_map_image": null,
@@ -11,18 +11,18 @@
     "user_2_image": "/img/Bedroom_v801_Part1/8cd4b82/Image_1_0_0048_0.png",
     "user_1_goal": "Communicate with your partner to answer the following question correctly.",
     "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
-    "user_1_question": "From your perspective, in which direction is the green cabinet that is next to a white door?",
+    "user_1_question": "Which of the following object is present in both your and your partner's views of the room?",
     "user_2_question": null,
     "options_user_1": [
-        "front-right",
-        "front-left",
-        "behind-left",
-        "behind-right"
+        "window with brown curtains",
+        "green cabinet",
+        "red cabinet",
+        "pink floor lamp"
     ],
     "options_user_2": null,
     "user_1_gt_answer_idx": 0,
     "user_2_gt_answer_idx": null,
-    "user_1_gt_answer_text": "front-right",
+    "user_1_gt_answer_text": "window with brown curtains",
     "user_2_gt_answer_text": null,
     "difficulty": 1,
     "description_difficulty": [
@@ -30,6 +30,6 @@
     ],
     "angle": 0,
     "distance": 0,
-    "question_object": "Door",
-    "correct_answer": "front-right"
+    "question_object": "Window",
+    "correct_answer": "window with brown curtains"
 }
