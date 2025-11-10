@@ -21,7 +21,7 @@ const MAX_TURNS = Number(process.env.MAX_TURNS || 10); // one turn = two message
 const REQUIRE_DISTINCT_PID = process.env.REQUIRE_DISTINCT_PID !== '1';
 // const BLOCK_REPEAT_PID = String(process.env.BLOCK_REPEAT_PID || 'false').toLowerCase() === 'true';
 // const STOP_WHEN_DECK_COMPLETE = String(process.env.STOP_WHEN_DECK_COMPLETE || 'false').toLowerCase() !== 'false';
-const BLOCK_REPEAT_PID = true;
+const BLOCK_REPEAT_PID = false;
 const STOP_WHEN_DECK_COMPLETE = true;
 const QUESTION_TYPE = process.env.QUESTION_TYPE || 'counting';
 
