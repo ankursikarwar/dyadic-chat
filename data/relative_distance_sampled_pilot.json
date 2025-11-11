@@ -1,7 +1,8 @@
 [
   {
     "sample_id": "relative_distance_011923",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+    "question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "7c8363e0",
     "global_map_image": null,
@@ -52,7 +53,8 @@
   },
   {
     "sample_id": "relative_distance_011234",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+    "question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "bbbf51f",
     "global_map_image": null,
@@ -103,7 +105,8 @@
   },
   {
     "sample_id": "relative_distance_009586",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+    "question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "1de83ff",
     "global_map_image": null,
@@ -154,7 +157,8 @@
   },
   {
     "sample_id": "relative_distance_007206",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+    "question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "759eae0b",
     "global_map_image": null,
@@ -205,7 +209,8 @@
   },
   {
     "sample_id": "relative_distance_003964",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+    "question_variant": "closest",
     "room_part": "Bedroom_v3001_Final_Part3",
     "scene_id": "1068d759",
     "global_map_image": null,
@@ -256,7 +261,8 @@
   },
   {
     "sample_id": "relative_distance_007508",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+    "question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "644c9924",
     "global_map_image": null,
@@ -307,7 +313,8 @@
   },
   {
     "sample_id": "relative_distance_003749",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+  "question_variant": "closest",
     "room_part": "Bedroom_v3001_Final_Part3",
     "scene_id": "745f7ff1",
     "global_map_image": null,
@@ -358,7 +365,8 @@
   },
   {
     "sample_id": "relative_distance_003010",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Bedroom_v3001_Final_Part2",
     "scene_id": "4e5ccf43",
     "global_map_image": null,
@@ -409,7 +417,8 @@
   },
   {
     "sample_id": "relative_distance_006752",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "25675f57",
     "global_map_image": null,
@@ -460,7 +469,8 @@
   },
   {
     "sample_id": "relative_distance_007378",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "544841b5",
     "global_map_image": null,
@@ -511,7 +521,8 @@
   },
   {
     "sample_id": "relative_distance_012908",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v6001_AA_Final_Part4",
     "scene_id": "2ab54870",
     "global_map_image": null,
@@ -562,7 +573,8 @@
   },
   {
     "sample_id": "relative_distance_004998",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v3001_Final_Part2",
     "scene_id": "145090f8",
     "global_map_image": null,
@@ -613,7 +625,8 @@
   },
   {
     "sample_id": "relative_distance_012575",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v6001_AA_Final_Part4",
     "scene_id": "2bb27d1d",
     "global_map_image": null,
@@ -664,7 +677,8 @@
   },
   {
     "sample_id": "relative_distance_013838",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v7001_AA_Final_Part4",
     "scene_id": "26a458a5",
     "global_map_image": null,
@@ -715,7 +729,8 @@
   },
   {
     "sample_id": "relative_distance_001622",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v4001_Final_Part5_1",
     "scene_id": "22724da",
     "global_map_image": null,
@@ -766,7 +781,8 @@
   },
   {
     "sample_id": "relative_distance_012730",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "LivingRoom_v6001_AA_Final_Part4",
     "scene_id": "41db0b63",
     "global_map_image": null,
@@ -817,7 +833,8 @@
   },
   {
     "sample_id": "relative_distance_002379",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "LivingRoom_v5001_AA_Final_Part4_BKP",
     "scene_id": "5515351c",
     "global_map_image": null,
@@ -868,7 +885,8 @@
   },
   {
     "sample_id": "relative_distance_012432",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v6001_AA_Final_Part4",
     "scene_id": "2cc0bda1",
     "global_map_image": null,
@@ -919,7 +937,8 @@
   },
   {
     "sample_id": "relative_distance_013475",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "LivingRoom_v6001_AA_Final_Part4",
     "scene_id": "4dd80636",
     "global_map_image": null,
@@ -970,7 +989,8 @@
   },
   {
     "sample_id": "relative_distance_005770",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "LivingRoom_v3001_Final_Part3_1",
     "scene_id": "7a906ac2",
     "global_map_image": null,
@@ -1021,7 +1041,8 @@
   },
   {
     "sample_id": "relative_distance_000034",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "121ff0aa",
     "global_map_image": null,
@@ -1072,7 +1093,8 @@
   },
   {
     "sample_id": "relative_distance_000271",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "1fab9f2",
     "global_map_image": null,
@@ -1123,7 +1145,8 @@
   },
   {
     "sample_id": "relative_distance_000492",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "2bad4b21",
     "global_map_image": null,
@@ -1174,7 +1197,8 @@
   },
   {
     "sample_id": "relative_distance_006349",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Kitchen_v5001_AA_Final_Part4",
     "scene_id": "7a603716",
     "global_map_image": null,
@@ -1225,7 +1249,8 @@
   },
   {
     "sample_id": "relative_distance_000633",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "34fce27a",
     "global_map_image": null,
@@ -1276,7 +1301,8 @@
   },
   {
     "sample_id": "relative_distance_015498",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4",
     "scene_id": "697647a9",
     "global_map_image": null,
@@ -1327,7 +1353,8 @@
   },
   {
     "sample_id": "relative_distance_006187",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4",
     "scene_id": "75e23137",
     "global_map_image": null,
@@ -1378,7 +1405,8 @@
   },
   {
     "sample_id": "relative_distance_006261",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4",
     "scene_id": "66f6b565",
     "global_map_image": null,
@@ -1429,7 +1457,8 @@
   },
   {
     "sample_id": "relative_distance_000401",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "288a1cee",
     "global_map_image": null,
@@ -1480,7 +1509,8 @@
   },
   {
     "sample_id": "relative_distance_000936",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "53e5fde1",
     "global_map_image": null,
@@ -1531,7 +1561,8 @@
   },
   {
     "sample_id": "relative_distance_004388",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "DiningRoom_v3001_Final_Part1",
     "scene_id": "379c4fb2",
     "global_map_image": null,
@@ -1582,7 +1613,8 @@
   },
   {
     "sample_id": "relative_distance_004505",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "DiningRoom_v3001_Final_Part1_1",
     "scene_id": "b9ce9ba",
     "global_map_image": null,
@@ -1633,7 +1665,8 @@
   },
   {
     "sample_id": "relative_distance_012118",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "DiningRoom_v6001_AA_Final_Part4",
     "scene_id": "597f4066",
     "global_map_image": null,
@@ -1684,7 +1717,8 @@
   },
   {
     "sample_id": "relative_distance_012217",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "DiningRoom_v6001_AA_Final_Part4",
     "scene_id": "5b3df679",
     "global_map_image": null,
@@ -1735,7 +1769,8 @@
   },
   {
     "sample_id": "relative_distance_012286",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "DiningRoom_v6001_AA_Final_Part4",
     "scene_id": "ca06f24",
     "global_map_image": null,
@@ -1786,7 +1821,8 @@
   },
   {
     "sample_id": "relative_distance_004488",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "DiningRoom_v3001_Final_Part1_1",
     "scene_id": "4179fcff",
     "global_map_image": null,
@@ -1837,7 +1873,8 @@
   },
   {
     "sample_id": "relative_distance_004429",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "DiningRoom_v3001_Final_Part1",
     "scene_id": "3d5a585b",
     "global_map_image": null,
@@ -1888,7 +1925,8 @@
   },
   {
     "sample_id": "relative_distance_012231",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "DiningRoom_v6001_AA_Final_Part4",
     "scene_id": "7632fec",
     "global_map_image": null,
@@ -1939,7 +1977,8 @@
   },
   {
     "sample_id": "relative_distance_013551",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "DiningRoom_v6001_AA_Final_Part4_BKP",
     "scene_id": "6a6bc796",
     "global_map_image": null,
@@ -1990,7 +2029,8 @@
   },
   {
     "sample_id": "relative_distance_001559",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "DiningRoom_v5001_AA_Final_Part4_BKP",
     "scene_id": "6e271684",
     "global_map_image": null,
@@ -2041,7 +2081,8 @@
   },
   {
     "sample_id": "relative_distance_014774",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Bedroom_v7001_AA_Final_Part4",
     "scene_id": "3f08fe80",
     "global_map_image": null,
@@ -2093,7 +2134,8 @@
   },
   {
     "sample_id": "relative_distance_000915",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
     "scene_id": "53e5fde1",
     "global_map_image": null,
@@ -2144,7 +2186,8 @@
   },
   {
     "sample_id": "relative_distance_006745",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "25675f57",
     "global_map_image": null,
@@ -2195,7 +2238,8 @@
   },
   {
     "sample_id": "relative_distance_001962",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "LivingRoom_v5001_AA_Final_Part4_BKP",
     "scene_id": "1a443307",
     "global_map_image": null,
@@ -2246,7 +2290,8 @@
   },
   {
     "sample_id": "relative_distance_005876",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "LivingRoom_v3001_Final_Part4_1",
     "scene_id": "16d24cfc",
     "global_map_image": null,
@@ -2297,7 +2342,8 @@
   },
   {
     "sample_id": "relative_distance_003995",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Bedroom_v3001_Final_Part3",
     "scene_id": "1068d759",
     "global_map_image": null,
@@ -2348,7 +2394,8 @@
   },
   {
     "sample_id": "relative_distance_011325",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Bedroom_v5001_AA_Final_Part4",
     "scene_id": "1e673fbb",
     "global_map_image": null,
@@ -2399,7 +2446,8 @@
   },
   {
     "sample_id": "relative_distance_006147",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Kitchen_v5001_AA_Final_Part4",
     "scene_id": "6c489625",
     "global_map_image": null,
@@ -2450,7 +2498,8 @@
   },
   {
     "sample_id": "relative_distance_003812",
-    "question_type": "closest",
+    "question_type": "relative_distance",
+"question_variant": "closest",
     "room_part": "Bedroom_v3001_Final_Part3",
     "scene_id": "358b8809",
     "global_map_image": null,
@@ -2501,7 +2550,8 @@
   },
   {
     "sample_id": "relative_distance_002972",
-    "question_type": "farthest",
+    "question_type": "relative_distance",
+"question_variant": "farthest",
     "room_part": "Bedroom_v3001_Final_Part2",
     "scene_id": "42b65c46",
     "global_map_image": null,
