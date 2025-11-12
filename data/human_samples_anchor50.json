@@ -1,0 +1,2929 @@
+[
+  {
+    "sample_id": "anchor_005181",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v6001_AA_Final_Part4",
+    "scene_id": "3d85ec66",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3d85ec66/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3d85ec66/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v6001_AA_Final_Part4/3d85ec66frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v6001_AA_Final_Part4/3d85ec66frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "computer monitor kept on a white desk",
+      "a door located next to a beige sofa",
+      "black plant container",
+      "yellow door"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "a door located next to a beige sofa",
+    "difficulty": 0.03714555148597376,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Large Plant Container 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "a door located next to a beige sofa",
+    "option_categories": [
+      "Monitor",
+      "Door",
+      "Plant Container",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects can be seen in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 16,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3d85ec66/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3d85ec66/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005222",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v6001_AA_Final_Part4",
+    "scene_id": "29cbff01",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/29cbff01/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/29cbff01/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v6001_AA_Final_Part4/29cbff01frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v6001_AA_Final_Part4/29cbff01frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "plant container near a black door",
+      "white door",
+      "window with yellow shutters",
+      "black door"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "white door",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.0439597952004922,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Window 11"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "white door",
+    "option_categories": [
+      "Plant Container",
+      "Door",
+      "Window",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 5,
+    "scene_union": 12,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/29cbff01/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/29cbff01/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005438",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v6001_AA_Final_Part4",
+    "scene_id": "11e90754",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/11e90754/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/11e90754/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v6001_AA_Final_Part4/11e90754frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v6001_AA_Final_Part4/11e90754frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "window with beige curtains located next to a black desk",
+      "green door",
+      "black desk located next to a window with beige curtains",
+      "beige sofa"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 3,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "beige sofa",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.107508976526051,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "beige sofa",
+    "option_categories": [
+      "Window",
+      "Door",
+      "Desk",
+      "Sofa"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 1,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/11e90754/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/11e90754/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005487",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v6001_AA_Final_Part4",
+    "scene_id": "3620f3d9",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3620f3d9/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3620f3d9/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v6001_AA_Final_Part4/3620f3d9frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v6001_AA_Final_Part4/3620f3d9frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "shelf near a computer monitor",
+      "gray plant container kept on a white shelf",
+      "window with brown curtains near a computer monitor",
+      "beige desk lamp near a window with brown curtains"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 3,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "beige desk lamp near a window with brown curtains",
+    "difficulty": 0.010721392921024364,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_2",
+    "correct_answer": "beige desk lamp near a window with brown curtains",
+    "option_categories": [
+      "Shelf",
+      "Plant Container",
+      "Window",
+      "Lamp"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 18,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3620f3d9/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/3620f3d9/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002920",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v3001_Final_Part4_1",
+    "scene_id": "75df689b",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v3001_Final_Part4_1/75df689bframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v3001_Final_Part4_1/75df689bframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "white shelf near a computer monitor",
+      "gray side table on which a green lamp is kept",
+      "black desk on which a computer monitor is kept",
+      "computer monitor near a white shelf"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "gray side table on which a green lamp is kept",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.0325284338567466,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "gray side table on which a green lamp is kept",
+    "option_categories": [
+      "Shelf",
+      "Side Table",
+      "Desk",
+      "Monitor"
+    ],
+    "question_both_views": "Which of the following objects is visible from both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 22,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002943",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v3001_Final_Part4_1",
+    "scene_id": "62b6db2f",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/62b6db2f/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/62b6db2f/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v3001_Final_Part4_1/62b6db2fframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v3001_Final_Part4_1/62b6db2fframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "window near a computer monitor",
+      "cyan sofa near a beige lamp",
+      "white desk located next to a black TV",
+      "black TV near a window with brown curtains"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "cyan sofa near a beige lamp",
+    "difficulty": 0.14902459553045347,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_2",
+    "correct_answer": "cyan sofa near a beige lamp",
+    "option_categories": [
+      "Window",
+      "Sofa",
+      "Desk",
+      "T V"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 20,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/62b6db2f/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/62b6db2f/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_001468",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v4001_Final_Part5_1",
+    "scene_id": "77a65712",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/LivingRoom_v4001_Final_Part5_1/77a65712/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/LivingRoom_v4001_Final_Part5_1/77a65712/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v4001_Final_Part5_1/77a65712frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v4001_Final_Part5_1/77a65712frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "door near a gray plant container",
+      "black desk located near a green door",
+      "window next to a gray plant container",
+      "plant container near a wall art"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "black desk located near a green door",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.02157380636303885,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "black desk located near a green door",
+    "option_categories": [
+      "Door",
+      "Desk",
+      "Window",
+      "Plant Container"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 7,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/LivingRoom_v4001_Final_Part5_1/77a65712/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/LivingRoom_v4001_Final_Part5_1/77a65712/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002646",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v3001_Final_Part2_1",
+    "scene_id": "49772b98",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2_1/49772b98/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2_1/49772b98/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v3001_Final_Part2_1/49772b98frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v3001_Final_Part2_1/49772b98frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "white door",
+      "black plant container",
+      "window with brown curtains near a black plant container",
+      "computer monitor near a brown plant container"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "window with brown curtains near a black plant container",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.0642809711911172,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 2",
+      "Plant Container 1",
+      "Monitor 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "window with brown curtains near a black plant container",
+    "option_categories": [
+      "Door",
+      "Plant Container",
+      "Window",
+      "Monitor"
+    ],
+    "question_both_views": "Which of the following objects is visible from both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 13,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2_1/49772b98/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part2_1/49772b98/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005569",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v6001_AA_Final_Part4",
+    "scene_id": "1114ab",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/1114ab/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/1114ab/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v6001_AA_Final_Part4/1114abframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v6001_AA_Final_Part4/1114abframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "computer monitor near a white shelf",
+      "pink sofa near a computer monitor",
+      "door near a black desk",
+      "red shelf"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "pink sofa near a computer monitor",
+    "difficulty": 0.03814023835449315,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Monitor 1",
+      "Panel Door 4"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "pink sofa near a computer monitor",
+    "option_categories": [
+      "Monitor",
+      "Sofa",
+      "Door",
+      "Shelf"
+    ],
+    "question_both_views": "Which of the following objects is visible from both perspectives of the room?",
+    "scene_intersection": 9,
+    "scene_union": 19,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/1114ab/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/LivingRoom_v6001_AA_Final_Part4/1114ab/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002919",
+    "question_type": "anchor",
+    "room_part": "LivingRoom_v3001_Final_Part4_1",
+    "scene_id": "75df689b",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/LivingRoom_v3001_Final_Part4_1/75df689bframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/LivingRoom_v3001_Final_Part4_1/75df689bframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "light brown shelf",
+      "green desk lamp kept on a gray side table",
+      "white TV near a yellow shelf",
+      "brown door near a white TV"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "green desk lamp kept on a gray side table",
+    "difficulty": 0.01105693523582852,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        1,
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_2",
+    "correct_answer": "green desk lamp kept on a gray side table",
+    "option_categories": [
+      "Shelf",
+      "Lamp",
+      "T V",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 22,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/LivingRoom_v3001_Final_Part4_1/75df689b/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_001895",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v3001_Final_Part2",
+    "scene_id": "4483bd07",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part2/4483bd07/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part2/4483bd07/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v3001_Final_Part2/4483bd07frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v3001_Final_Part2/4483bd07frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "red cabinet",
+      "cabinet located next to a gray sink",
+      "green cabinet",
+      "cabinet located next to a gray toilet"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "cabinet located next to a gray sink",
+    "difficulty": 0.21347145405053047,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Single Cabinet 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "cabinet located next to a gray sink",
+    "option_categories": [
+      "Cabinet",
+      "Cabinet",
+      "Cabinet",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 9,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part2/4483bd07/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bathroom_v3001_Final_Part2/4483bd07/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_006939",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v5001_AA_Final_Part4",
+    "scene_id": "15467054",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/15467054/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/15467054/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v5001_AA_Final_Part4/15467054frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v5001_AA_Final_Part4/15467054frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "blue shelf",
+      "dark brown shelf",
+      "gray toilet located next to a brown door",
+      "brown door located next to a gray toilet"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "blue shelf",
+    "difficulty": 0.25983079567359146,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_2",
+    "correct_answer": "blue shelf",
+    "option_categories": [
+      "Shelf",
+      "Shelf",
+      "Toilet",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 10,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/15467054/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/15467054/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000866",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v5001_AA_Final_Part4_BKP",
+    "scene_id": "25e14642",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/25e14642/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/25e14642/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v5001_AA_Final_Part4_BKP/25e14642frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v5001_AA_Final_Part4_BKP/25e14642frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "wall art located next to a grey toilet",
+      "grey toilet located next to a wall art",
+      "white door near a yellow shelf",
+      "tall shelf"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "white door near a yellow shelf",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.15067002463096413,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "white door near a yellow shelf",
+    "option_categories": [
+      "Wall Art",
+      "Toilet",
+      "Door",
+      "Shelf"
+    ],
+    "question_both_views": "Which of the following objects is visible in both views of the room?",
+    "scene_intersection": 2,
+    "scene_union": 14,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/25e14642/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/25e14642/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005750",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v7001_AA_Final_Part4",
+    "scene_id": "68dc2a11",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v3_dataset_filtered/Bathroom_v7001_AA_Final_Part4/68dc2a11/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v3_dataset_filtered/Bathroom_v7001_AA_Final_Part4/68dc2a11/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v7001_AA_Final_Part4/68dc2a11frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v7001_AA_Final_Part4/68dc2a11frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "black door located next to a light brown shelf",
+      "green sink located next to a gray toilet",
+      "blue shelf",
+      "gray toilet located next to a green sink"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "black door located next to a light brown shelf",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.195139970049122,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Simple Bookcase 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "black door located next to a light brown shelf",
+    "option_categories": [
+      "Door",
+      "Sink",
+      "Shelf",
+      "Toilet"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 7,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v3_dataset_filtered/Bathroom_v7001_AA_Final_Part4/68dc2a11/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v3_dataset_filtered/Bathroom_v7001_AA_Final_Part4/68dc2a11/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000926",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v5001_AA_Final_Part4_BKP",
+    "scene_id": "499d877f",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/499d877f/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/499d877f/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v5001_AA_Final_Part4_BKP/499d877fframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v5001_AA_Final_Part4_BKP/499d877fframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "black door near a container for a purple plant",
+      "container for a purple plant near a black door",
+      "gray toilet next to a window with brown shutters",
+      "window with brown shutters"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "gray toilet next to a window with brown shutters",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.1585165059008762,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 1",
+      "Large Plant Container 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "gray toilet next to a window with brown shutters",
+    "option_categories": [
+      "Door",
+      "Plant Container",
+      "Toilet",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is visible from both views of the room?",
+    "scene_intersection": 4,
+    "scene_union": 8,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/499d877f/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/499d877f/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_007007",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v5001_AA_Final_Part4",
+    "scene_id": "201260fb",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/201260fb/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/201260fb/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v5001_AA_Final_Part4/201260fbframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v5001_AA_Final_Part4/201260fbframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "gray sink near a window with brown curtains",
+      "brown door",
+      "gray toilet",
+      "window with beige shutters"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "gray sink near a window with brown curtains",
+    "difficulty": 0.1784337024199678,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Toilet 1",
+      "Window 4"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "gray sink near a window with brown curtains",
+    "option_categories": [
+      "Sink",
+      "Door",
+      "Toilet",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 9,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/201260fb/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/201260fb/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_006841",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v5001_AA_Final_Part4",
+    "scene_id": "56944ef8",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/56944ef8/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/56944ef8/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v5001_AA_Final_Part4/56944ef8frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v5001_AA_Final_Part4/56944ef8frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "purple sink located next to a window with yellow curtains",
+      "gray toilet located next to a purple sink",
+      "red shelf near a container for green plants",
+      "window with beige shutters"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 2,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "red shelf near a container for green plants",
+    "difficulty": 0.062281128191002955,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Window 10"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "red shelf near a container for green plants",
+    "option_categories": [
+      "Sink",
+      "Toilet",
+      "Shelf",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is present in both views of the room?",
+    "scene_intersection": 4,
+    "scene_union": 8,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/56944ef8/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v10_dataset_filtered/Bathroom_v5001_AA_Final_Part4/56944ef8/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000818",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v4001_AA_Final_Part4",
+    "scene_id": "662187da",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v4001_AA_Final_Part4/662187da/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v4001_AA_Final_Part4/662187da/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v4001_AA_Final_Part4/662187daframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v4001_AA_Final_Part4/662187daframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "white cabinet",
+      "beige sink located next to a window with brown shutters",
+      "grey toilet located next to a blue cabinet",
+      "white door located next to a blue cabinet"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "beige sink located next to a window with brown shutters",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.14232506438828052,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Kitchen Cabinet 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "beige sink located next to a window with brown shutters",
+    "option_categories": [
+      "Cabinet",
+      "Sink",
+      "Toilet",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 10,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v4001_AA_Final_Part4/662187da/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v4001_AA_Final_Part4/662187da/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000832",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v5001_AA_Final_Part4_BKP",
+    "scene_id": "15c65ee9",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/15c65ee9/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/15c65ee9/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v5001_AA_Final_Part4_BKP/15c65ee9frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v5001_AA_Final_Part4_BKP/15c65ee9frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "window with blue curtains",
+      "brown door located next to a gray sink",
+      "wall art located next to a gray sink",
+      "gray sink located next to a wall art"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "brown door located next to a gray sink",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.35935804317579134,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Wall Art 1",
+      "Standing Sink 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "brown door located next to a gray sink",
+    "option_categories": [
+      "Window",
+      "Door",
+      "Wall Art",
+      "Sink"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 9,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/15c65ee9/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v8_dataset_filtered/Bathroom_v5001_AA_Final_Part4_BKP/15c65ee9/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_006565",
+    "question_type": "anchor",
+    "room_part": "Bathroom_v7001_AA_Final_Part4",
+    "scene_id": "1e1441d7",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v4_dataset_filtered/Bathroom_v7001_AA_Final_Part4/1e1441d7/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v4_dataset_filtered/Bathroom_v7001_AA_Final_Part4/1e1441d7/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bathroom_v7001_AA_Final_Part4/1e1441d7frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bathroom_v7001_AA_Final_Part4/1e1441d7frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "brown door",
+      "gray toilet near a window with brown shutters",
+      "window with black shutters",
+      "brown sink near a window with black shutters"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "gray toilet near a window with brown shutters",
+    "difficulty": 0.0940114672864838,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Window 2",
+      "Standing Sink 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "gray toilet near a window with brown shutters",
+    "option_categories": [
+      "Door",
+      "Toilet",
+      "Window",
+      "Sink"
+    ],
+    "question_both_views": "Which of the following objects is visible from both perspectives of the room?",
+    "scene_intersection": 5,
+    "scene_union": 10,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v4_dataset_filtered/Bathroom_v7001_AA_Final_Part4/1e1441d7/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v4_dataset_filtered/Bathroom_v7001_AA_Final_Part4/1e1441d7/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_004416",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v5001_AA_Final_Part4",
+    "scene_id": "464bbcfd",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/464bbcfd/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/464bbcfd/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v5001_AA_Final_Part4/464bbcfdframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v5001_AA_Final_Part4/464bbcfdframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "bed with purple bedframe located next to a black desk",
+      "white cabinet",
+      "desk located next to a white cabinet",
+      "green cabinet near a brown door"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "bed with purple bedframe located next to a black desk",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.7438433115099765,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "bed with purple bedframe located next to a black desk",
+    "option_categories": [
+      "Bed",
+      "Cabinet",
+      "Desk",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 23,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/464bbcfd/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/464bbcfd/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_004589",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v5001_AA_Final_Part4",
+    "scene_id": "9041a65",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/9041a65/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/9041a65/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v5001_AA_Final_Part4/9041a65frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v5001_AA_Final_Part4/9041a65frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "brown lamp",
+      "yellow cabinet near a wall art",
+      "lamp located next to a brown door",
+      "cabinet located next to a brown door"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "yellow cabinet near a wall art",
+    "difficulty": 0.008671718789774352,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Floor Lamp 1",
+      "Kitchen Cabinet 2"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "yellow cabinet near a wall art",
+    "option_categories": [
+      "Lamp",
+      "Cabinet",
+      "Lamp",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 9,
+    "scene_union": 23,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/9041a65/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/9041a65/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_004174",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v5001_AA_Final_Part4",
+    "scene_id": "19c52f16",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/19c52f16/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/19c52f16/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v5001_AA_Final_Part4/19c52f16frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v5001_AA_Final_Part4/19c52f16frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "white door located next to a black lamp",
+      "black bed near a plant container with gray color",
+      "plant container located next to a white desk",
+      "black floor lamp"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "black bed near a plant container with gray color",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.4742349713433205,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 1",
+      "Floor Lamp 3"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "black bed near a plant container with gray color",
+    "option_categories": [
+      "Door",
+      "Bed",
+      "Plant Container",
+      "Lamp"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 24,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/19c52f16/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/19c52f16/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_004776",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v5001_AA_Final_Part4",
+    "scene_id": "7a6ee404",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/7a6ee404/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/7a6ee404/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v5001_AA_Final_Part4/7a6ee404frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v5001_AA_Final_Part4/7a6ee404frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "floor beige lamp near a white desk",
+      "computer monitor on a white desk",
+      "olive plant container",
+      "desk near a computer monitor"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "floor beige lamp near a white desk",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.03375361988121006,
+    "description_difficulty": [
+      [
+        1,
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "floor beige lamp near a white desk",
+    "option_categories": [
+      "Lamp",
+      "Monitor",
+      "Plant Container",
+      "Desk"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 24,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/7a6ee404/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/7a6ee404/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_006253",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v7001_AA_Final_Part4",
+    "scene_id": "10b97b06",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/10b97b06/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/10b97b06/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v7001_AA_Final_Part4/10b97b06frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v7001_AA_Final_Part4/10b97b06frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "computer monitor on a white desk",
+      "brown door",
+      "bed with green bedframe next to a white desk",
+      "shelf near a gray plant container"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 2,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "bed with green bedframe next to a white desk",
+    "difficulty": 0.14215894290584563,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Large Shelf 2"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "bed with green bedframe next to a white desk",
+    "option_categories": [
+      "Monitor",
+      "Door",
+      "Bed",
+      "Shelf"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 7,
+    "scene_union": 18,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/10b97b06/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/10b97b06/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_004709",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v5001_AA_Final_Part4",
+    "scene_id": "54b10a2",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/54b10a2/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/54b10a2/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v5001_AA_Final_Part4/54b10a2frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v5001_AA_Final_Part4/54b10a2frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "red shelf near a beige lamp",
+      "desk lamp",
+      "desk located next to a red lamp",
+      "computer monitor on a white desk"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "red shelf near a beige lamp",
+    "difficulty": 0.017387107275120398,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_2",
+    "correct_answer": "red shelf near a beige lamp",
+    "option_categories": [
+      "Shelf",
+      "Lamp",
+      "Desk",
+      "Monitor"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 10,
+    "scene_union": 19,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/54b10a2/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/54b10a2/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_006451",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v7001_AA_Final_Part4",
+    "scene_id": "3affd8ae",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/3affd8ae/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/3affd8ae/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v7001_AA_Final_Part4/3affd8aeframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v7001_AA_Final_Part4/3affd8aeframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "computer monitor near a beige lamp",
+      "dark brown shelf",
+      "floor lamp located next to a yellow shelf",
+      "window with the purple curtains"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "computer monitor near a beige lamp",
+    "difficulty": 0.003983947278721756,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Floor Lamp 4"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "computer monitor near a beige lamp",
+    "option_categories": [
+      "Monitor",
+      "Shelf",
+      "Lamp",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 15,
+    "scene_union": 20,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/3affd8ae/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/3affd8ae/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_004275",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v5001_AA_Final_Part4",
+    "scene_id": "b899800",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/b899800/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/b899800/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v5001_AA_Final_Part4/b899800frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v5001_AA_Final_Part4/b899800frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "desk located near a computer monitor",
+      "beige lamp positioned next to a beige door",
+      "green plant container kept on a white cabinet",
+      "bed with beige bedframe near a white desk"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "beige lamp positioned next to a beige door",
+    "difficulty": 0.007771414144362998,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Plant Container 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "beige lamp positioned next to a beige door",
+    "option_categories": [
+      "Desk",
+      "Lamp",
+      "Plant Container",
+      "Bed"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 8,
+    "scene_union": 20,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/b899800/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/Bedroom_v5001_AA_Final_Part4/b899800/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002126",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v3001_Final_Part3",
+    "scene_id": "61229b75",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/61229b75/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/61229b75/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v3001_Final_Part3/61229b75frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v3001_Final_Part3/61229b75frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "red lamp",
+      "white desk located near a brown plant container",
+      "computer monitor kept on a white desk",
+      "brown plant container near a white desk"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "red lamp",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.006325206489519175,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Simple Desk 1",
+      "Monitor 2",
+      "Large Plant Container 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "red lamp",
+    "option_categories": [
+      "Lamp",
+      "Desk",
+      "Monitor",
+      "Plant Container"
+    ],
+    "question_both_views": "Which of the following objects is visible from both perspectives in the room?",
+    "scene_intersection": 11,
+    "scene_union": 27,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/61229b75/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part3/61229b75/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002021",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v3001_Final_Part2",
+    "scene_id": "47b762b1",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v3001_Final_Part2/47b762b1frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v3001_Final_Part2/47b762b1frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "brown door located next to a bed with green bedframe",
+      "gray plant container",
+      "lamp located next to a window with beige curtains",
+      "computer monitor near a window with beige curtains"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "brown door located next to a bed with green bedframe",
+    "difficulty": 0.08948542894071584,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Large Plant Container 4",
+      "Monitor 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "brown door located next to a bed with green bedframe",
+    "option_categories": [
+      "Door",
+      "Plant Container",
+      "Lamp",
+      "Monitor"
+    ],
+    "question_both_views": "Which of the following objects is visible from both perspectives of the room?",
+    "scene_intersection": 8,
+    "scene_union": 21,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/Bedroom_v3001_Final_Part2/47b762b1/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000173",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "1fab9f2",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1fab9f2/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1fab9f2/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/1fab9f2frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/1fab9f2frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "fridge located next to a dark brown cabinet",
+      "red cabinet",
+      "white cabinet",
+      "dark brown cabinet located next to a window with brown shutters"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 2,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "white cabinet",
+    "difficulty": 0.03689384105547866,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Single Cabinet 7",
+      "Single Cabinet 6"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "white cabinet",
+    "option_categories": [
+      "Fridge",
+      "Cabinet",
+      "Cabinet",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 13,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1fab9f2/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1fab9f2/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_003350",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4",
+    "scene_id": "6255777d",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/6255777d/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/6255777d/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4/6255777dframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4/6255777dframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "red cabinet",
+      "window with brown shutters",
+      "beige door near a window with brown shutters",
+      "window with brown curtains"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "beige door near a window with brown shutters",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.10571348963538388,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Window 13"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "beige door near a window with brown shutters",
+    "option_categories": [
+      "Cabinet",
+      "Window",
+      "Door",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 7,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/6255777d/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/6255777d/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_003052",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4",
+    "scene_id": "c88b32c",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/c88b32c/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/c88b32c/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4/c88b32cframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4/c88b32cframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "window located next to a dark brown cabinet",
+      "brown door near a white cabinet",
+      "dark brown cabinet",
+      "gray plant container"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 1,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "brown door near a white cabinet",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.11449066068730707,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Window 20",
+      "Single Cabinet 4"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "brown door near a white cabinet",
+    "option_categories": [
+      "Window",
+      "Door",
+      "Cabinet",
+      "Plant Container"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 1,
+    "scene_union": 13,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/c88b32c/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/c88b32c/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000120",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "1973b969",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1973b969/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1973b969/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/1973b969frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/1973b969frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "oven near a window with green curtains",
+      "brown door",
+      "green shelf",
+      "window with green curtains near an oven"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "green shelf",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.04459528135077129,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Oven 1",
+      "Window 9"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "green shelf",
+    "option_categories": [
+      "Oven",
+      "Door",
+      "Shelf",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is present in both views of the room?",
+    "scene_intersection": 2,
+    "scene_union": 9,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1973b969/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/1973b969/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000621",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "4bf4bc83",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4bf4bc83/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4bf4bc83/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/4bf4bc83frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/4bf4bc83frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "fridge located next to a dark brown shelf",
+      "window with yellow curtains near a wall art",
+      "blue shelf",
+      "wall art near a blue shelf"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "fridge located next to a dark brown shelf",
+    "difficulty": 0.33173114909991397,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Large Shelf 1",
+      "Wall Art 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "fridge located next to a dark brown shelf",
+    "option_categories": [
+      "Fridge",
+      "Window",
+      "Shelf",
+      "Wall Art"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 10,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4bf4bc83/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4bf4bc83/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000502",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "4179003e",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4179003e/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4179003e/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/4179003eframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/4179003eframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "oven located next to a light brown shelf",
+      "window with beige curtains near a yellow shelf",
+      "tall shelf",
+      "brown door"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "oven located next to a light brown shelf",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.08522147594067445,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Lite Door 2"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "oven located next to a light brown shelf",
+    "option_categories": [
+      "Oven",
+      "Window",
+      "Shelf",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 5,
+    "scene_union": 11,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4179003e/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4179003e/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000095",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "16641ef5",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/16641ef5/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/16641ef5/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/16641ef5frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/16641ef5frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "shelf located next to a white door",
+      "white door located next to a white shelf",
+      "sink next to an oven",
+      "fridge located next to a container for a brown plant"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 2,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "sink next to an oven",
+    "difficulty": 0.011726872120945808,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Beverage Fridge 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "sink next to an oven",
+    "option_categories": [
+      "Shelf",
+      "Door",
+      "Sink",
+      "Fridge"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 5,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/16641ef5/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/16641ef5/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000083",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "154d7419",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/154d7419/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/154d7419/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/154d7419frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/154d7419frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "cabinet on which a grey plant container is kept",
+      "oven located near a blue cabinet",
+      "brown door",
+      "grey plant container kept on a blue cabinet"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "oven located near a blue cabinet",
+    "difficulty": 0.19604335395495232,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Single Cabinet 3",
+      "Plant Container 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "oven located near a blue cabinet",
+    "option_categories": [
+      "Cabinet",
+      "Oven",
+      "Door",
+      "Plant Container"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 5,
+    "scene_union": 13,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/154d7419/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/154d7419/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_000650",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4_BKP",
+    "scene_id": "4d1a1fc9",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4d1a1fc9/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4d1a1fc9/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/4d1a1fc9frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4_BKP/4d1a1fc9frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "light brown cabinet located next to a gray plant container",
+      "black curtain window near a white cabinet",
+      "white door near an oven",
+      "gray plant container kept on a white cabinet"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "white door near an oven",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.08505114802580094,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "white door near an oven",
+    "option_categories": [
+      "Cabinet",
+      "Window",
+      "Door",
+      "Plant Container"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 4,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4d1a1fc9/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v7_dataset_filtered/Kitchen_v5001_AA_Final_Part4_BKP/4d1a1fc9/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_003101",
+    "question_type": "anchor",
+    "room_part": "Kitchen_v5001_AA_Final_Part4",
+    "scene_id": "fc34daf",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/fc34daf/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/fc34daf/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Kitchen_v5001_AA_Final_Part4/fc34dafframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Kitchen_v5001_AA_Final_Part4/fc34dafframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "shelf located next to a window with beige curtains",
+      "oven near a white shelf",
+      "white door next to a fridge",
+      "fridge located next to a white door"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "oven near a white shelf",
+    "difficulty": 0.09736347036800697,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 1",
+      "Beverage Fridge 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "oven near a white shelf",
+    "option_categories": [
+      "Shelf",
+      "Oven",
+      "Door",
+      "Fridge"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 3,
+    "scene_union": 11,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/fc34daf/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v6_dataset_filtered/Kitchen_v5001_AA_Final_Part4/fc34daf/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005012",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v6001_AA_Final_Part4",
+    "scene_id": "64b766c",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/64b766c/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/64b766c/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v6001_AA_Final_Part4/64b766cframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v6001_AA_Final_Part4/64b766cframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "beige door near a dark brown cabinet",
+      "white cabinet",
+      "dark brown cabinet",
+      "light brown cabinet located next to a beige door"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 3,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "light brown cabinet located next to a beige door",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.13430734885485407,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Single Cabinet 3"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "light brown cabinet located next to a beige door",
+    "option_categories": [
+      "Door",
+      "Cabinet",
+      "Cabinet",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is present in both views of the room?",
+    "scene_intersection": 7,
+    "scene_union": 16,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/64b766c/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/64b766c/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002355",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v3001_Final_Part1_1",
+    "scene_id": "70507de",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/70507de/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/70507de/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v3001_Final_Part1_1/70507deframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v3001_Final_Part1_1/70507deframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "blue shelf",
+      "black door",
+      "tall white shelf",
+      "short shelf near a purple door"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 0,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "blue shelf",
+    "difficulty": 0.12462161521727873,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Cell Shelf 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "blue shelf",
+    "option_categories": [
+      "Shelf",
+      "Door",
+      "Shelf",
+      "Shelf"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 8,
+    "scene_union": 17,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/70507de/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/70507de/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005068",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v6001_AA_Final_Part4",
+    "scene_id": "3a9a839b",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/3a9a839b/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/3a9a839b/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v6001_AA_Final_Part4/3a9a839bframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v6001_AA_Final_Part4/3a9a839bframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "black door",
+      "wall art located next to a yellow cabinet",
+      "white cabinet near a wall art",
+      "window with orange shutters"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 2,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "white cabinet near a wall art",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.05999323635462038,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 2",
+      "Wall Art 2"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "white cabinet near a wall art",
+    "option_categories": [
+      "Door",
+      "Wall Art",
+      "Cabinet",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 8,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/3a9a839b/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/3a9a839b/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002361",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v3001_Final_Part1_1",
+    "scene_id": "74d4c32b",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v3001_Final_Part1_1/74d4c32bframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v3001_Final_Part1_1/74d4c32bframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "brown plant container",
+      "wall art near a green cabinet",
+      "window with pink curtains next to a red cabinet",
+      "green cabinet"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 2,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "window with pink curtains next to a red cabinet",
+    "difficulty": 0.10954008226521283,
+    "description_difficulty": [
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Large Plant Container 1"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "window with pink curtains next to a red cabinet",
+    "option_categories": [
+      "Plant Container",
+      "Wall Art",
+      "Window",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 14,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002378",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v3001_Final_Part1_1",
+    "scene_id": "7e573277",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/7e573277/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/7e573277/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v3001_Final_Part1_1/7e573277frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v3001_Final_Part1_1/7e573277frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "wall art located next to a black door",
+      "black plant container",
+      "beige door",
+      "window with brown shutters"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "wall art located next to a black door",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.05801110368927276,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ]
+    ],
+    "distractor_difficulty": [
+      "Lite Door 2"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "wall art located next to a black door",
+    "option_categories": [
+      "Wall Art",
+      "Plant Container",
+      "Door",
+      "Window"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 17,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/7e573277/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/7e573277/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005134",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v6001_AA_Final_Part4",
+    "scene_id": "6697cbf",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v6001_AA_Final_Part4/6697cbfframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v6001_AA_Final_Part4/6697cbfframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "brown door located next to a yellow cabinet",
+      "beige plant container near a window with beige shutters",
+      "window with beige shutters",
+      "cabinet located next to a window with beige curtains"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 3,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "cabinet located next to a window with beige curtains",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.03138349972019022,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Panel Door 1",
+      "Large Plant Container 2",
+      "Window 5"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "cabinet located next to a window with beige curtains",
+    "option_categories": [
+      "Door",
+      "Plant Container",
+      "Window",
+      "Cabinet"
+    ],
+    "question_both_views": "Which of the following objects is present in both perspectives of the room?",
+    "scene_intersection": 7,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005120",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v6001_AA_Final_Part4",
+    "scene_id": "657978cc",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/657978cc/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/657978cc/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v6001_AA_Final_Part4/657978ccframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v6001_AA_Final_Part4/657978ccframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "brown door located next to a red cabinet",
+      "window with black shutters",
+      "cabinet near a window with black shutters",
+      "wall art near a red cabinet"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "brown door located next to a red cabinet",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.16394638153683572,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_1",
+    "correct_answer": "brown door located next to a red cabinet",
+    "option_categories": [
+      "Door",
+      "Window",
+      "Cabinet",
+      "Wall Art"
+    ],
+    "question_both_views": "Which of the following objects is present in both views of the room?",
+    "scene_intersection": 4,
+    "scene_union": 16,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/657978cc/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/657978cc/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_005133",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v6001_AA_Final_Part4",
+    "scene_id": "6697cbf",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v6001_AA_Final_Part4/6697cbfframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v6001_AA_Final_Part4/6697cbfframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's perspectives of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "beige plant container located near a window with beige shutters",
+      "cabinet positioned next to a window with beige shutters",
+      "window with beige shutters",
+      "brown door next to a yellow cabinet"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 1,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "cabinet positioned next to a window with beige shutters",
+    "difficulty": 0.11805901306110833,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0,
+        2
+      ]
+    ],
+    "distractor_difficulty": [],
+    "asking_to": "agent_2",
+    "correct_answer": "cabinet positioned next to a window with beige shutters",
+    "option_categories": [
+      "Plant Container",
+      "Cabinet",
+      "Window",
+      "Door"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 7,
+    "scene_union": 15,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v5_dataset_filtered/DiningRoom_v6001_AA_Final_Part4/6697cbf/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_002360",
+    "question_type": "anchor",
+    "room_part": "DiningRoom_v3001_Final_Part1_1",
+    "scene_id": "74d4c32b",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/DiningRoom_v3001_Final_Part1_1/74d4c32bframes/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/DiningRoom_v3001_Final_Part1_1/74d4c32bframes/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_2_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_1_question": "Which of the following objects is present in both your and your partner's views of the room?",
+    "user_2_question": null,
+    "options_user_1": [
+      "window with pink curtains located next to a red cabinet",
+      "green cabinet",
+      "brown plant container",
+      "wall art near a green cabinet"
+    ],
+    "options_user_2": null,
+    "user_1_gt_answer_idx": 0,
+    "user_2_gt_answer_idx": null,
+    "user_1_gt_answer_text": "window with pink curtains located next to a red cabinet",
+    "user_2_gt_answer_text": null,
+    "difficulty": 0.10954008226521283,
+    "description_difficulty": [
+      [
+        0,
+        2
+      ],
+      [
+        0
+      ],
+      [
+        0
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Single Cabinet 4",
+      "Wall Art 1"
+    ],
+    "asking_to": "agent_1",
+    "correct_answer": "window with pink curtains located next to a red cabinet",
+    "option_categories": [
+      "Window",
+      "Cabinet",
+      "Plant Container",
+      "Wall Art"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 6,
+    "scene_union": 14,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v9_dataset_filtered/DiningRoom_v3001_Final_Part1_1/74d4c32b/agent_2_input.txt"
+  },
+  {
+    "sample_id": "anchor_006243",
+    "question_type": "anchor",
+    "room_part": "Bedroom_v7001_AA_Final_Part4",
+    "scene_id": "2324ae64",
+    "global_map_image": null,
+    "user_1_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/2324ae64/frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image_local_path": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/2324ae64/frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_image": "/img/Bedroom_v7001_AA_Final_Part4/2324ae64frames/Image/camera_0/Image_0_0_0048_0.png",
+    "user_2_image": "/img/Bedroom_v7001_AA_Final_Part4/2324ae64frames/Image/camera_0/Image_1_0_0048_0.png",
+    "user_1_goal": "Communicate with your partner to help them answer their question correctly.",
+    "user_2_goal": "Communicate with your partner to answer the following question correctly.",
+    "user_1_question": null,
+    "user_2_question": "Which of the following objects is present in both your and your partner's views of the room?",
+    "options_user_1": null,
+    "options_user_2": [
+      "desk near a computer monitor",
+      "computer monitor on a white desk",
+      "wall art next to a bed with brown bedframe",
+      "desk on which a beige lamp is kept"
+    ],
+    "user_1_gt_answer_idx": null,
+    "user_2_gt_answer_idx": 2,
+    "user_1_gt_answer_text": null,
+    "user_2_gt_answer_text": "wall art next to a bed with brown bedframe",
+    "difficulty": 0.01731534119885758,
+    "description_difficulty": [
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "distractor_difficulty": [
+      "Simple Desk 3"
+    ],
+    "asking_to": "agent_2",
+    "correct_answer": "wall art next to a bed with brown bedframe",
+    "option_categories": [
+      "Desk",
+      "Monitor",
+      "Wall Art",
+      "Desk"
+    ],
+    "question_both_views": "Which of the following objects is visible in both perspectives of the room?",
+    "scene_intersection": 7,
+    "scene_union": 21,
+    "user_1_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/2324ae64/agent_1_input.txt",
+    "user_2_perception": "/home/mila/a/ankur.sikarwar/scratch/infinigen/infinigen_debang/infinigen/v00_filtered/v1_1_dataset_filtered/Bedroom_v7001_AA_Final_Part4/2324ae64/agent_2_input.txt"
+  }
+]
