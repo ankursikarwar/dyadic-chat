@@ -89,7 +89,7 @@ try {
       demoFile = 'demo_spatial.json';
       break;
     case 'map':
-      jsonFile = 'human_samples_map50.json';
+      jsonFile = 'human_samples_map50_img_copy.json';
       // jsonFile = 'sampled_perspective_v4.json';
       demoFile = 'demo_map.json';
       break;
