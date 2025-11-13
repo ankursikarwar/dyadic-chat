@@ -39,8 +39,27 @@
       '.dc-qa-wrap { max-width:720px; width:100%; margin:0 auto; display:grid; grid-template-rows:auto auto 1fr auto; row-gap:8px; align-items:start; text-align:center; min-height:0; height:100%; }',
       '.dc-center-bottom.single-box .dc-qa-wrap { display:flex; flex-direction:column; justify-content:center; align-items:center; }',
       '.dc-answers { display:block; width:100%; max-width:720px; margin:8px auto; text-align:left; min-height:0; max-height:100%; overflow:auto; }',
+      '.dc-answers.dc-answers-horizontal { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }',
       '.dc-answer-option { display:flex; align-items:center; justify-content:flex-start; gap:8px; margin:8px !important; }',
+      '.dc-answers-horizontal .dc-answer-option { margin:4px !important; flex:0 0 auto; }',
       '.dc-answer-option span { font-size:17px !important; }',
+      '.dc-map-image { width:100%; max-width:720px; margin:16px auto 0; border:1px solid var(--border); border-radius:var(--radius); overflow:hidden; box-shadow: var(--shadow); }',
+      '.dc-map-image img { width:100%; height:auto; display:block; }',
+      // Special styles for map questions
+      '.dc-qa-wrap.dc-map-layout { display:flex; flex-direction:column; height:100%; padding:6px; box-sizing:border-box; }',
+      '.dc-map-header { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px; flex-wrap:wrap; flex-shrink:0; }',
+      '.dc-map-header .dc-goal-title { margin:0; font-size:14px !important; flex:1; min-width:150px; line-height:1.2; }',
+      '.dc-map-header .dc-answers { margin:0 !important; flex:0 0 auto; }',
+      '.dc-map-header .dc-answers-horizontal { gap:6px !important; }',
+      '.dc-map-header .dc-answer-option { margin:2px !important; }',
+      '.dc-map-header .dc-answer-option span { font-size:13px !important; }',
+      '.dc-map-question { font-size:13px !important; margin:2px 0 4px 0; line-height:1.3; flex-shrink:0; }',
+      '.dc-map-image-container { flex:1; min-height:0; overflow:auto; margin-top:4px; display:flex; align-items:stretch; justify-content:center; }',
+      '.dc-map-image-container .dc-map-image { margin:0; width:100%; height:100%; max-width:100%; display:flex; align-items:center; justify-content:center; }',
+      '.dc-map-image-container .dc-map-image img { max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; }',
+      '.dc-map-footer { margin-top:4px; flex-shrink:0; }',
+      '.dc-map-footer .dc-availability-note { font-size:11px; margin:2px 0; }',
+      '.dc-map-footer #dc-submit { font-size:13px; padding:6px 12px; }',
       '.dc-availability-note { margin-top:8px; margin-bottom:3px; font-size:15px; font-weight:bold; color:var(--muted); }',
       '#dc-submit { font-size:16px; margin-top:auto; margin-bottom:4px; }',
       '.dc-right { display:grid; grid-template-rows: auto minmax(0,1fr) auto auto; row-gap:7px; height:100%; min-height:0; box-sizing:border-box; }',
@@ -124,7 +143,7 @@
 
   function generateSidebarInstructions(questionType, minMessages = 10, role = 'answerer') {
     console.log('[DyadicChat] generateSidebarInstructions called with questionType:', questionType, 'role:', role);
-    
+
     if (role === 'answerer') {
       return generateAnswererSidebarInstructions(questionType, minMessages);
     } else {
@@ -176,7 +195,7 @@
       <li><strong style="color: #0066cc;">You can choose to terminate the conversation early by pressing the "End Chat and Answer Now" button if you think you have found the correct answer.</strong></li>
       <li><strong style="color: #0066cc;">After the conversation is complete (either by choosing to terminate, or by reaching the maximum number of allowed messages), you must select the best option you think is correct and click "Submit Answer".</strong></li>
     </ol>
-    
+
     <!-- Read Carefully Subsection -->
     <div style="margin-top: 20px;">
       <h4>Read Carefully</h4>
@@ -246,7 +265,7 @@
       <li><strong style="color: #cc0000;">After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</strong></li>
       <li><strong style="color: #cc0000;">Once your partner has submitted their answer, you will move on to the next question.</strong></li>
     </ol>
-    
+
     <!-- Read Carefully Subsection -->
     <div style="margin-top: 20px;">
       <h4>Read Carefully</h4>
@@ -294,7 +313,7 @@
         return `<li style="color: #0066cc;"><strong>The task is to find which of the objects in the options is either the farthest or the closest to the object mentioned in the question.</strong></li>
                 <li style="color: #0066cc;"><strong>The objects in the options are visible either in only your view or only in your partner's view. Be careful, as what might be the closest / farthest in your view might not be the correct answer, even an object which is not at all in your view might be the correct answer.</strong></li>
               `;
-      case 'perspective_taking':
+      case 'map':
         return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of an object from the Helper's point of view.</strong></li>
                 <li style="color: #0066cc;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper's orientation.</strong></li>
                 <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, directions are defined from the Helper's perspective, not the Answerer's. For example, "Front" refers to the space directly ahead of the Helper's current line of sight.</strong></li>
@@ -404,7 +423,7 @@
       const self = this;
       let pairedPayload = null;
       const pidLabel = (trial.prolific && trial.prolific.PID) || 'DEBUG_LOCAL';
-      
+
       // Additional timing tracking - declare variables first
       let consentPageStartTime = null;
       let instructionsPageStartTime = null;
@@ -414,7 +433,7 @@
       let chatEndTime = null;
       let answerSubmitTime = null;
       let surveySubmitTime = null;
-      
+
       // Get timing from global scope
       consentPageStartTime = window.consentPageStartTime;
       instructionsPageStartTime = window.instructionsPageStartTime;
@@ -434,7 +453,7 @@
         const minMessages = (p && p.min_turns) || trial.min_messages;
         const hasQuestion = item && item.has_question;
         const hasOptions = item && item.has_options;
-        
+
         const imgHtml = (item && item.image_url)
           ? '<div class="dc-image-viewport"><img id="dc-scene" src="' + item.image_url + '" alt="scene"></div>'
             + '<div class="dc-zoom-controls">'
@@ -446,30 +465,76 @@
         const opts = (item && item.options) || trial.answer_options || [];
         const goalQ = (item && item.goal_question) || trial.goal_question || '';
 
+        // Check if this is a map question
+        const isMapQuestion = (item && item.question_type === 'map') ||
+                              (p && p.server_question_type === 'map') ||
+                              (trial && trial.question_type === 'map');
+
+        // For map questions, use ["A", "B", "C", "D"] as option labels
+        const mapOptionLabels = ['A', 'B', 'C', 'D'];
+
         // Generate different content based on whether user has a question
         let centerContent;
         if (hasQuestion && hasOptions) {
           // User has a question - show normal interface
-          centerContent = [
-            '<section class="dc-center-bottom single-box">',
-            '  <div class="dc-qa-wrap">',
-            '    <h3 class="dc-goal-title">Goal: Discuss with your partner to answer the following question correctly.</h3>',
-            '    <div class="dc-question">', goalQ, '</div>',
-            '    <div id="dc-answer-group" class="dc-answers">',
-            opts.map(function(opt, index){
-              return [
-                '<label class="dc-answer-option">',
-                '  <input type="radio" name="dc-answer" value="', String(index), '" disabled />',
-                '  <span>', String(opt), '</span>',
-                '</label>'
-              ].join('');
-            }).join(''),
-            '    </div>',
-            '    <div class="dc-availability-note">Note: Submit button becomes accessible when ' + String(minMessages) + ' messages are sent.</div>',
-            '    <button id="dc-submit" class="dc-btn dc-submit" disabled>Submit Answer</button>',
-            '  </div>',
-            '</section>'
-          ].join('');
+          // For map questions, use horizontal layout and A/B/C/D labels
+          const answersClass = isMapQuestion ? 'dc-answers dc-answers-horizontal' : 'dc-answers';
+          const optionLabels = isMapQuestion ? mapOptionLabels : opts;
+
+          // Build options HTML
+          const optionsHtml = opts.map(function(opt, index){
+            const displayLabel = isMapQuestion ? mapOptionLabels[index] : String(opt);
+            return [
+              '<label class="dc-answer-option">',
+              '  <input type="radio" name="dc-answer" value="', String(index), '" disabled />',
+              '  <span>', displayLabel, '</span>',
+              '</label>'
+            ].join('');
+          }).join('');
+
+          // Build global_map_image HTML for map questions (only for answerer)
+          const mapImageHtml = (isMapQuestion && item && item.global_map_image)
+            ? '<div class="dc-map-image"><img src="' + item.global_map_image + '" alt="Global map view" /></div>'
+            : '';
+
+          // Use special layout for map questions
+          if (isMapQuestion) {
+            centerContent = [
+              '<section class="dc-center-bottom single-box">',
+              '  <div class="dc-qa-wrap dc-map-layout">',
+              '    <div class="dc-map-header">',
+              '      <h3 class="dc-goal-title">Goal: Discuss with your partner to answer the following question correctly.</h3>',
+              '      <div id="dc-answer-group" class="', answersClass, '">',
+              optionsHtml,
+              '      </div>',
+              '    </div>',
+              '    <div class="dc-map-question">', goalQ, '</div>',
+              '    <div class="dc-map-image-container">',
+              mapImageHtml,
+              '    </div>',
+              '    <div class="dc-map-footer">',
+              '      <div class="dc-availability-note">Note: Submit button becomes accessible when ' + String(minMessages) + ' messages are sent.</div>',
+              '      <button id="dc-submit" class="dc-btn dc-submit" disabled>Submit Answer</button>',
+              '    </div>',
+              '  </div>',
+              '</section>'
+            ].join('');
+          } else {
+            centerContent = [
+              '<section class="dc-center-bottom single-box">',
+              '  <div class="dc-qa-wrap">',
+              '    <h3 class="dc-goal-title">Goal: Discuss with your partner to answer the following question correctly.</h3>',
+              '    <div class="dc-question">', goalQ, '</div>',
+              '    <div id="dc-answer-group" class="', answersClass, '">',
+              optionsHtml,
+              '    </div>',
+              mapImageHtml,
+              '    <div class="dc-availability-note">Note: Submit button becomes accessible when ' + String(minMessages) + ' messages are sent.</div>',
+              '    <button id="dc-submit" class="dc-btn dc-submit" disabled>Submit Answer</button>',
+              '  </div>',
+              '</section>'
+            ].join('');
+          }
         } else {
           // User has no question - show helper interface
           centerContent = [
@@ -537,7 +602,7 @@
 
       // Use existing socket if provided, otherwise create new one
       // Enable automatic reconnection with exponential backoff for network resilience
-      const socket = trial.existingSocket || io(trial.socketUrl, { 
+      const socket = trial.existingSocket || io(trial.socketUrl, {
         query: { pid: pidLabel },
         reconnection: true,
         reconnectionDelay: 1000,        // Start with 1 second delay
@@ -605,17 +670,17 @@
         const box = document.getElementById('dc-chat'); if (!box) return;
         const line = document.createElement('div'); line.className = 'dc-row ' + (who==='Me'?'dc-me':'dc-partner');
         const bubble = document.createElement('span'); bubble.className = 'dc-bubble ' + (who==='Me'?'dc-bubble-me':'dc-bubble-partner');
-        
+
         // Create bold label and text content separately to prevent HTML injection
         const label = document.createElement('b');
         label.textContent = who + ': ';
         const messageText = document.createElement('span');
         messageText.textContent = text;
-        
+
         bubble.appendChild(label);
         bubble.appendChild(messageText);
-        line.appendChild(bubble); 
-        box.appendChild(line); 
+        line.appendChild(bubble);
+        box.appendChild(line);
         box.scrollTop = box.scrollHeight;
       }
 
@@ -667,12 +732,12 @@
 
         addLine('Me', text);
         msgCount += 1; updateMessages();
-        
+
         // Track first message time
         if (!firstMessageTime) {
           firstMessageTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         }
-        
+
         socket.emit('chat:message', { text: text });
         el.value = '';
         if (el && el.classList.contains('dc-textarea')) { el.style.height = 'auto'; el.style.overflowY = 'hidden'; }
@@ -736,25 +801,25 @@
         if (!window.__userHasQuestion || !window.__userHasOptions) {
           // User has no question - just notify server
           console.log('[DyadicChat] User has no question, notifying server');
-          
+
           // Safety check: ensure t0 is set (should be set when paired)
           if (t0 === null) {
             console.warn('[DyadicChat] t0 not set, using current time as fallback');
             t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           }
-          
+
           const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
           const rt = Math.round(nowTs - t0);
-          
+
           // Track answer submit time
           answerSubmitTime = nowTs;
-          
+
           // Store empty answer data
           window.__answerData = { messages: Math.floor(msgCount/2), choice: null, rt: rt, pid: pidLabel };
-          
+
           // Store socket reference
           window.__socket = socket;
-          
+
           // Notify server (no answer to submit)
           socket.emit('answer:submit', { choice: null, rt: rt });
 
@@ -762,31 +827,31 @@
           display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Waiting for your partner to finish...</div>';
           return;
         }
-        
+
         // User has a question - proceed with normal answer submission
         const el = document.querySelector('input[name="dc-answer"]:checked');
         if (!el) return;
-        
+
         // Safety check: ensure t0 is set (should be set when paired)
         if (t0 === null) {
           console.warn('[DyadicChat] t0 not set, using current time as fallback');
           t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         }
-        
+
         const nowTs = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
         const rt = Math.round(nowTs - t0);
-        
+
         // Track answer submit time
         answerSubmitTime = nowTs;
-        
+
         // Store the answer data
         window.__answerData = { messages: Math.floor(msgCount/2), choice: el.value, rt: rt, pid: pidLabel };
-        
+
         // Store socket reference
         window.__socket = socket;
-        
+
         socket.emit('answer:submit', { choice: el.value, rt: rt });
-        
+
         // Store last answer for survey feedback (if this is the last question)
         window.__lastAnswer = el.value;
 
@@ -806,18 +871,18 @@
               <div style="font-size:24px; margin-bottom:20px; color:#4CAF50;">
                 ✓ Thank you for completing all the questions!
                 </div>
-                
+
               <div style="font-size:18px; margin-bottom:20px; color:var(--text);">
                 You and your partner have successfully completed all the collaborative tasks. Please proceed to fill out the survey below.
                 </div>
-                
+
               <div style="font-size:16px; color:#0066cc; margin-top:15px;">
                 Great job working together!
                 </div>
               </div>
             </div>
           `;
-        
+
         const feedbackHTML = `
           <div style="max-width:800px; margin:0 auto; padding:20px 20px; color:var(--text); text-align:left; background:var(--bg); min-height:100vh;">
             ${feedbackSection}
@@ -825,9 +890,9 @@
             <!-- Survey Section -->
             <h2 style="text-align:center; margin-bottom:30px; color:var(--text);">Post-Study Survey</h2>
             <p style="margin-bottom:25px; font-size:16px; line-height:1.5; color:var(--text);">Thank you for participating! Please answer a few brief questions about your experience.</p>
-            
+
             <form id="post-study-survey" style="background:#ffffff; padding:25px; border-radius:12px; border:1px solid var(--border); box-shadow: var(--shadow);">
-              
+
               <div style="margin-bottom:20px;">
                 <label style="display:block; margin-bottom:8px; font-weight:bold; color:#0066cc;">How difficult was the collaborative task?</label>
                 <select name="difficulty" required style="width:100%; padding:10px; border-radius:8px; background:#ffffff; color:var(--text); border:1px solid #999999;">
@@ -919,7 +984,7 @@
             </form>
           </div>
         `;
-        
+
         display_element.innerHTML = feedbackHTML;
 
         // Handle dynamic feedback fields
@@ -974,7 +1039,7 @@
         if (penPaperSelect && penPaperFollowup) {
           const sketchedMapSelect = penPaperFollowup.querySelector('select[name="sketched_map"]');
           console.log('Sketched map select found:', !!sketchedMapSelect);
-          
+
           penPaperSelect.addEventListener('change', function() {
             console.log('Pen paper changed to:', this.value);
             if (this.value === 'yes') {
@@ -1007,10 +1072,10 @@
               surveyData[key] = value;
             }
             console.log('[DyadicChat] Survey data collected:', surveyData);
-            
+
             // Track survey submit time
             surveySubmitTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-            
+
             // Debug: Log timing data before sending
             console.log('[DyadicChat] Timing data being sent:', {
               consentPageStartTime,
@@ -1022,19 +1087,19 @@
               answerSubmitTime,
               surveySubmitTime
             });
-            
+
             // Validate timing data
             if (!consentPageStartTime || !instructionsPageStartTime || !waitingPageStartTime || !chatBeginTime) {
               console.warn('[DyadicChat] Missing critical timing data!');
             }
-            
+
             // Send survey data to server
             console.log('[DyadicChat] Submitting survey data:', surveyData);
             console.log('[DyadicChat] Socket connection state:', window.__socket?.connected);
             if (window.__socket) {
               // Show completion message immediately
               display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses are being submitted...</div>';
-              
+
               // Wait for server acknowledgment before redirecting
               // This ensures the server has processed the survey submission before the socket disconnects
               window.__socket.emit('survey:submit', {
@@ -1052,16 +1117,16 @@
                 }
               }, (response) => {
                 console.log('[DyadicChat] Survey submission response:', response);
-                
+
                 // Combine answer data with survey data
                 const finalData = {
                   ...window.__answerData,
                   survey: surveyData
                 };
-                
+
                 // Update completion message
                 display_element.innerHTML = '<div style="padding:40px; font-size:20px; text-align:center; color:var(--text); background:var(--bg); min-height:100vh;">Thank you for completing the study! Your responses have been submitted. Redirecting to Prolific...</div>';
-                
+
                 // Add a small delay before redirecting to ensure server has fully processed
                 setTimeout(() => {
                   self.jsPsych.finishTrial(finalData);
@@ -1223,10 +1288,10 @@
 
 
       display_element.innerHTML = htmlWait();
-      
+
       // Set waiting page start time
       waitingPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-      
+
       // 5-minute pairing timeout
       (function(){
         const TIMEOUT_MS = 5 * 60 * 1000;
@@ -1246,16 +1311,16 @@
       // CRITICAL: Set up the paired event listener FIRST, before requesting data
       // This ensures we don't miss the event if it arrives quickly
       console.log('[DyadicChat] Setting up paired event listener...');
-      socket.on('paired', function(p){ 
+      socket.on('paired', function(p){
         console.log('[DyadicChat] Received paired event!', p);
-        window.__pairedOnce = true; 
+        window.__pairedOnce = true;
         try{ if(window.__pairTimer){ clearTimeout(window.__pairTimer); delete window.__pairTimer; } }catch(e){}
         // Set reaction time start point when users get paired
         t0 = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        
+
         // Set chat begin time
         chatBeginTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        
+
         // Verify role consistency
         const expectedRole = window.userRole; // Set by paired:instructions
         const receivedRole = p.role; // From paired event
@@ -1265,7 +1330,7 @@
         } else if (expectedRole && receivedRole) {
           console.log(`[DyadicChat] Role verified: ${receivedRole} (matches instructions)`);
         }
-        
+
         // Store user's question status and answer data
         window.__userHasQuestion = p.item.has_question;
         window.__userHasOptions = p.item.has_options;
@@ -1275,7 +1340,7 @@
         console.log('[DyadicChat] User has options:', p.item.has_options);
         console.log('[DyadicChat] Role from event:', p.role, 'Role from instructions:', window.userRole);
         console.log('[DyadicChat] Item data:', p.item);
-        
+
         if (p.item.has_question && p.item.has_options) {
           // Store the correct answer index, text, and options for this user
           correctAnswerIndex = p.item.correct_answer;
@@ -1285,7 +1350,7 @@
           console.log('[DyadicChat] User has question with options - showing early termination button');
 
         }
-        
+
         display_element.innerHTML = htmlChat(p);
         let pairedPayload = p;
 
@@ -1323,7 +1388,7 @@
           const endChatEarlyBtn = document.getElementById('dc-end-chat-early');
           if (endChatEarlyBtn) endChatEarlyBtn.addEventListener('click', endChatEarly);
         }, 0);
-        
+
         // Add instructions toggle functionality
         const toggleButton = document.getElementById('toggle-instructions');
         const instructionsContent = document.getElementById('dc-instructions-content');
@@ -1333,7 +1398,7 @@
           // Set initial state to minimized
           instructionsContent.style.display = 'none';
           toggleButton.textContent = 'Expand';
-          
+
           toggleButton.addEventListener('click', function() {
             if (isMinimized) {
               instructionsContent.style.display = 'block';
@@ -1346,12 +1411,12 @@
             }
           });
         }
-        
+
         setupTextarea();
         setupZoom();
         startHeartbeat(); // Start heartbeat monitoring
       });
-      
+
       // Now that the paired event listener is set up, request paired data from server
       // Send the expected role from instructions to help server verify correctness
       console.log('[DyadicChat] Paired event listener set up, now requesting paired data...');
@@ -1359,13 +1424,13 @@
       console.log('[DyadicChat] Socket ID:', socket.id);
       console.log('[DyadicChat] Socket currentRoom:', socket.currentRoom);
       console.log('[DyadicChat] window.pairingData:', window.pairingData);
-      
+
       // Function to request paired data
       const requestPairedData = () => {
         if (window.pairingData && window.pairingData.roomId) {
           const expectedRole = window.userRole; // Set by paired:instructions
           console.log('[DyadicChat] Requesting paired data from server (roomId:', window.pairingData.roomId, ', expectedRole:', expectedRole, ')');
-          
+
           // Verify socket is connected
           if (!socket.connected) {
             console.warn('[DyadicChat] WARNING: Socket is not connected. Current state:', {
@@ -1385,17 +1450,17 @@
             }
             return;
           }
-          
+
           // Ensure socket has currentRoom set
           if (!socket.currentRoom && window.pairingData.roomId) {
             socket.currentRoom = window.pairingData.roomId;
             console.log('[DyadicChat] Set socket.currentRoom to:', window.pairingData.roomId);
           }
-          
+
           // Request the full paired event from server, including expected role for verification
           socket.emit('request:paired_data', { expectedRole: expectedRole });
           console.log('[DyadicChat] Emitted request:paired_data event');
-          
+
           // Set up a timeout to retry if we don't receive paired event within 2 seconds
           if (!window.__pairedOnce) {
             setTimeout(() => {
@@ -1409,7 +1474,7 @@
           console.warn('[DyadicChat] No pairing data found, waiting for paired event...');
         }
       };
-      
+
       // Wait a tiny bit to ensure listener is fully registered, then request
       setTimeout(requestPairedData, 100);
 
@@ -1498,8 +1563,8 @@
           updateMessages();
         }, 100);
       });
-      socket.on('chat:closed', function(){ 
-        chatClosed = true; 
+      socket.on('chat:closed', function(){
+        chatClosed = true;
 
         // Stop typing indicator and hide partner's typing indicator
         stopTyping();
@@ -1510,10 +1575,10 @@
         }
 
         updateMessages();
-        
+
         // Track chat end time
         chatEndTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
-        
+
         // If user has no question (helper agent), automatically submit
         // This notifies the server that they've completed the question
         if (!window.__userHasQuestion || !window.__userHasOptions) {

@@ -33,7 +33,7 @@ const QUESTIONS_PER_CATEGORY_DEFAULT = {
   'spatial_orientation': 4,
   'anchor': 4,
   'relative_distance': 4,
-  'perspective_taking': 4
+  'map': 4  // Add 'map' as an alias for cognitive_mapping (matches question_type in data files)
 };
 let QUESTIONS_PER_CATEGORY = QUESTIONS_PER_CATEGORY_DEFAULT;
 try {
@@ -88,10 +88,10 @@ try {
       jsonFile = 'human_samples_spatial50.json';
       demoFile = 'demo_spatial.json';
       break;
-    case 'perspective_taking':
-      jsonFile = 'human_samples_perspective50.json';
+    case 'map':
+      jsonFile = 'human_samples_map50.json';
       // jsonFile = 'sampled_perspective_v4.json';
-      demoFile = 'demo_perspective_taking.json';
+      demoFile = 'demo_map.json';
       break;
     default:
       jsonFile = 'items.json'; // Default for 'all_types' or unknown
@@ -298,10 +298,10 @@ function generateQuestionSequence() {
     const randomDemoIndex = Math.floor(Math.random() * demoItems.length);
     const demoItem = demoItems[randomDemoIndex];
     const demoItemId = demoItem.id || demoItem.sample_id || String(demoItem);
-    sequence.push({ 
-      item: demoItem, 
+    sequence.push({
+      item: demoItem,
       category: QUESTION_TYPE,
-      isDemo: true 
+      isDemo: true
     });
     usedItemIds.add(demoItemId);
     console.log(`[DyadicChat] Added demo question: ${demoItemId} (sample_id: ${demoItem.sample_id || 'N/A'})`);
@@ -318,7 +318,7 @@ function generateQuestionSequence() {
   const demoAdded = sequence.length > 0;
   const baseCount = QUESTIONS_PER_CATEGORY[QUESTION_TYPE] || 0;
   const regularQuestionCount = demoAdded ? Math.max(0, baseCount - 1) : baseCount;
-  
+
   console.log(`[DyadicChat] Question sequence generation: baseCount=${baseCount}, demoAdded=${demoAdded}, regularQuestionCount=${regularQuestionCount}`);
 
   // If QUESTION_TYPE is a specific type (not 'all_types'), only use that type
@@ -505,12 +505,12 @@ function tryPair(){
     console.error(`[DyadicChat] ERROR: nextItem is not a function!`);
     return;
   }
-  
+
   console.log(`[DyadicChat] tryPair called, queue length: ${queue.length}`);
   if (queue.length >= 2){
     const user1 = queue.shift();
     const user2 = queue.shift();
-    
+
     // CRITICAL: Log queue order to verify which user is first
     console.log(`[DyadicChat] Queue order: user1=${user1.id} (PID: ${user1.prolific?.PID}), user2=${user2.id} (PID: ${user2.prolific?.PID})`);
     console.log(`[DyadicChat] Attempting to pair ${user1.id} (PID: ${user1.prolific?.PID}) with ${user2.id} (PID: ${user2.prolific?.PID})`);
@@ -551,7 +551,7 @@ function tryPair(){
       io.to(user1.id).emit('blocked:deck_complete');
       io.to(user2.id).emit('blocked:deck_complete');
       setTimeout(() => { user1.disconnect(true); user2.disconnect(true); }, 100);
-      
+
       // CRITICAL: After handling deck complete, check if there are more users to pair
       // This ensures other pairs can still be created even if one pair hits deck complete
       if (queue.length >= 2) {
@@ -628,7 +628,7 @@ function tryPair(){
     // CRITICAL: Verify roles are set correctly before sending instructions
     const answererRoleCheck = room.userRoles[answerer.id];
     const helperRoleCheck = room.userRoles[helper.id];
-    
+
     if (answererRoleCheck !== 'answerer') {
       console.error(`[DyadicChat] CRITICAL ERROR: answerer.id=${answerer.id} has role=${answererRoleCheck}, expected 'answerer'`);
       console.error(`[DyadicChat] Fixing: setting userRoles[${answerer.id}]='answerer'`);
@@ -639,7 +639,7 @@ function tryPair(){
       console.error(`[DyadicChat] Fixing: setting userRoles[${helper.id}]='helper'`);
       room.userRoles[helper.id] = 'helper';
     }
-    
+
     // CRITICAL: Verify originalUsers array matches our assignment
     console.log(`[DyadicChat] originalUsers[0] (answerer): ${room.originalUsers[0].id} (PID: ${room.userPids[room.originalUsers[0].id]})`);
     console.log(`[DyadicChat] originalUsers[1] (helper): ${room.originalUsers[1].id} (PID: ${room.userPids[room.originalUsers[1].id]})`);
@@ -651,36 +651,36 @@ function tryPair(){
     // CRITICAL: Double-check we're sending to the correct sockets
     const answererSocketCheck = io.sockets.sockets.get(answerer.id);
     const helperSocketCheck = io.sockets.sockets.get(helper.id);
-    
+
     if (!answererSocketCheck) {
       console.error(`[DyadicChat] ERROR: Answerer socket ${answerer.id} not found when sending paired:instructions`);
     }
     if (!helperSocketCheck) {
       console.error(`[DyadicChat] ERROR: Helper socket ${helper.id} not found when sending paired:instructions`);
     }
-    
+
     // CRITICAL: Verify socket IDs match before sending
     const answererSocket = io.sockets.sockets.get(answerer.id);
     const helperSocket = io.sockets.sockets.get(helper.id);
-    
+
     if (!answererSocket) {
       console.error(`[DyadicChat] CRITICAL ERROR: Answerer socket ${answerer.id} (PID: ${answerer.prolific?.PID}) not found in io.sockets.sockets!`);
     }
     if (!helperSocket) {
       console.error(`[DyadicChat] CRITICAL ERROR: Helper socket ${helper.id} (PID: ${helper.prolific?.PID}) not found in io.sockets.sockets!`);
     }
-    
+
     // CRITICAL: Verify PIDs match before sending
     const answererPidFromSocket = answererSocket?.prolific?.PID;
     const helperPidFromSocket = helperSocket?.prolific?.PID;
-    
+
     if (answererPidFromSocket && answererPidFromSocket !== answerer.prolific?.PID) {
       console.error(`[DyadicChat] CRITICAL ERROR: Answerer PID mismatch! Socket has PID: ${answererPidFromSocket}, but answerer object has PID: ${answerer.prolific?.PID}`);
     }
     if (helperPidFromSocket && helperPidFromSocket !== helper.prolific?.PID) {
       console.error(`[DyadicChat] CRITICAL ERROR: Helper PID mismatch! Socket has PID: ${helperPidFromSocket}, but helper object has PID: ${helper.prolific?.PID}`);
     }
-    
+
     // Send to answerer
     console.log(`[DyadicChat] Sending paired:instructions to answerer socket ${answerer.id} (PID: ${answerer.prolific?.PID}) with role='answerer'`);
     io.to(answerer.id).emit('paired:instructions', {
@@ -689,7 +689,7 @@ function tryPair(){
       server_question_type: QUESTION_TYPE,
       maxTurns: MAX_TURNS
     });
-    
+
     // Send to helper
     console.log(`[DyadicChat] Sending paired:instructions to helper socket ${helper.id} (PID: ${helper.prolific?.PID}) with role='helper'`);
     io.to(helper.id).emit('paired:instructions', {
@@ -698,7 +698,7 @@ function tryPair(){
       server_question_type: QUESTION_TYPE,
       maxTurns: MAX_TURNS
     });
-    
+
     // Log what was sent for verification
     console.log(`[DyadicChat] Sent paired:instructions to answerer ${answerer.id} (PID: ${answerer.prolific?.PID}) with role='answerer'`);
     console.log(`[DyadicChat] Sent paired:instructions to helper ${helper.id} (PID: ${helper.prolific?.PID}) with role='helper'`);
@@ -710,7 +710,7 @@ function tryPair(){
 
     // Determine which item fields to use based on whether user_1_question exists
     const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
-    
+
     // If user_1_question exists: answerer gets user_1 fields, helper gets user_2 fields
     // If user_1_question is empty: answerer gets user_2 fields, helper gets user_1 fields
     const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
@@ -746,7 +746,7 @@ function tryPair(){
     io.to(answerer.id).emit('turn:you');
     io.to(helper.id).emit('turn:wait');
     console.log(`[DyadicChat] Pairing complete, answerer (${answerer.id}) starts first, helper (${helper.id}) waits`);
-    
+
     // CRITICAL: After pairing, check if there are more users in queue to pair
     // This ensures multiple pairs can be created simultaneously
     if (queue.length >= 2) {
@@ -816,7 +816,7 @@ io.on('connection', (socket) => {
   // Log ALL connection attempts immediately
   const pidFromQuery = (socket.handshake.query && String(socket.handshake.query.pid||'').trim()) || 'DEBUG_LOCAL';
   console.log(`[DyadicChat] Connection attempt: ${socket.id} (PID from query: ${pidFromQuery}), serverStarting: ${serverStarting}`);
-  
+
   // CRITICAL: Check if server is still starting - if so, disconnect immediately
   // This must be checked FIRST before any other processing
   if (serverStarting) {
@@ -825,7 +825,7 @@ io.on('connection', (socket) => {
     setTimeout(() => socket.disconnect(true), 100);
     return;
   }
-  
+
   const pid = pidFromQuery;
   socket.prolific = { PID: pid };
 
@@ -840,7 +840,7 @@ io.on('connection', (socket) => {
       return;
     }
   }
-  
+
   // Check if user has already participated (after consent, at connection time)
   if (BLOCK_REPEAT_PID && seenPidsMap[pid]){
     console.log(`[DyadicChat] Blocking ${socket.id} (PID: ${pid}) - already participated`);
@@ -855,7 +855,7 @@ io.on('connection', (socket) => {
   let existingRoomId = null;
   for (const [roomId, room] of rooms.entries()) {
     // Check if this PID is already in this room
-    const pidInRoom = Object.values(room.userPids || {}).includes(pid) || 
+    const pidInRoom = Object.values(room.userPids || {}).includes(pid) ||
                       room.users.some(u => u.prolific?.PID === pid) ||
                       (room.originalUsers && room.originalUsers.some(u => u.prolific?.PID === pid));
     if (pidInRoom) {
@@ -865,21 +865,21 @@ io.on('connection', (socket) => {
       break;
     }
   }
-  
+
   if (existingRoom && existingRoomId) {
     // This is a reconnection - restore user to their existing room
     console.log(`[DyadicChat] Reconnecting user ${socket.id} (PID: ${pid}) to existing room ${existingRoomId}`);
     socket.currentRoom = existingRoomId;
-    
+
     // Find the original socket for this PID and replace it
     const originalSocketIndex = existingRoom.users.findIndex(u => u.prolific?.PID === pid);
     if (originalSocketIndex >= 0) {
       const originalSocket = existingRoom.users[originalSocketIndex];
       console.log(`[DyadicChat] Replacing original socket ${originalSocket.id} with new socket ${socket.id} for PID ${pid}`);
-      
+
       // Update room.users
       existingRoom.users[originalSocketIndex] = socket;
-      
+
       // Update room.userRoles and room.userPids with new socket ID
       if (existingRoom.userRoles[originalSocket.id]) {
         existingRoom.userRoles[socket.id] = existingRoom.userRoles[originalSocket.id];
@@ -889,7 +889,7 @@ io.on('connection', (socket) => {
         existingRoom.userPids[socket.id] = existingRoom.userPids[originalSocket.id];
         delete existingRoom.userPids[originalSocket.id];
       }
-      
+
       // CRITICAL: Transfer instructionsReady state from old socket ID to new socket ID
       if (existingRoom.instructionsReady && existingRoom.instructionsReady[originalSocket.id] !== undefined) {
         existingRoom.instructionsReady[socket.id] = existingRoom.instructionsReady[originalSocket.id];
@@ -900,7 +900,7 @@ io.on('connection', (socket) => {
         existingRoom.instructionsReady[socket.id] = false;
         console.log(`[DyadicChat] Initialized instructionsReady for new socket ${socket.id} as false`);
       }
-      
+
       // Update room.answerer or room.helper if this socket was one of them
       if (existingRoom.answerer && existingRoom.answerer.id === originalSocket.id) {
         existingRoom.answerer = socket;
@@ -910,10 +910,10 @@ io.on('connection', (socket) => {
         existingRoom.helper = socket;
         console.log(`[DyadicChat] Updated room.helper to new socket ${socket.id}`);
       }
-      
+
       // Re-join the room
       socket.join(existingRoomId);
-      
+
       // Re-send paired:instructions with the correct role
       const userRole = existingRoom.userRoles[socket.id];
       if (userRole) {
@@ -996,13 +996,13 @@ io.on('connection', (socket) => {
           }
         }
       }
-      
+
       // CRITICAL: If user has submitted survey, they are considered finished
       if (hasSubmittedSurvey) {
         wasAlreadyFinished = true;
         console.log(`[DyadicChat] User ${socket.id} (PID: ${socketPid}) has submitted survey, marking as finished`);
       }
-      
+
       // Log the status for debugging
       console.log(`[DyadicChat] Disconnect handler: socket=${socket.id}, pid=${socketPid}, wasAlreadyFinished=${wasAlreadyFinished}, hasSubmittedSurvey=${hasSubmittedSurvey}`);
 
@@ -1012,7 +1012,7 @@ io.on('connection', (socket) => {
       if (room.instructionsReady) {
         // Check if this socket ID hasn't finished instructions
         const socketReady = room.instructionsReady[socket.id];
-        
+
         if (socketReady === false) {
           // Explicitly false - user is in instructions phase
           isInInstructionsPhase = true;
@@ -1035,21 +1035,21 @@ io.on('connection', (socket) => {
         }
         // If socketReady === true, user has finished instructions, so isInInstructionsPhase stays false
       }
-      
+
       // Check if user is in questions phase (finished instructions but hasn't submitted survey)
       // This means they're either in the chat/questions phase or waiting between questions
       // Don't rely on wasAlreadyFinished flag - check actual state
       const isInQuestionsPhase = !isInInstructionsPhase && !hasSubmittedSurvey;
-      
+
       // Determine if we should end the study immediately (instructions or questions phase)
       const shouldEndStudy = isInInstructionsPhase || isInQuestionsPhase;
-      
+
       //Working
       // Use 1 second timeout for instructions/questions phases, 3 seconds for survey phase
       const disconnectTimeoutMs = shouldEndStudy ? 1000 : 3000;
-      
+
       console.log(`[DyadicChat] Disconnect detected: isInInstructionsPhase=${isInInstructionsPhase}, isInQuestionsPhase=${isInQuestionsPhase}, shouldEndStudy=${shouldEndStudy}, timeout=${disconnectTimeoutMs}ms`);
-      
+
       // Don't immediately notify partner - wait a bit to see if user reconnects
       // This prevents false "partner disconnected" messages during brief reconnections
       // EXCEPTION: For instructions/questions phases, always notify (refresh should end study)
@@ -1059,13 +1059,13 @@ io.on('connection', (socket) => {
         let shouldNotify = true;
         if (!shouldEndStudy) {
           // Survey phase - check if user reconnected
-          const userReconnected = socketPid && Array.from(io.sockets.sockets.values()).some(s => 
+          const userReconnected = socketPid && Array.from(io.sockets.sockets.values()).some(s =>
             s.prolific?.PID === socketPid && s.currentRoom === roomId
           );
           shouldNotify = !userReconnected;
         }
         // If shouldEndStudy is true (instructions/questions), always notify regardless of reconnection
-        
+
         if (shouldNotify) {
           // Mark this user as finished only if they haven't reconnected
           if (!room.finished[socket.id]) {
@@ -1088,7 +1088,7 @@ io.on('connection', (socket) => {
               }
             }
           }
-          
+
           // Re-check finished status as well (in case it was updated during the wait)
           let currentWasFinished = room.finished[socket.id] || false;
           if (!currentWasFinished && socketPid) {
@@ -1102,22 +1102,22 @@ io.on('connection', (socket) => {
               currentWasFinished = !!finishedByPid;
             }
           }
-          
+
           // If user has submitted survey, they are definitely finished
           if (currentHasSubmittedSurvey) {
             currentWasFinished = true;
             console.log(`[DyadicChat] Timeout handler: User ${socket.id} (PID: ${socketPid}) has submitted survey, marking as finished`);
           }
-          
+
           // Log the status for debugging
           console.log(`[DyadicChat] Timeout handler: socket=${socket.id}, pid=${socketPid}, currentWasFinished=${currentWasFinished}, currentHasSubmittedSurvey=${currentHasSubmittedSurvey}`);
-          
+
           // Re-check if still in instructions/questions phase (in case state changed during wait)
           // Check by socket ID first, then by PID if socket ID not found (reconnection case)
           let currentIsInInstructionsPhase = false;
           if (room.instructionsReady) {
             const socketReady = room.instructionsReady[socket.id];
-            
+
             if (socketReady === false) {
               // Explicitly false - user is in instructions phase
               currentIsInInstructionsPhase = true;
@@ -1144,9 +1144,9 @@ io.on('connection', (socket) => {
           // Don't rely on currentWasFinished flag as it might be incorrectly set
           const currentIsInQuestionsPhase = !currentIsInInstructionsPhase && !currentHasSubmittedSurvey;
           const currentShouldEndStudy = currentIsInInstructionsPhase || currentIsInQuestionsPhase;
-          
+
           console.log(`[DyadicChat] Phase check: currentIsInInstructionsPhase=${currentIsInInstructionsPhase}, currentIsInQuestionsPhase=${currentIsInQuestionsPhase}, currentHasSubmittedSurvey=${currentHasSubmittedSurvey}, currentWasFinished=${currentWasFinished}, currentShouldEndStudy=${currentShouldEndStudy}`);
-          
+
           // CRITICAL: For instructions/questions phases, always notify and end study
           // For survey phase, only notify if user hasn't finished/submitted
           if (other && currentShouldEndStudy) {
@@ -1162,7 +1162,7 @@ io.on('connection', (socket) => {
                 io.to(other.id).emit('end:partner');
                 console.log(`[DyadicChat] Notified partner ${other.id} of disconnect during questions phase - study ending`);
               }
-              
+
               // Mark both users as finished to end the study
               console.log(`[DyadicChat] Ending study for both users due to disconnect during ${currentIsInInstructionsPhase ? 'instructions' : 'questions'} phase`);
               // Mark both users as finished
@@ -1186,7 +1186,7 @@ io.on('connection', (socket) => {
                 room.finishedByPid[socketPid] = true;
               }
               console.log(`[DyadicChat] Marked disconnecting user ${socket.id} (PID: ${socketPid}) as finished`);
-              
+
               // Clean up the room since study has ended
               try {
                 persistRoom(room);
@@ -1218,7 +1218,7 @@ io.on('connection', (socket) => {
           console.log(`[DyadicChat] User ${socketPid} reconnected, not notifying partner of disconnect`);
         }
       }, disconnectTimeoutMs); // Wait 1 second for instructions/questions, 3 seconds for survey
-      
+
       // Store timeout so we can clear it if user reconnects
       if (!room.disconnectTimeouts) {
         room.disconnectTimeouts = {};
@@ -1244,7 +1244,7 @@ io.on('connection', (socket) => {
           }
         }
       }
-      
+
       const otherFinished = other ? (room.finished[other.id] || false) : true;
       let otherSurveySubmitted = false;
       if (other && room.surveys) {
@@ -1262,10 +1262,10 @@ io.on('connection', (socket) => {
       } else if (!other) {
         otherSurveySubmitted = true; // No partner means "other" is done
       }
-      
+
       const thisFinished = wasAlreadyFinished || (room.finished[socket.id] || false);
       const thisSurveySubmitted = currentThisSurveySubmitted;
-      
+
       if (!other || (otherFinished && otherSurveySubmitted && thisFinished && thisSurveySubmitted)) {
         try {
           persistRoom(room);
@@ -1283,11 +1283,11 @@ io.on('connection', (socket) => {
   socket.on('request:paired_data', (data = {}) => {
     const roomId = socket.currentRoom;
     const expectedRole = data.expectedRole; // Role from paired:instructions (client's source of truth)
-    
+
     if (roomId && rooms.has(roomId)) {
       const room = rooms.get(roomId);
       const socketPid = socket.prolific?.PID;
-      
+
       // If this is a reconnection (same PID, different socket ID), check if we should clear disconnect timeout
       // CRITICAL: For instructions/questions phases, don't clear timeout - a refresh should end the study
       if (socketPid && room.disconnectTimeouts) {
@@ -1316,7 +1316,7 @@ io.on('connection', (socket) => {
               }
             }
           }
-          
+
           if (isInInstructionsOrQuestions) {
             console.log(`[DyadicChat] User ${socketPid} reconnected during instructions/questions phase - NOT clearing disconnect timeout (refresh should end study)`);
             // Don't clear the timeout - let it fire to end the study
@@ -1331,7 +1331,7 @@ io.on('connection', (socket) => {
           }
         }
       }
-      
+
       // CRITICAL: First verify this socket is actually in the room
       // If socket reconnected, it might not be in room.users yet - check by PID
       let userInRoom = room.users.find(u => u.id === socket.id);
@@ -1348,36 +1348,36 @@ io.on('connection', (socket) => {
           }
         }
       }
-      
+
       if (!userInRoom) {
         console.error(`[DyadicChat] ERROR: Socket ${socket.id} (PID: ${socketPid}) is not in room ${roomId}`);
         console.error(`[DyadicChat] Room users:`, room.users.map(u => ({ id: u.id, pid: u.prolific?.PID })));
         console.error(`[DyadicChat] Room userRoles:`, room.userRoles);
         return;
       }
-      
+
       // Log expected role from client for debugging
       if (expectedRole) {
         console.log(`[DyadicChat] Client expects role: ${expectedRole} (PID: ${socketPid})`);
       }
-      
+
       // CRITICAL: Use PID as PRIMARY lookup method, socket ID as fallback
       // This is because socket IDs change on reconnection, but PIDs are stable
       // Note: socketPid is already declared above
       let userRole = null;
-      
+
       // PRIMARY: Look up role by PID (stable identifier)
       if (socketPid && room.userPids) {
         const originalSocketId = Object.keys(room.userPids).find(sid => room.userPids[sid] === socketPid);
         if (originalSocketId && room.userRoles[originalSocketId]) {
           userRole = room.userRoles[originalSocketId];
           console.log(`[DyadicChat] Found role by PID: ${userRole} (PID: ${socketPid}, original socket: ${originalSocketId}, current socket: ${socket.id})`);
-          
+
           // CRITICAL VALIDATION: Verify the role makes sense using originalUsers as source of truth
           // originalUsers[0] is ALWAYS the answerer, originalUsers[1] is ALWAYS the helper
           const originalAnswererPid = room.userPids[room.originalUsers[0]?.id] || (room.originalUsers[0]?.prolific?.PID);
           const originalHelperPid = room.userPids[room.originalUsers[1]?.id] || (room.originalUsers[1]?.prolific?.PID);
-          
+
           // Validate against original assignment (ultimate source of truth)
           if (socketPid === originalAnswererPid && userRole !== 'answerer') {
             console.error(`[DyadicChat] CRITICAL ERROR: PID ${socketPid} is original answerer (originalUsers[0]) but role is '${userRole}', correcting to 'answerer'`);
@@ -1404,7 +1404,7 @@ io.on('connection', (socket) => {
               console.error(`[DyadicChat] WARNING: PID ${socketPid} doesn't match either original user. Keeping role: ${userRole}`);
             }
           }
-          
+
           // Update room.userRoles to use current socket ID for future lookups
           room.userRoles[socket.id] = userRole;
           // Update room.userPids to map current socket ID to PID
@@ -1416,7 +1416,7 @@ io.on('connection', (socket) => {
           }
         }
       }
-      
+
       // FALLBACK: If PID lookup failed, try socket ID (for cases where socket hasn't reconnected)
       if (!userRole) {
         userRole = room.userRoles[socket.id];
@@ -1424,7 +1424,7 @@ io.on('connection', (socket) => {
           console.log(`[DyadicChat] Found role by socket ID: ${userRole} (socket: ${socket.id})`);
         }
       }
-      
+
       if (!userRole) {
           console.error(`[DyadicChat] ERROR: No role found in userRoles for socket ${socket.id} (PID: ${socketPid})`);
           console.error(`[DyadicChat] Available userRoles:`, room.userRoles);
@@ -1443,25 +1443,25 @@ io.on('connection', (socket) => {
             return; // Don't send paired event if we can't determine role
           }
       }
-      
+
       // CRITICAL: Never trust client's expected role if it conflicts with original assignment
       // Use PID-based lookup from originalUsers as the ultimate source of truth
       if (expectedRole && userRole && expectedRole !== userRole) {
         console.error(`[DyadicChat] CRITICAL: Role mismatch detected!`);
         console.error(`[DyadicChat] Client expected role (from paired:instructions): ${expectedRole}`);
         console.error(`[DyadicChat] Server determined role (from room.userRoles): ${userRole}`);
-        
+
         // Determine correct role by PID from originalUsers (ultimate source of truth)
         const originalAnswererPid = room.userPids[room.originalUsers[0]?.id] || Object.values(room.userPids)[0];
         const originalHelperPid = room.userPids[room.originalUsers[1]?.id] || Object.values(room.userPids)[1];
-        
+
         let correctRoleByPid = null;
         if (socketPid === originalAnswererPid) {
           correctRoleByPid = 'answerer';
         } else if (socketPid === originalHelperPid) {
           correctRoleByPid = 'helper';
         }
-        
+
         if (correctRoleByPid) {
           console.error(`[DyadicChat] Using PID-based role determination: ${correctRoleByPid} (PID: ${socketPid}, originalAnswererPID: ${originalAnswererPid}, originalHelperPID: ${originalHelperPid})`);
           userRole = correctRoleByPid;
@@ -1486,29 +1486,29 @@ io.on('connection', (socket) => {
           });
         }
       }
-      
+
       // CRITICAL: Log the role determination for debugging
       console.log(`[DyadicChat] Role determined for socket ${socket.id} (PID: ${socketPid}): ${userRole}${expectedRole ? ` (client expected: ${expectedRole})` : ''}`);
-      
+
       const isAnswerer = userRole === 'answerer';
-      
+
       // Find the user object for logging
       const user = room.users.find(u => u.id === socket.id);
       const userPid = user?.prolific?.PID || socket.prolific?.PID || 'unknown';
-      
+
       console.log(`[DyadicChat] request:paired_data for socket ${socket.id} (PID: ${userPid})`);
       console.log(`[DyadicChat] Role from userRoles[${socket.id}]: ${userRole}, isAnswerer: ${isAnswerer}`);
       console.log(`[DyadicChat] Room answerer ID: ${room.answerer?.id}, helper ID: ${room.helper?.id}`);
       console.log(`[DyadicChat] Requesting socket matches answerer: ${socket.id === room.answerer?.id}, matches helper: ${socket.id === room.helper?.id}`);
-      
+
       // Re-send the paired event with current item data
       const item = room.item;
-      
+
       // Get answerer and helper from room (these are the authoritative references)
       // First try room.answerer/room.helper, then find by role from userRoles
       let answerer = room.answerer;
       let helper = room.helper;
-      
+
       // Verify answerer/helper are still valid sockets
       if (!answerer || !io.sockets.sockets.has(answerer.id)) {
         answerer = room.users.find(u => room.userRoles[u.id] === 'answerer' && io.sockets.sockets.has(u.id));
@@ -1518,7 +1518,7 @@ io.on('connection', (socket) => {
         helper = room.users.find(u => room.userRoles[u.id] === 'helper' && io.sockets.sockets.has(u.id));
         if (helper) room.helper = helper;
       }
-      
+
       // Final fallback to originalUsers
       if (!answerer || !io.sockets.sockets.has(answerer.id)) {
         answerer = room.originalUsers[0];
@@ -1526,13 +1526,13 @@ io.on('connection', (socket) => {
       if (!helper || !io.sockets.sockets.has(helper.id)) {
         helper = room.originalUsers[1];
       }
-      
+
       // Verify we have valid answerer and helper
       if (!answerer || !helper) {
         console.error(`[DyadicChat] ERROR: Could not find valid answerer or helper for room ${roomId}`);
         return;
       }
-      
+
       // CRITICAL VALIDATION: Ensure the requesting socket's role matches what we determined
       // This prevents any race conditions or ordering issues
       const actualRoleFromRoom = room.userRoles[socket.id];
@@ -1543,16 +1543,16 @@ io.on('connection', (socket) => {
         // Use the actual role from room as the source of truth
         finalIsAnswerer = actualRoleFromRoom === 'answerer';
       }
-      
+
       // Double-check: the requesting user should match either answerer or helper
       // Use PID comparison instead of socket ID (socket IDs change on reconnection)
       // Note: socketPid is already declared above
       const answererPid = answerer.prolific?.PID || room.userPids[answerer.id];
       const helperPid = helper.prolific?.PID || room.userPids[helper.id];
-      
+
       const isAnswererByPid = socketPid && answererPid && socketPid === answererPid;
       const isHelperByPid = socketPid && helperPid && socketPid === helperPid;
-      
+
       if (!isAnswererByPid && !isHelperByPid && socket.id !== answerer.id && socket.id !== helper.id) {
         console.error(`[DyadicChat] ERROR: Socket ${socket.id} (PID: ${socketPid}) is not answerer (${answerer.id}, PID: ${answererPid}) or helper (${helper.id}, PID: ${helperPid})`);
         console.error(`[DyadicChat] Room userRoles:`, room.userRoles);
@@ -1564,7 +1564,7 @@ io.on('connection', (socket) => {
           return;
         }
       }
-      
+
       // FINAL VALIDATION: Trust room.userRoles[socket.id] as the source of truth
       // If there's a mismatch with answerer/helper socket IDs, it might be due to reconnection
       // In that case, trust the role from userRoles over the socket ID comparison
@@ -1574,7 +1574,7 @@ io.on('connection', (socket) => {
         console.error(`[DyadicChat] Using roleFromUserRoles=${roleFromUserRoles} as source of truth`);
         finalIsAnswerer = roleFromUserRoles === 'answerer';
       }
-      
+
       // Log validation results
       if (finalIsAnswerer && socket.id !== answerer.id) {
         console.warn(`[DyadicChat] WARNING: finalIsAnswerer=true but socket.id (${socket.id}) !== answerer.id (${answerer.id})`);
@@ -1584,11 +1584,11 @@ io.on('connection', (socket) => {
         console.warn(`[DyadicChat] WARNING: finalIsAnswerer=false but socket.id (${socket.id}) !== helper.id (${helper.id})`);
         console.warn(`[DyadicChat] This might indicate socket reconnection. Trusting role from userRoles: ${roleFromUserRoles}`);
       }
-      
+
       const user1HasQuestion = !!(item.user_1_question && item.user_1_question.trim() !== '');
       const answererQuestionField = user1HasQuestion ? 'user_1' : 'user_2';
       const helperQuestionField = user1HasQuestion ? 'user_2' : 'user_1';
-      
+
       const itemForUser = finalIsAnswerer ? {
         ...item,
         image_url: answererQuestionField === 'user_1' ? item.user_1_image : item.user_2_image,
@@ -1606,9 +1606,9 @@ io.on('connection', (socket) => {
         has_question: false, // Helper never has the question
         has_options: false
       };
-      
+
         const finalRole = finalIsAnswerer ? 'answerer' : 'helper';
-        
+
         // Verify socket is still connected before sending
         const socketStillConnected = io.sockets.sockets.has(socket.id);
         if (!socketStillConnected) {
@@ -1616,9 +1616,9 @@ io.on('connection', (socket) => {
           console.error(`[DyadicChat] This might indicate the socket disconnected. Available sockets:`, Array.from(io.sockets.sockets.keys()));
           return;
         }
-        
+
         console.log(`[DyadicChat] Sending paired event to socket ${socket.id} (PID: ${socketPid}, finalRole: ${finalRole}, has_question: ${itemForUser.has_question}) for room ${roomId}`);
-        
+
         io.to(socket.id).emit('paired', {
           roomId,
           item: itemForUser,
@@ -1629,7 +1629,7 @@ io.on('connection', (socket) => {
           totalQuestions: room.questionSequence.length,
           isDemo: room.questionSequence[room.currentQuestionIndex]?.isDemo || false
         });
-        
+
         // CRITICAL: For the first question, send turn:you to answerer and turn:wait to helper
         // This ensures the answerer can send the first message even if the initial turn:you was missed
         if (room.currentQuestionIndex === 0) {
@@ -1645,7 +1645,7 @@ io.on('connection', (socket) => {
             io.to(socket.id).emit('turn:wait');
           }
         }
-        
+
         console.log(`[DyadicChat] Successfully sent paired event to ${socket.id}`);
     }
   });
@@ -1658,15 +1658,15 @@ io.on('connection', (socket) => {
         room.instructionsReady[socket.id] = true;
         console.log(`[DyadicChat] User ${socket.id} finished instructions in room ${roomId}`);
         console.log(`[DyadicChat] Current instructionsReady state:`, room.instructionsReady);
-        
+
         // Check if both users are ready
         // Get the current socket IDs from room.users to check their ready status
         const user1Ready = room.users[0] && room.instructionsReady[room.users[0].id] === true;
         const user2Ready = room.users[1] && room.instructionsReady[room.users[1].id] === true;
         const allReady = user1Ready && user2Ready;
-        
+
         console.log(`[DyadicChat] Instructions ready check: user1 (${room.users[0]?.id}) ready=${user1Ready}, user2 (${room.users[1]?.id}) ready=${user2Ready}, allReady=${allReady}`);
-        
+
         if (allReady) {
           console.log(`[DyadicChat] Both users ready in room ${roomId}, allowing them to proceed`);
           // Notify both users they can proceed
@@ -1709,7 +1709,7 @@ io.on('connection', (socket) => {
     }
     const room = rooms.get(roomId);
     console.log(`[DyadicChat] Room found: ${roomId}, room.users: ${room.users?.map(u => u.id).join(',') || 'none'}, room.answerer: ${room.answerer?.id}, room.helper: ${room.helper?.id}`);
-    
+
     // CRITICAL: Check if chat is already closed - reject message immediately
     console.log(`[DyadicChat] Checking chat status: chatClosed=${room.chatClosed}`);
     if (room.chatClosed) {
@@ -1724,7 +1724,7 @@ io.on('connection', (socket) => {
       io.to(socket.id).emit('turn:wait');
       return;
     }
-    
+
     // CRITICAL: Check if this message would exceed max turns BEFORE processing
     // minTurns = maximum number of completed turns allowed
     // Each turn = 2 messages (one from each user)
@@ -1732,7 +1732,7 @@ io.on('connection', (socket) => {
     const currentMsgCount = room.msgCount || 0;
     const maxMessages = room.minTurns * 2;
     console.log(`[DyadicChat] Message count check: currentMsgCount=${currentMsgCount}, maxMessages=${maxMessages}, minTurns=${room.minTurns}`);
-    
+
     // If we've already reached the max messages, reject this message
     if (currentMsgCount >= maxMessages) {
       console.log(`[DyadicChat] Max messages reached (${currentMsgCount} >= ${maxMessages}), rejecting message`);
@@ -1742,10 +1742,10 @@ io.on('connection', (socket) => {
       }
       return;
     }
-    
+
     const newMsgCount = currentMsgCount + 1;
     const completedTurns = Math.floor(newMsgCount / 2);
-    
+
     // If this message would reach or exceed the max turns, close chat
     // But still allow this message if it's exactly at the limit (the last allowed message)
     if (completedTurns >= room.minTurns) {
@@ -1758,7 +1758,7 @@ io.on('connection', (socket) => {
         return;
       }
     }
-    
+
     const text = String(msg.text || '').slice(0, 2000);
     const now = Date.now();
     const rec = {
@@ -1771,7 +1771,7 @@ io.on('connection', (socket) => {
     room.messages.push(rec);
 
     room.msgCount = newMsgCount;
-    
+
     // Double-check: if we've now exceeded max turns after processing, ensure chat is closed
     const finalCompletedTurns = Math.floor(room.msgCount / 2);
     if (finalCompletedTurns >= room.minTurns && !room.chatClosed){
@@ -1803,7 +1803,7 @@ io.on('connection', (socket) => {
     console.log(`[DyadicChat] Looking for other user. Current socket: ${socket.id}, room.users: [${room.users.map(u => `${u.id} (PID: ${u.prolific?.PID})`).join(', ')}]`);
     let other = room.users.find(u => u.id !== socket.id);
     console.log(`[DyadicChat] Found other via room.users.find(): ${other?.id || 'null'}`);
-    
+
     // If not found in room.users, try room.answerer/helper as fallback
     if (!other) {
       console.log(`[DyadicChat] Not found in room.users, trying room.answerer/helper. answerer.id=${room.answerer?.id}, helper.id=${room.helper?.id}`);
@@ -1815,7 +1815,7 @@ io.on('connection', (socket) => {
         console.log(`[DyadicChat] Current socket is helper, using answerer: ${other?.id}`);
       }
     }
-    
+
     // If still not found, try to find by PID (reconnection case)
     if (!other && socket.prolific?.PID) {
       const socketPid = socket.prolific.PID;
@@ -1823,7 +1823,7 @@ io.on('connection', (socket) => {
       const otherPid = Object.values(room.userPids || {}).find(pid => pid !== socketPid);
       if (otherPid) {
         console.log(`[DyadicChat] Found other PID: ${otherPid}, searching for socket...`);
-        const otherSocket = Array.from(io.sockets.sockets.values()).find(s => 
+        const otherSocket = Array.from(io.sockets.sockets.values()).find(s =>
           s.prolific?.PID === otherPid && s.currentRoom === roomId
         );
         if (otherSocket) {
@@ -1842,10 +1842,10 @@ io.on('connection', (socket) => {
         console.error(`[DyadicChat] Could not find other PID in room.userPids`);
       }
     }
-    
+
     room.nextSenderId = other ? other.id : null;
     console.log(`[DyadicChat] Final other user: ${other?.id || 'null'}, nextSenderId: ${room.nextSenderId || 'null'}`);
-    
+
     if (other) {
       // Verify the other socket is still connected before sending
       const otherSocketStillConnected = io.sockets.sockets.has(other.id);
@@ -1981,7 +1981,7 @@ io.on('connection', (socket) => {
       // This handles cases where sockets disconnect/reconnect
       let answerer = room.answerer;
       let helper = room.helper;
-      
+
       // If answerer/helper not found, find them by role from userRoles
       if (!answerer || !io.sockets.sockets.has(answerer.id)) {
         answerer = room.users.find(u => room.userRoles[u.id] === 'answerer') || room.originalUsers[0];
@@ -1997,7 +1997,7 @@ io.on('connection', (socket) => {
           room.helper = helper;
         }
       }
-      
+
       // Final fallback: use originalUsers if still not found
       if (!answerer || !io.sockets.sockets.has(answerer.id)) {
         answerer = room.originalUsers[0];
@@ -2005,14 +2005,14 @@ io.on('connection', (socket) => {
       if (!helper || !io.sockets.sockets.has(helper.id)) {
         helper = room.originalUsers[1];
       }
-      
+
       // CRITICAL VALIDATION: Ensure answerer and helper match originalUsers by PID
       // This prevents role swapping across questions
       const originalAnswererPid = room.userPids[room.originalUsers[0]?.id] || room.originalUsers[0]?.prolific?.PID;
       const originalHelperPid = room.userPids[room.originalUsers[1]?.id] || room.originalUsers[1]?.prolific?.PID;
       const currentAnswererPid = answerer?.prolific?.PID || room.userPids[answerer?.id];
       const currentHelperPid = helper?.prolific?.PID || room.userPids[helper?.id];
-      
+
       if (currentAnswererPid && originalAnswererPid && currentAnswererPid !== originalAnswererPid) {
         console.error(`[DyadicChat] CRITICAL: Answerer PID mismatch! Current: ${currentAnswererPid}, Original: ${originalAnswererPid}`);
         console.error(`[DyadicChat] Fixing: Using original answerer from originalUsers[0]`);
@@ -2033,7 +2033,7 @@ io.on('connection', (socket) => {
           helper = currentSocket;
         }
       }
-      
+
       console.log(`[DyadicChat] Question ${nextIndex + 1}: Using answerer=${answerer?.id} (PID: ${currentAnswererPid}), helper=${helper?.id} (PID: ${currentHelperPid})`);
 
       const item = room.item;
@@ -2075,7 +2075,7 @@ io.on('connection', (socket) => {
       // Note: originalAnswererPid and originalHelperPid are already declared above
       const answererPid = answerer?.prolific?.PID || room.userPids[answerer?.id];
       const helperPid = helper?.prolific?.PID || room.userPids[helper?.id];
-      
+
       // Verify roles match original assignment by PID (using already-declared variables)
       if (answererPid && originalAnswererPid && answererPid !== originalAnswererPid) {
         console.error(`[DyadicChat] CRITICAL: Answerer PID mismatch! Current: ${answererPid}, Original: ${originalAnswererPid}`);
@@ -2097,18 +2097,18 @@ io.on('connection', (socket) => {
           helper = currentSocket;
         }
       }
-      
+
       // CRITICAL: Enforce fixed roles - NEVER swap them
       room.userRoles[answerer.id] = 'answerer';
       room.userRoles[helper.id] = 'helper';
-      
+
       // Update room.answerer and room.helper to ensure consistency
       room.answerer = answerer;
       room.helper = helper;
 
       // Keep room.users in answerer, helper order
       room.users = [answerer, helper];
-      
+
       // Final validation: Log role assignment to confirm they're fixed
       console.log(`[DyadicChat] Question ${nextIndex + 1}: Roles FIXED - Answerer: ${answerer.id} (PID: ${answererPid}), Helper: ${helper.id} (PID: ${helperPid})`);
       console.log(`[DyadicChat] Original roles - Answerer PID: ${originalAnswererPid}, Helper PID: ${originalHelperPid}`);
@@ -2286,7 +2286,7 @@ io.on('connection', (socket) => {
       } catch(e) {
         console.error('[DyadicChat] Error saving survey data:', e);
       }
-      
+
       // CRITICAL: Call callback even if room doesn't exist, so client can redirect
       if (callback) {
         callback({ success: true, message: 'Survey data received (room already cleaned up)' });
@@ -2301,7 +2301,7 @@ io.on('connection', (socket) => {
     // CRITICAL: Store by both socket ID and PID to ensure it's found even if socket disconnects
     const now = Date.now();
     const socketPid = socket.prolific?.PID;
-    
+
     room.surveys[socket.id] = {
       pid: socketPid,
       survey: survey,
@@ -2313,7 +2313,7 @@ io.on('connection', (socket) => {
       submittedAt: now,
       submittedAt_formatted: formatTimestamp(now)
     };
-    
+
     // Also store by PID as a backup (in case socket ID changes on disconnect)
     if (socketPid && !room.surveysByPid) {
       room.surveysByPid = {};
@@ -2331,7 +2331,7 @@ io.on('connection', (socket) => {
       room.finished[socket.id] = true;
       console.log(`[DyadicChat] Marked user ${socket.id} as finished on survey submission`);
     }
-    
+
     // Also mark by PID
     if (socketPid && !room.finishedByPid) {
       room.finishedByPid = {};
@@ -2442,16 +2442,16 @@ function persistRoom(room){
 
 function transformRoomData(room) {
   const item = room.item;
-  
+
   // Get isDemo flag from the question sequence (for single-question sessions)
-  const isDemo = room.questionSequence && room.questionSequence[0] 
-    ? (room.questionSequence[0].isDemo || false) 
+  const isDemo = room.questionSequence && room.questionSequence[0]
+    ? (room.questionSequence[0].isDemo || false)
     : false;
-  
+
   // Answerer is always the first user, helper is always the second user
   const answerer = room.answerer || room.users[0];
   const helper = room.helper || room.users[1];
-  
+
   // Determine which item fields correspond to answerer and helper
   // If user_1_question exists: answerer gets user_1 fields, helper gets user_2 fields
   // If user_1_question is empty: answerer gets user_2 fields, helper gets user_1 fields
@@ -2467,7 +2467,7 @@ function transformRoomData(room) {
   const conversation = {};
   let answererMsgCount = 0;
   let helperMsgCount = 0;
-  
+
   room.messages.forEach((msg, idx) => {
     const isAnswerer = msg.who === answerer.id;
     if (isAnswerer) {
@@ -2544,7 +2544,7 @@ function transformRoomData(room) {
     const isAnswerer = socketId === answerer.id;
     const itemField = isAnswerer ? answererItemField : helperItemField;
     const userOptions = itemField === 'user_1' ? (item.options_user_1 || item.options || []) : (item.options_user_2 || item.options || []);
-    
+
     const surveyData = {
       id: userRole,
       who: socketId,
@@ -2562,7 +2562,7 @@ function transformRoomData(room) {
       submittedAt: survey.submittedAt,
       submittedAt_formatted: survey.submittedAt_formatted
     };
-    
+
     transformedSurveys[userRole] = surveyData;
     // Also keep user_1/user_2 format for backward compatibility
     transformedSurveys[itemField] = surveyData;
@@ -2594,7 +2594,7 @@ function transformRoomData(room) {
       survey_rt: calculateRT(timingData.answerSubmitTime, timingData.surveySubmitTime) || answer.rt_formatted,
       total_experiment_time: calculateRT(timingData.consentPageStartTime, timingData.surveySubmitTime) || answer.rt_formatted
     };
-    
+
     // Also keep user_1/user_2 format for backward compatibility
     const itemField = role === 'answerer' ? answererItemField : helperItemField;
     rts[itemField] = rts[role];
@@ -2625,7 +2625,7 @@ function transformRoomData(room) {
   const helperOptionsList = helperItemField === 'user_1' ? item.options_user_1 : item.options_user_2;
   const answererGtIdx = answererItemField === 'user_1' ? (item.user_1_gt_answer_idx ?? 0) : (item.user_2_gt_answer_idx ?? 0);
   const helperGtIdx = helperItemField === 'user_1' ? (item.user_1_gt_answer_idx ?? 0) : (item.user_2_gt_answer_idx ?? 0);
-  const answererGtText = answererItemField === 'user_1' 
+  const answererGtText = answererItemField === 'user_1'
     ? (item.user_1_gt_answer_text || answererOptions[answererGtIdx] || '')
     : (item.user_2_gt_answer_text || answererOptions[answererGtIdx] || '');
   const helperGtText = helperItemField === 'user_1'
@@ -2711,8 +2711,8 @@ function transformRoomDataForQuestion(room, questionData, questionIndex) {
   const questionMessages = questionData.messages;
 
   // Get isDemo flag from the question sequence
-  const isDemo = room.questionSequence && room.questionSequence[questionIndex] 
-    ? (room.questionSequence[questionIndex].isDemo || false) 
+  const isDemo = room.questionSequence && room.questionSequence[questionIndex]
+    ? (room.questionSequence[questionIndex].isDemo || false)
     : false;
 
   // Answerer is always the first user, helper is always the second user
@@ -2741,7 +2741,7 @@ function transformRoomDataForQuestion(room, questionData, questionIndex) {
   const conversation = {};
   let answererMsgCount = 0;
   let helperMsgCount = 0;
-  
+
   questionMessages.forEach((msg, idx) => {
     const isAnswerer = msg.who === answerer.id;
     if (isAnswerer) {
@@ -2818,7 +2818,7 @@ function transformRoomDataForQuestion(room, questionData, questionIndex) {
     const isAnswerer = socketId === answerer.id;
     const itemField = isAnswerer ? answererItemField : helperItemField;
     const userOptions = itemField === 'user_1' ? (item.options_user_1 || item.options || []) : (item.options_user_2 || item.options || []);
-    
+
     const surveyData = {
       id: userRole,
       who: socketId,
@@ -2836,7 +2836,7 @@ function transformRoomDataForQuestion(room, questionData, questionIndex) {
       submittedAt: survey.submittedAt,
       submittedAt_formatted: survey.submittedAt_formatted
     };
-    
+
     transformedSurveys[userRole] = surveyData;
     // Also keep user_1/user_2 format for backward compatibility
     transformedSurveys[itemField] = surveyData;
@@ -2868,7 +2868,7 @@ function transformRoomDataForQuestion(room, questionData, questionIndex) {
       survey_rt: calculateRT(timingData.answerSubmitTime, timingData.surveySubmitTime) || answer.rt_formatted,
       total_experiment_time: calculateRT(timingData.consentPageStartTime, timingData.surveySubmitTime) || answer.rt_formatted
     };
-    
+
     // Also keep user_1/user_2 format for backward compatibility
     const itemField = role === 'answerer' ? answererItemField : helperItemField;
     rts[itemField] = rts[role];
@@ -2899,7 +2899,7 @@ function transformRoomDataForQuestion(room, questionData, questionIndex) {
   const helperOptionsList = helperItemField === 'user_1' ? item.options_user_1 : item.options_user_2;
   const answererGtIdx = answererItemField === 'user_1' ? (item.user_1_gt_answer_idx ?? 0) : (item.user_2_gt_answer_idx ?? 0);
   const helperGtIdx = helperItemField === 'user_1' ? (item.user_1_gt_answer_idx ?? 0) : (item.user_2_gt_answer_idx ?? 0);
-  const answererGtText = answererItemField === 'user_1' 
+  const answererGtText = answererItemField === 'user_1'
     ? (item.user_1_gt_answer_text || answererOptions[answererGtIdx] || '')
     : (item.user_2_gt_answer_text || answererOptions[answererGtIdx] || '');
   const helperGtText = helperItemField === 'user_1'
