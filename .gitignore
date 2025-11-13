@@ -10,4 +10,7 @@ data/deck_state_relative_distance.json
 data/deck_state_spatial.json
 data/deck_state_perspective_taking.json
 
+=======
+data/deck_state_map.json
+>>>>>>> refs/remotes/origin/main
 # public/img/

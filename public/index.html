@@ -96,7 +96,7 @@
     .instr-section:first-of-type .nice li strong { font-weight: bold !important; }
   </style>
       <h2 style="color: #000000; font-size: 2.5em;">Instructions</h2>
-  
+
   <!-- Study Section -->
   <div class="instr-section">
     <h3>Study</h3>
@@ -126,7 +126,7 @@
       <li><strong style="color: #0066cc;">You can choose to terminate the conversation early by pressing the "End Chat and Answer Now" button if you think you have found the correct answer.</strong></li>
       <li><strong style="color: #0066cc;">After the conversation is complete (either by choosing to terminate, or by reaching the maximum number of allowed messages), you must select the best option you think is correct and click "Submit Answer".</strong></li>
     </ol>
-    
+
     <!-- Read Carefully Subsection -->
     <div style="margin-top: 30px;">
       <h4 style="color: #000000; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
@@ -182,7 +182,7 @@
     .instr-section:first-of-type .nice li strong { font-weight: bold !important; }
   </style>
       <h2 style="color: #000000; font-size: 2.5em;">Instructions</h2>
-  
+
   <!-- Study Section -->
   <div class="instr-section">
     <h3>Study</h3>
@@ -211,7 +211,7 @@
       <li><strong style="color: #0066cc;">After the conversation is complete (either by your partner choosing to terminate early, or by reaching the maximum number of allowed messages), your partner will select the best option they think is correct and submit their answer.</strong></li>
       <li><strong style="color: #0066cc;">Once your partner has submitted their answer, you will move on to the next question.</strong></li>
     </ol>
-    
+
     <!-- Read Carefully Subsection -->
     <div style="margin-top: 30px;">
       <h4 style="color: #000000; margin-bottom: 15px; font-size: 18px;">Read Carefully</h4>
@@ -646,7 +646,7 @@
                 -->
               </li>`;
 
-          case 'perspective_taking':
+          case 'map':
           return `<li style="color: #0066cc;"><strong>In this task, the Answerer must determine the direction of an object from the Helper's point of view.</strong></li>
                 <li style="color: #0066cc;"><strong>The object is visible only to the Answerer, not to the Helper. To identify where the object lies relative to the Helper, the Answerer must communicate with the Helper and use the information obtained to infer the Helper's orientation.</strong></li>
                 <li style="color: #cc0000;"><strong style="color: #cc0000;">Note: Here, directions are defined from the Helper's perspective, not the Answerer's. For example, "Front" refers to the space directly ahead of the Helper's current line of sight.</strong></li>
@@ -744,11 +744,11 @@ const consentTrial = {
           constructor(jsPsych) {
             this.jsPsych = jsPsych;
           }
-          
+
           trial(display_element, trial) {
             // Store display_element reference for dynamic updates
             trial._displayElement = display_element;
-            
+
             const updateDisplay = (message, showSpinner = true, additionalText = 'Please keep this tab open.') => {
               display_element.innerHTML = `
                 <div style="text-align: center; padding: 40px;">
@@ -760,9 +760,9 @@ const consentTrial = {
                 </div>
               `;
             };
-            
+
             updateDisplay(trial.message);
-            
+
             if (trial.on_wait) {
               const finishTrialFn = () => {
                 this.jsPsych.finishTrial();
@@ -774,7 +774,7 @@ const consentTrial = {
             }
           }
         }
-        
+
         WaitingTrialPlugin.info = {
           name: 'waiting-trial',
           parameters: {
@@ -782,11 +782,11 @@ const consentTrial = {
             on_wait: { type: Function, default: null }
           }
         };
-        
+
         // Register on window like other plugins
         window.jsPsychWaitingTrial = WaitingTrialPlugin;
       })();
-      
+
       const waitingTrialPlugin = window.jsPsychWaitingTrial;
 
       // Waiting page for pairing
@@ -797,14 +797,14 @@ const consentTrial = {
           console.log('[DyadicChat] Starting socket connection with PID:', pidFromUrl);
           console.log('[DyadicChat] finishTrial type:', typeof finishTrial, finishTrial);
           console.log('[DyadicChat] updateDisplay type:', typeof updateDisplay, updateDisplay);
-          
+
           // Store finishTrial and updateDisplay in variables accessible in closures
           const finishTrialFn = finishTrial;
           const updateDisplayFn = updateDisplay;
-          
+
           // Connect to socket with PID in query string (server expects this)
           // Enable automatic reconnection with exponential backoff for network resilience
-          const socket = io(window.location.origin, { 
+          const socket = io(window.location.origin, {
             query: { pid: pidFromUrl },
             reconnection: true,
             reconnectionDelay: 1000,        // Start with 1 second delay
@@ -814,11 +814,11 @@ const consentTrial = {
             transports: ['websocket', 'polling'] // Try websocket first, fallback to polling
           });
           socket.prolific = { PID: pidFromUrl };
-          
+
           let connected = false;
           let paired = false;
           let blocked = false;
-          
+
           // Wait for socket to connect
           socket.on('connect', () => {
             connected = true;
@@ -852,7 +852,7 @@ const consentTrial = {
               updateDisplayFn('Reconnecting...', true, `Reconnecting... (attempt ${attemptNumber})`);
             }
           });
-          
+
           socket.on('paired:instructions', (data) => {
             if (paired || blocked) return; // Prevent duplicate handling
             paired = true;
@@ -864,10 +864,10 @@ const consentTrial = {
             window.maxTurns = data.maxTurns;
             socket.currentRoom = data.roomId;
             window.socket = socket; // Store socket globally
-            
+
             // CRITICAL: Verify the role matches our PID
             console.log('[DyadicChat] Setting window.userRole to:', data.role, 'for PID:', pidFromUrl);
-            
+
             // Move to instructions
             if (typeof finishTrialFn === 'function') {
               console.log('[DyadicChat] Calling finishTrial function');
@@ -881,18 +881,18 @@ const consentTrial = {
               }
             }
           });
-          
+
           // Handle connection errors
           socket.on('connect_error', (error) => {
             console.error('[DyadicChat] Socket connection error:', error);
           });
-          
+
           // Handle blocked events - update display instead of showing alert
           socket.on('blocked:deck_complete', () => {
             if (blocked) return;
             blocked = true;
             console.error('[DyadicChat] Blocked: deck complete');
-            
+
             // Always update the display directly to ensure it works
             const updatePageDisplay = () => {
               // Try multiple selectors to find the display element
@@ -903,7 +903,7 @@ const consentTrial = {
               if (!displayEl) {
                 displayEl = document.body;
               }
-              
+
               if (displayEl) {
                 displayEl.innerHTML = `
                   <div style="text-align: center; padding: 40px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -918,7 +918,7 @@ const consentTrial = {
                 console.error('[DyadicChat] Could not find display element to update');
               }
             };
-            
+
             // Try using updateDisplayFn first, then fallback to direct update
             if (updateDisplayFn && typeof updateDisplayFn === 'function') {
               try {
@@ -931,12 +931,12 @@ const consentTrial = {
               updatePageDisplay();
             }
           });
-          
+
           socket.on('blocked:repeat_pid', () => {
             if (blocked) return;
             blocked = true;
             console.error('[DyadicChat] Blocked: repeat PID');
-            
+
             // Always update the display directly to ensure it works
             const updatePageDisplay = () => {
               // Try multiple selectors to find the display element
@@ -947,7 +947,7 @@ const consentTrial = {
               if (!displayEl) {
                 displayEl = document.body;
               }
-              
+
               if (displayEl) {
                 displayEl.innerHTML = `
                   <div style="text-align: center; padding: 40px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -962,7 +962,7 @@ const consentTrial = {
                 console.error('[DyadicChat] Could not find display element to update');
               }
             };
-            
+
             // Try using updateDisplayFn first, then fallback to direct update
             if (updateDisplayFn && typeof updateDisplayFn === 'function') {
               try {
@@ -975,7 +975,7 @@ const consentTrial = {
               updatePageDisplay();
             }
           });
-          
+
           // Timeout after 5 minutes
           setTimeout(() => {
             if (!paired && !blocked) {
@@ -1008,16 +1008,16 @@ const consentTrial = {
           // Store finishTrial and updateDisplay in variables accessible in closures
           const finishTrialFn = finishTrial;
           const updateDisplayFn = updateDisplay;
-          
+
           if (window.socket) {
             // Check if partner already finished
             let partnerReady = false;
-            
+
             window.socket.on('instructions:partner_ready', () => {
               console.log('[DyadicChat] Partner finished instructions');
               partnerReady = true;
             });
-            
+
             window.socket.on('instructions:both_ready', () => {
               console.log('[DyadicChat] Both users ready, proceeding to study');
               if (typeof finishTrialFn === 'function') {
@@ -1026,7 +1026,7 @@ const consentTrial = {
                 window.jsPsych.finishTrial();
               }
             });
-            
+
             // Handle partner disconnect during instructions phase
             window.socket.on('end:partner:instructions', () => {
               console.log('[DyadicChat] Partner disconnected during instructions phase');
@@ -1046,7 +1046,7 @@ const consentTrial = {
                   `;
                 }
               };
-              
+
               // Try using updateDisplayFn first, then fallback to direct update
               if (updateDisplayFn && typeof updateDisplayFn === 'function') {
                 try {
@@ -1059,7 +1059,7 @@ const consentTrial = {
                 updatePageDisplay();
               }
             });
-            
+
             // Also handle general end:partner event (for consistency)
             window.socket.on('end:partner', () => {
               console.log('[DyadicChat] Partner disconnected');
@@ -1079,7 +1079,7 @@ const consentTrial = {
                   `;
                 }
               };
-              
+
               // Try using updateDisplayFn first, then fallback to direct update
               if (updateDisplayFn && typeof updateDisplayFn === 'function') {
                 try {
@@ -1092,7 +1092,7 @@ const consentTrial = {
                 updatePageDisplay();
               }
             });
-            
+
             // If partner was already ready when we got here, we might have missed the event
             // The server will send both_ready when we notify we're ready
             // So we just wait for both_ready
@@ -1128,12 +1128,12 @@ const consentTrial = {
             const getRole = () => window.userRole || 'answerer'; // Default to answerer if not set
             const getQuestionType = () => window.serverQuestionType || serverConfig.questionType;
             const getMaxTurns = () => window.maxTurns || serverConfig.maxTurns;
-            
+
             // Get initial role (might be undefined, but that's okay - will update in on_load)
             const initialRole = getRole();
             const initialQuestionType = getQuestionType();
             const initialMaxTurns = getMaxTurns();
-            
+
             return {
               type: jsPsychInstructions,
               pages: [generateRoleSpecificInstructions(initialRole, initialQuestionType, initialMaxTurns)], // Initial placeholder
@@ -1146,16 +1146,16 @@ const consentTrial = {
               const role = getRole();
               const questionType = getQuestionType();
               const maxTurns = getMaxTurns();
-              
+
               console.log('[DyadicChat] Loading instructions with role:', role, 'questionType:', questionType, 'maxTurns:', maxTurns);
-              
+
               // Only update if role has changed or if we need to refresh
               // Generate the correct instructions based on current role
               const instructionsHTML = generateRoleSpecificInstructions(role, questionType, maxTurns);
-              
+
               // Update the pages array
               this.pages = [instructionsHTML];
-              
+
               // Update the DOM directly since the plugin has already rendered
               // The plugin creates a div with class 'instr-page' containing pages[0]
               const updateInstructions = () => {
@@ -1167,7 +1167,7 @@ const consentTrial = {
                 }
                 return false;
               };
-              
+
               // Try to update immediately
               if (!updateInstructions()) {
                 // If not found, try after a short delay
@@ -1177,12 +1177,12 @@ const consentTrial = {
                   }
                 }, 100);
               }
-              
+
               // Track instructions page start time
               if (typeof window !== 'undefined' && window.instructionsPageStartTime === undefined) {
                 window.instructionsPageStartTime = (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
               }
-              
+
               // Handle partner disconnect during instructions reading phase
               if (window.socket) {
                 const handlePartnerDisconnect = () => {
@@ -1201,13 +1201,13 @@ const consentTrial = {
                     `;
                   }
                 };
-                
+
                 // Listen for partner disconnect during instructions
                 window.socket.on('end:partner:instructions', () => {
                   console.log('[DyadicChat] Partner disconnected during instructions reading phase');
                   handlePartnerDisconnect();
                 });
-                
+
                 // Also handle general end:partner event
                 window.socket.on('end:partner', () => {
                   console.log('[DyadicChat] Partner disconnected during instructions');
