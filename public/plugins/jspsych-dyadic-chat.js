@@ -493,8 +493,8 @@
           }).join('');
 
           // Build global_map_image HTML for map questions (only for answerer)
-          const mapImageHtml = (isMapQuestion && item && item.global_map_image)
-            ? '<div class="dc-map-image"><img src="' + item.global_map_image + '" alt="Global map view" /></div>'
+          const mapImageHtml = (isMapQuestion && item && item.map_image_path)
+            ? '<div class="dc-map-image"><img src="' + item.map_image_path + '" alt="Global map view" /></div>'
             : '';
 
           // Use special layout for map questions
