@@ -625,9 +625,23 @@
       let partnerTypingTimeout = null; // Timeout for hiding partner's typing indicator
 
       function redirectToProlific() {
-        // Redirect to Prolific completion URL after a short delay
+        // Get PID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('PID') || urlParams.get('PROLIFIC_PID') || '';
+
+        // Intermediate website URL - should match urls.json
+        // Default: http://localhost:3001 (update when deploying to AWS)
+        const intermediateWebsite = 'http://localhost:3001';
+
+        // Redirect to intermediate website code page with PID
         setTimeout(() => {
-          window.location.href = 'https://app.prolific.com/submissions/complete?cc=C1FXFXJ1';
+          if (pid) {
+            window.location.href = `${intermediateWebsite}/code?PID=${pid}`;
+          } else {
+            console.error('[DyadicChat] No PID found in URL, cannot redirect to intermediate website');
+            // Fallback: show error message
+            alert('Error: No PID found. Please contact support.');
+          }
         }, 2000); // 2 second delay to show completion message
       }
 
